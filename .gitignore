@@ -1,0 +1,11 @@
+# Segredos e mídia não revisada
+.env
+.env.*
+!.env.example
+private/
+originals/
+unreviewed/
+*.key
+*.pem
+node_modules/
+.DS_Store
