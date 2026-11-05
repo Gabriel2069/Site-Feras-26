@@ -1,0 +1,25 @@
+name: Verify memorial
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate JavaScript
+        run: |
+          node --check main.js
+          node --check tools/importar-drive.mjs
+      - name: Validate catalog and assets
+        run: |
+          node -e 'const fs=require("fs");const c=JSON.parse(fs.readFileSync("content/acervo.json","utf8"));if(!Array.isArray(c.eventos)||!c.eventos.length)process.exit(1);for(const e of c.eventos){if(!Array.isArray(e.midias))process.exit(1)}'
+          test -f index.html
+          test -f styles.css
+          test -f assets/feras26.png
+          test -f assets/baloes-feras.png
+          test -f assets/quadros-feras.png
