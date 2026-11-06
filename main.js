@@ -36,7 +36,7 @@ function measureYear() {
   const padding = parseFloat(getComputedStyle(yearSection).paddingTop) || 0;
   const base = padding + yearHead.offsetHeight + innerHeight + yearFoot.offsetHeight + 180;
   yearSection.style.minHeight = Math.ceil(base + railRange) + "px";
-  pinStart = yearSection.getBoundingClientRect().top + scrollY + padding + yearHead.offsetHeight;
+  pinStart = yearPin.offsetTop;
   requestMotion();
 }
 function advanceYear(direction) {
@@ -109,6 +109,7 @@ function requestMotion() {
 addEventListener("scroll", requestMotion, {passive:true});
 addEventListener("resize", requestMotion, {passive:true});
 addEventListener("resize",()=>requestAnimationFrame(measureYear),{passive:true});
+if(document.fonts?.ready) document.fonts.ready.then(()=>requestAnimationFrame(measureYear));
 requestMotion();
 
 const observer = ("IntersectionObserver" in window && !reduced.matches)
