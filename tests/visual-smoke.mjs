@@ -43,5 +43,18 @@ try {
    assert.deepEqual(errors, [], "page errors in "+config.name);
    await page.close();
  }
+ const motion = await browser.newPage({ viewport:{width:1440,height:900}, reducedMotion:"no-preference" });
+ await motion.goto("http://127.0.0.1:4173/",{waitUntil:"domcontentloaded"});
+ await motion.locator("#eventTrack .episode").first().waitFor({timeout:15000});
+ await motion.waitForTimeout(180);
+ const initial = await motion.locator("#yearPin").evaluate(el=>el.getBoundingClientRect().top+window.scrollY);
+ const railRange = await motion.locator("#eventTrack").evaluate(el=>el.scrollWidth-el.clientWidth);
+ assert.ok(railRange>100,"rail too short for cinematographic movement");
+ await motion.evaluate(y=>window.scrollTo({top:y+550,behavior:"instant"}),initial);
+ await motion.waitForTimeout(300);
+ const railPosition = await motion.locator("#eventTrack").evaluate(el=>el.scrollLeft);
+ assert.ok(railPosition>80,"scroll-driven travelling did not advance: "+railPosition);
+ await motion.screenshot({path:"visual-snapshots/desktop-travelling.png"});
+ await motion.close();
  console.log("Visual smoke: desktop, iPad and iPhone passed");
 } finally { await browser.close(); }
