@@ -57,7 +57,7 @@ body.nav-open{overflow:hidden}body.cinema-on .nav{transform:translateY(-100%)}bo
 .passage__aside{padding:30px 0}.passage__aside>p{font:500 clamp(22px,2.4vw,32px)/1.45 "Cormorant Garamond";max-width:480px}
 .place-switch{margin-top:55px;border-top:1px solid var(--line)}.place-switch button{display:flex;align-items:center;justify-content:space-between;width:100%;padding:16px 2px;border:0;border-bottom:1px solid var(--line);background:transparent;text-align:left;cursor:pointer;font:800 clamp(23px,2.8vw,37px)/1 "Barlow Condensed";transition:padding .25s,color .25s}.place-switch button span{font:700 10px "DM Sans";color:var(--muted)}.place-switch button:hover,.place-switch button.is-active{padding-left:12px;color:var(--cyan)}
 .handwritten{font:600 clamp(24px,3.2vw,45px) "Caveat";color:var(--green);display:block;margin-top:34px;transform:rotate(-4deg)}
-.year{background:#0d0d13;padding:115px 0 115px;overflow:hidden}
+.year{background:#0d0d13;padding:115px 0 115px;overflow:visible}
 .year__head h2{font:900 clamp(90px,14.8vw,225px)/.77 "Barlow Condensed";letter-spacing:-.05em;max-width:1280px;margin:88px 0 42px}.year__head h2 em{font:italic 600 .85em/.8 "Cormorant Garamond";color:var(--purple);letter-spacing:-.06em}
 .year__sub{display:flex;align-items:end;justify-content:space-between;gap:40px}.year__sub p{max-width:490px;font:500 clamp(21px,2.6vw,31px)/1.25 "Cormorant Garamond";margin:0;color:#d1ccd6}
 .year__controls{display:flex;gap:6px}.year__controls button{width:55px;height:55px;border:1px solid #ffffff5a;background:transparent;color:var(--white);font-size:23px;cursor:pointer}.year__controls button:hover{background:var(--white);color:var(--black)}
