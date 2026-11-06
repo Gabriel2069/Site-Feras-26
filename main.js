@@ -17,6 +17,37 @@ const introFrames = $$(".intro__film-frame");
 const corridor = $("#corridor");
 const corridorBackdrop = $("#corridorBackdrop");
 const eventTrack = $("#eventTrack");
+const yearSection = $(".year");
+const yearPin = $("#yearPin");
+const yearHead = $(".year__head");
+const yearFoot = $(".year__foot");
+let yearPinned = false;
+let pinStart = 0;
+let railRange = 0;
+function measureYear() {
+  const previous = yearPinned;
+  railRange = Math.max(0, eventTrack.scrollWidth - eventTrack.clientWidth);
+  yearPinned = innerWidth > 900 && !reduced.matches && railRange > 30;
+  if (!yearPinned) {
+    yearSection.style.minHeight = "";
+    if (previous) eventTrack.scrollLeft = 0;
+    return;
+  }
+  const padding = parseFloat(getComputedStyle(yearSection).paddingTop) || 0;
+  const base = padding + yearHead.offsetHeight + innerHeight + yearFoot.offsetHeight + 180;
+  yearSection.style.minHeight = Math.ceil(base + railRange) + "px";
+  pinStart = yearSection.getBoundingClientRect().top + scrollY + padding + yearHead.offsetHeight;
+  requestMotion();
+}
+function advanceYear(direction) {
+  if (yearPinned) {
+    const p = clamp(scrollY - pinStart + direction * eventTrack.clientWidth * .76, 0, railRange);
+    window.scrollTo({top: pinStart + p, behavior: reduced.matches ? "auto" : "smooth"});
+  } else {
+    eventTrack.scrollBy({left:direction * eventTrack.clientWidth * .76,behavior:reduced.matches?"auto":"smooth"});
+  }
+}
+
 const archiveFilters = $("#archiveFilters");
 const mosaic = $("#mosaicWall");
 const archiveNote = $("#archiveNote");
@@ -48,6 +79,7 @@ function updateMotion() {
   const maximum = Math.max(1, document.documentElement.scrollHeight - innerHeight);
   progress.style.transform = "scaleX(" + clamp(scrollY / maximum, 0, 1) + ")";
   nav.classList.toggle("is-scrolled", scrollY > 46);
+  if (yearPinned) eventTrack.scrollLeft = clamp(scrollY - pinStart, 0, railRange);
   if (reduced.matches) return;
   const introBounds = intro.getBoundingClientRect();
   const introTravel = Math.max(1, intro.offsetHeight - innerHeight);
@@ -76,6 +108,7 @@ function requestMotion() {
 }
 addEventListener("scroll", requestMotion, {passive:true});
 addEventListener("resize", requestMotion, {passive:true});
+addEventListener("resize",()=>requestAnimationFrame(measureYear),{passive:true});
 requestMotion();
 
 const observer = ("IntersectionObserver" in window && !reduced.matches)
@@ -144,6 +177,7 @@ function switchLocation(id) {
   $("#locationName").textContent=loc.nome;
   $("#locationStamp").textContent=loc.numero+" / 04";
   $("#locationDescription").textContent=loc.descricao;
+  corridor.dataset.place=id;
   const surface=$("#locationImage");
   const src=filePath(loc.imagem);
   if(src && !isVideo(src)) {
@@ -191,13 +225,14 @@ function renderEpisodes(events){
   eventTrack.replaceChildren();
   if(!events.length){eventTrack.append(text("p","Os acontecimentos estão sendo organizados.","loading"));return;}
   events.forEach((x,i)=>eventTrack.append(makeEpisode(x,i)));
+  requestAnimationFrame(measureYear);
 }
-$("#eventPrev").addEventListener("click",()=>eventTrack.scrollBy({left:-eventTrack.clientWidth*.78,behavior:reduced.matches?"auto":"smooth"}));
-$("#eventNext").addEventListener("click",()=>eventTrack.scrollBy({left:eventTrack.clientWidth*.78,behavior:reduced.matches?"auto":"smooth"}));
+$("#eventPrev").addEventListener("click",()=>advanceYear(-1));
+$("#eventNext").addEventListener("click",()=>advanceYear(1));
 eventTrack.addEventListener("keydown",event=>{
   if(event.target!==eventTrack)return;
-  if(event.key==="ArrowRight"){event.preventDefault();eventTrack.scrollBy({left:eventTrack.clientWidth*.78,behavior:"smooth"});}
-  if(event.key==="ArrowLeft"){event.preventDefault();eventTrack.scrollBy({left:-eventTrack.clientWidth*.78,behavior:"smooth"});}
+  if(event.key==="ArrowRight"){event.preventDefault();advanceYear(1);}
+  if(event.key==="ArrowLeft"){event.preventDefault();advanceYear(-1);}
 });
 
 function renderMosaic(events,filter="todos"){
@@ -221,7 +256,7 @@ function renderMosaic(events,filter="todos"){
 }
 function setupFilters(events){
   const available=events.filter(e=>(e.midias||[]).some(m=>filePath(m.src)&&!isVideo(m.src)));
-  if(!available.length)return;
+  if(!available.length){archiveFilters.replaceChildren();return;}
   archiveFilters.replaceChildren();
   const options=[{id:"todos",name:"TUDO"},...available.map(e=>({id:e.id,name:e.titulo.toUpperCase()}))];
   options.forEach(({id,name},index)=>{

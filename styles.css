@@ -142,3 +142,21 @@ body.nav-open{overflow:hidden}body.cinema-on .nav{transform:translateY(-100%)}bo
  .finale{min-height:100svh}.finale__content{padding:95px 0}.finale .section-index{margin-bottom:70px}.finale h2{font-size:clamp(88px,17vw,135px)}.finale__content>p{font-size:25px}.finale__logo{width:76vw}.footer{font-size:9px}.chapter-modal__media{grid-template-columns:1fr}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important;scroll-behavior:auto!important}[data-reveal]{opacity:1;transform:none!important}.intro__center,.intro__logo,.intro__slash{transform:none!important;opacity:1!important}}
+
+/* V3.1: travelling horizontal vinculado à rolagem no desktop */
+body.cinema-on .nav{transform:none;background:transparent;border-color:transparent}
+body.cinema-on .nav__logo,body.cinema-on .nav__edition,body.cinema-on .nav__menu{opacity:0;pointer-events:none}
+body.cinema-on .nav__cinema{position:absolute;top:14px;right:clamp(16px,3.4vw,58px);background:#09090c94;opacity:1;pointer-events:auto}
+.corridor[data-place="portao"] .corridor__backdrop{background:radial-gradient(circle at 38% 40%,#50778c4a,transparent 38%),linear-gradient(145deg,#151a27,#273448,#152f36)}
+.corridor[data-place="salas"] .corridor__backdrop{background:radial-gradient(circle at 59% 36%,#8075a053,transparent 34%),linear-gradient(140deg,#1b152c,#30334c,#18302f)}
+.corridor[data-place="auditorio"] .corridor__backdrop{background:radial-gradient(circle at 50% 24%,#5a4d8a75,transparent 29%),linear-gradient(160deg,#0a0a12,#262039,#141729)}
+.chapter-modal__media video{width:100%;height:clamp(240px,40vw,480px);object-fit:contain;background:#07080d}
+@media(min-width:901px) and (prefers-reduced-motion:no-preference){
+ .year__pin{position:sticky;top:0;height:100svh;min-height:620px;display:flex;align-items:center;overflow:hidden;background:#0d0d13;isolation:isolate}
+ .year__pin:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.13;background:repeating-linear-gradient(90deg,transparent 0 79px,#9dd9f433 80px 81px,transparent 82px 160px)}
+ .year__pin .year__rail{width:100%;overflow-x:hidden;overflow-y:hidden;scrollbar-width:none;padding-block:27px;align-items:center;position:relative}
+ .year__pin .year__rail::-webkit-scrollbar{display:none}
+ .year__pin .episode{height:min(72svh,670px);min-height:480px}
+}
+@media(max-width:900px){.year__pin{position:static;height:auto;min-height:0}}
+@media(prefers-reduced-motion:reduce){body.cinema-on .nav__logo,body.cinema-on .nav__edition,body.cinema-on .nav__menu{opacity:1;pointer-events:auto}}
