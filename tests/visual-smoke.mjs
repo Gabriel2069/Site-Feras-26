@@ -57,6 +57,8 @@ try {
  await motion.evaluate(y=>window.scrollTo({top:y+550,behavior:"instant"}),initial);
  await motion.waitForTimeout(300);
  const railPosition = await motion.locator("#eventTrack").evaluate(el=>el.scrollLeft);
+ const info = await motion.evaluate(() => ({yearPinned, pinStart, railRange, scrollY, yearTop: document.querySelector(".year").getBoundingClientRect().top, yearHeight:document.querySelector(".year").offsetHeight, pinTop:document.querySelector("#yearPin").getBoundingClientRect().top, pinOffset:document.querySelector("#yearPin").offsetTop, headHeight:document.querySelector(".year__head").offsetHeight, railLeft:document.querySelector("#eventTrack").scrollLeft}));
+ console.log("PIN DIAG "+JSON.stringify(info));
  assert.ok(railPosition>80,"scroll-driven travelling did not advance: "+railPosition);
  await motion.screenshot({path:"visual-snapshots/desktop-travelling.png"});
  await motion.close();
