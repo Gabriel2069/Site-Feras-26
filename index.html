@@ -1,151 +1,181 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#101123">
-  <meta name="description" content="FERAS 26. Um memorial feito de lugares, pessoas e histórias do Terceirão do Agostiniano 2026.">
-  <title>FERAS 26 | Depois do Sinal</title>
-  <link rel="icon" type="image/png" href="./assets/feras26.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css">
-  <script src="./main.js" defer></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#09090c">
+<meta name="description" content="Feras 26 · Um lugar para rever o nosso Terceirão no Agostiniano.">
+<meta property="og:title" content="FERAS 26 · Depois do Sinal">
+<meta property="og:description" content="Fotos, histórias e gente do nosso último ano.">
+<title>FERAS 26 · Depois do Sinal</title>
+<link rel="icon" href="assets/feras26.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;1,500;1,600&family=DM+Sans:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./styles.css">
+<script src="./main.js" defer></script>
 </head>
 <body>
-  <a class="skip-link" href="#historia">Pular para a história</a>
-  <div class="grain" aria-hidden="true"></div>
-  <div class="reading-progress" aria-hidden="true"><span id="progress"></span></div>
-
-  <header class="masthead" id="masthead">
-    <a class="brand" href="#inicio" aria-label="FERAS 26, início">
-      <span class="brand__symbol" aria-hidden="true">F<span>✳</span></span>
-      <span class="brand__info">FERAS <strong>26</strong><small>AGOSTINIANO · GOIÂNIA</small></span>
-    </a>
-    <span class="masthead__edition">UM ARQUIVO EM CONSTRUÇÃO <span class="status-dot" aria-hidden="true"></span></span>
-    <button class="menu-trigger" id="menuTrigger" aria-controls="navigation" aria-expanded="false" type="button">
-      <span>EXPLORAR</span><span class="menu-trigger__icon" aria-hidden="true"><i></i><i></i></span>
-    </button>
-  </header>
-
-  <nav class="navigation" id="navigation" aria-label="Capítulos do memorial" inert>
-    <div class="navigation__intro">UM LUGAR PRA VOLTAR</div>
-    <a href="#inicio"><span>00</span> O começo</a>
-    <a href="#historia"><span>01</span> A história</a>
-    <a href="#acontecimentos"><span>02</span> O ano</a>
-    <a href="#lugares"><span>03</span> Os lugares</a>
-    <a href="#pessoas"><span>04</span> As pessoas</a>
-    <a href="#cotidiano"><span>05</span> Entre uma aula e outra</a>
-    <a href="#final"><span>06</span> Depois do sinal</a>
-    <p>O memorial está sendo montado com materiais reais. Algumas partes ainda vão ganhar fotografias, vídeos e histórias.</p>
-  </nav>
-
-  <main>
-    <section class="prologue" id="inicio" aria-label="Abertura do memorial">
-      <div class="prologue__sticky" id="prologueStage">
-        <div class="prologue__wash" aria-hidden="true"></div>
-        <div class="prologue__orbit orbit--one" aria-hidden="true"></div>
-        <div class="prologue__orbit orbit--two" aria-hidden="true"></div>
-        <div class="prologue__paper paper--one" aria-hidden="true"><span>O PÁTIO</span></div>
-        <div class="prologue__paper paper--two" aria-hidden="true"><span>2026</span></div>
-        <div class="prologue__slashes" aria-hidden="true"><i></i><i></i><i></i></div>
-        <div class="prologue__copy">
-          <span class="eyebrow eyebrow--light">ALGUMAS COISAS A GENTE GUARDA.</span>
-          <img class="prologue__logo" src="./assets/feras26.png" alt="Feras 26, Agostiniano 2026" fetchpriority="high">
-          <h1>OUTRAS, A GENTE <em>CONTA.</em></h1>
-          <p>Fotos, vídeos, histórias e gente que fez parte do nosso último ano no Agostiniano.</p>
-        </div>
-        <div class="prologue__bottom"><span>MEMORIAL · 2026</span><a href="#historia" aria-label="Avançar para a história">DESCE AÍ <span aria-hidden="true">↓</span></a><span>01 / 07</span></div>
-      </div>
-    </section>
-
-    <section class="threshold" id="historia" aria-labelledby="thresholdTitle">
-      <div class="threshold__number" aria-hidden="true">26</div>
-      <p class="section-code" data-reveal>01 / A HISTÓRIA</p>
-      <div class="threshold__layout">
-        <h2 id="thresholdTitle" data-reveal>A GENTE AINDA <span>SABE O CAMINHO.</span></h2>
-        <div class="threshold__copy" data-reveal>
-          <p>Entrar pelo portão, encontrar a sala, passar pelo pátio. No começo do ano, tudo isso era só rotina. Agora, até o caminho parece diferente.</p>
-          <p>Esse site é uma tentativa de juntar as partes que ficaram espalhadas em celulares, conversas, pastas e na memória de cada um.</p>
-          <span class="handnote">Sem precisar caber tudo num único vídeo.</span>
+<a class="skip" href="#caminho">Ir para a história</a>
+<div class="film-grain" aria-hidden="true"></div>
+<div class="progress" aria-hidden="true"><div id="progress"></div></div>
+<header class="nav" id="masthead">
+  <a href="#inicio" class="nav__logo" aria-label="Feras 26, voltar ao começo"><img src="assets/feras26.png" alt="FERAS 26"></a>
+  <span class="nav__edition">AGOSTINIANO <i aria-hidden="true">✳</i> 2026</span>
+  <div class="nav__actions">
+    <button class="nav__cinema" id="cinemaButton" type="button" aria-pressed="false"><span class="dot"></span><span id="cinemaLabel">MODO CINEMA</span></button>
+    <button class="nav__menu" id="menuButton" type="button" aria-expanded="false" aria-controls="navigation">CAPÍTULOS <span class="menu-lines" aria-hidden="true"><i></i><i></i></span></button>
+  </div>
+</header>
+<nav class="navigation" id="navigation" aria-label="Navegação do memorial" inert>
+  <span class="navigation__overline">ESSE ANO, VISTO DE NOVO.</span>
+  <a href="#inicio"><small>00</small><span>O COMEÇO</span></a>
+  <a href="#caminho"><small>01</small><span>A ESCOLA</span></a>
+  <a href="#acontecimentos"><small>02</small><span>O ANO</span></a>
+  <a href="#mosaico"><small>03</small><span>AS FOTOS</span></a>
+  <a href="#pessoas"><small>04</small><span>AS PESSOAS</span></a>
+  <a href="#entre"><small>05</small><span>AS ENTRELINHAS</span></a>
+  <a href="#final"><small>06</small><span>DEPOIS</span></a>
+  <span class="navigation__foot">FERAS 26 · UM MEMORIAL EM CONSTRUÇÃO</span>
+</nav>
+<main>
+  <section class="intro" id="inicio" aria-label="Abertura do memorial">
+    <div class="intro__sticky" id="introStage">
+      <div class="intro__lights" aria-hidden="true"></div>
+      <div class="intro__film-frame intro__film-frame--left" aria-hidden="true"><span>06 / 2026</span><div class="film-abstract film-abstract--one"></div><i>um retrato do ano</i></div>
+      <div class="intro__film-frame intro__film-frame--right" aria-hidden="true"><span>AGOSTINIANO</span><div class="film-abstract film-abstract--two"></div><i>as coisas de sempre</i></div>
+      <div class="intro__collage intro__collage--burst"><img src="assets/burst-sticker.png" alt=""></div>
+      <div class="intro__collage intro__collage--clapper"><img src="assets/clapper-sticker.png" alt=""></div>
+      <div class="intro__slash" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="intro__center" id="introCenter">
+        <p class="eyebrow intro__eyebrow">O TERCEIRÃO DO AGOSTINIANO · 2026</p>
+        <img class="intro__logo" id="introLogo" src="assets/feras26.png" alt="FERAS 26, Agostiniano 2026">
+        <div class="intro__title" id="introTitle">
+          <h1>DEPOIS DO <em>SINAL.</em></h1>
+          <p>Pra rever as fotos, encontrar quem estava lá e lembrar até das coisas pequenas.</p>
         </div>
       </div>
-      <div class="threshold__ribbon" aria-hidden="true"><span>FERAS 26 ✳ AGOSTINIANO ✳ FERAS 26 ✳ AGOSTINIANO ✳</span></div>
-    </section>
+      <div class="intro__bottom">
+        <span>UM MEMORIAL EM CONSTRUÇÃO</span>
+        <a href="#caminho">ENTRAR NA HISTÓRIA <span aria-hidden="true">↓</span></a>
+        <span>00 — 06</span>
+      </div>
+      <div class="intro__framecount" aria-hidden="true">REC <b>●</b> 26</div>
+    </div>
+  </section>
 
-    <section class="event-section" id="acontecimentos" aria-labelledby="eventsTitle">
-      <div class="event-section__intro">
-        <p class="section-code" data-reveal>02 / O ANO</p>
-        <div class="section-head" data-reveal>
-          <h2 id="eventsTitle">TEVE <i>DE TUDO.</i></h2>
-          <p>A gente foi juntando as fotos. Os acontecimentos foram aparecendo. E ainda falta muita coisa.</p>
+  <section class="passage" id="caminho" aria-labelledby="passageTitle">
+    <div class="passage__index section-index" data-reveal><span>01 / OS LUGARES</span><span>AGOSTINIANO · 2026</span></div>
+    <div class="passage__headline" data-reveal>
+      <p class="eyebrow">PASSA TANTA VEZ QUE NEM PENSA.</p>
+      <h2 id="passageTitle">A GENTE AINDA <span>SABE O CAMINHO.</span></h2>
+    </div>
+    <div class="passage__sequence">
+      <div class="corridor" id="corridor" aria-label="Composição dos lugares da escola">
+        <div class="corridor__backdrop" id="corridorBackdrop" aria-hidden="true"></div>
+        <div class="corridor__perspective" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="corridor__scene" id="locationScene">
+          <div class="corridor__image" id="locationImage" aria-hidden="true"></div>
+          <span class="corridor__stamp" id="locationStamp">01 / 04</span>
+          <div class="corridor__caption"><small>UM LUGAR DA NOSSA ROTINA</small><strong id="locationName">O PÁTIO</strong><p id="locationDescription">Era onde a gente se encontrava antes de ir pra sala.</p></div>
         </div>
+        <div class="corridor__ticker" aria-hidden="true">01—02—03—04<span>FERAS 26</span>01—02—03—04</div>
       </div>
-      <div class="event-section__track" id="eventTrack" aria-live="polite">
-        <p class="load-note">Abrindo os capítulos do ano…</p>
+      <div class="passage__aside">
+        <p>O portão, o pátio, os corredores, as salas. Os mesmos caminhos o ano inteiro, com histórias diferentes todos os dias.</p>
+        <div class="place-switch" role="group" aria-label="Escolher lugar">
+          <button type="button" data-place="portao">PORTÃO <span>01</span></button>
+          <button type="button" data-place="patio" class="is-active">PÁTIO <span>02</span></button>
+          <button type="button" data-place="salas">SALAS <span>03</span></button>
+          <button type="button" data-place="auditorio">AUDITÓRIO <span>04</span></button>
+        </div>
+        <span class="handwritten">Tem lugar que a gente reconhece de longe.</span>
       </div>
-      <div class="event-section__end"><span class="asterisk" aria-hidden="true">✳</span><p>E ainda tem o que está por vir.</p></div>
-    </section>
+    </div>
+  </section>
 
-    <section class="place-section" id="lugares" aria-labelledby="placesTitle">
-      <div class="place-section__header" data-reveal>
-        <p class="section-code section-code--inverse">03 / OS LUGARES</p>
-        <h2 id="placesTitle">NÃO ERA <span>SÓ UM PRÉDIO.</span></h2>
-        <p>Cada lugar tem alguma coisa para contar. Estamos reunindo fotos e filmagens da escola para trazer esses espaços para cá.</p>
-      </div>
-      <div class="blueprint">
-        <div class="blueprint__grid" aria-hidden="true"></div>
-        <div class="blueprint__center" aria-hidden="true">AGOSTINIANO <small>2026</small></div>
-        <button class="place-chip place-chip--gate" data-place="portao"><span>01</span> PORTÃO</button>
-        <button class="place-chip place-chip--yard" data-place="patio"><span>02</span> PÁTIO</button>
-        <button class="place-chip place-chip--rooms" data-place="salas"><span>03</span> SALAS</button>
-        <button class="place-chip place-chip--hall" data-place="auditorio"><span>04</span> AUDITÓRIO</button>
-        <span class="blueprint__arrow" aria-hidden="true">↗</span>
-        <div class="place-detail" id="placeDetail" aria-live="polite"><small>TOQUE NUM LUGAR</small><p>Escolhe um ponto desse mapa. As lembranças vão chegar aqui.</p></div>
-        <span class="blueprint__legend">MAPA AFETIVO · NÃO É UMA PLANTA REAL</span>
-      </div>
-      <div class="place-section__after"><span>UM DIA, A GENTE VAI ENTRAR POR AQUI SÓ PRA LEMBRAR.</span></div>
-    </section>
+  <section class="year" id="acontecimentos" aria-labelledby="yearTitle">
+    <div class="year__head section-wrap">
+      <div class="section-index" data-reveal><span>02 / O ANO</span><span>NOSSOS ACONTECIMENTOS</span></div>
+      <h2 id="yearTitle" data-reveal>O CALENDÁRIO <em>NÃO DÁ CONTA.</em></h2>
+      <div class="year__sub" data-reveal><p>Trotes, Recreaço, Day-Off, Festa Junina. Em cada pasta aparece um pedaço do ano.</p><div class="year__controls"><button id="eventPrev" type="button" aria-label="Capítulo anterior">←</button><button id="eventNext" type="button" aria-label="Próximo capítulo">→</button></div></div>
+    </div>
+    <div class="year__rail" id="eventTrack" aria-label="Capítulos dos acontecimentos" tabindex="0"><p class="loading">Abrindo os capítulos…</p></div>
+    <div class="year__foot section-wrap"><span>DESLIZE PARA ENCONTRAR OS PRÓXIMOS CAPÍTULOS</span><span>FERAS 26 · ACERVO</span></div>
+  </section>
 
-    <section class="people-section" id="pessoas" aria-labelledby="peopleTitle">
-      <p class="section-code" data-reveal>04 / QUEM ESTAVA LÁ</p>
-      <div class="people-section__title" data-reveal>
-        <h2 id="peopleTitle">NÃO FORAM <i>SÓ AS FOTOS.</i></h2>
-        <p>Tem gente que aparece em quase todas. Tem gente que fez parte de todos os dias e quase nunca saiu numa foto.</p>
+  <section class="archive" id="mosaico" aria-labelledby="archiveTitle">
+    <div class="archive__heading section-wrap">
+      <div class="section-index" data-reveal><span>03 / O ACERVO</span><span>FOTOS, VÍDEOS E ACHADOS</span></div>
+      <div class="archive__headline" data-reveal><h2 id="archiveTitle">TEM FOTO QUE <em>CONTA TUDO.</em></h2><p>Outras só fazem sentido pra quem tava lá. O arquivo vai ter espaço pras duas.</p></div>
+    </div>
+    <div class="archive__controls" id="archiveFilters" aria-label="Filtrar acervo"><button type="button" class="is-selected" data-filter="todos" aria-pressed="true">TUDO</button></div>
+    <div class="mosaic" id="mosaicWall" aria-live="polite">
+      <div class="mosaic__graphic mosaic__graphic--big"><span class="mosaic__micro">FERAS 26 / MEMÓRIAS</span><strong>UM MONTE DE<br>HISTÓRIA JUNTA.</strong><img src="assets/camera-sticker.png" alt=""></div>
+      <div class="mosaic__graphic mosaic__graphic--cyan"><span>COISAS DO NOSSO ANO</span><b>26</b></div>
+      <div class="mosaic__graphic mosaic__graphic--paper"><img src="assets/paper-note.png" alt=""><span>ÁLBUM EM<br>MONTAGEM</span></div>
+      <div class="mosaic__graphic mosaic__graphic--purple"><span>FOTOS · VÍDEOS<br>VOZES · RECADOS</span><img src="assets/ink-stroke.png" alt=""></div>
+      <div class="mosaic__graphic mosaic__graphic--last"><strong>AINDA TEM<br>MUITA COISA.</strong><span>OS REGISTROS AUTORIZADOS ENTRAM AQUI</span></div>
+    </div>
+    <p class="archive__note section-wrap" id="archiveNote">Estamos selecionando as fotos e os vídeos que poderão fazer parte do memorial.</p>
+  </section>
+
+  <section class="people" id="pessoas" aria-labelledby="peopleTitle">
+    <div class="section-wrap">
+      <div class="section-index" data-reveal><span>04 / AS PESSOAS</span><span>QUEM ESTAVA POR AQUI</span></div>
+      <h2 id="peopleTitle" data-reveal>LEMBRAR DO ANO É <em>LEMBRAR DE GENTE.</em></h2>
+    </div>
+    <div class="people__sequence">
+      <article class="people__scene people__scene--teachers" data-reveal>
+        <div class="people__visual" aria-hidden="true"><span class="people__number">01</span><div class="people__mosaic"><i></i><i></i><i></i><i></i></div><span class="people__label">FRENTE DA SALA / 2026</span></div>
+        <div class="people__copy"><span class="eyebrow">PROFESSORES</span><h3>AS AULAS<br><em>E TUDO ALÉM DELAS.</em></h3><p>Tem explicação que ficou. Tem frase que a turma não esquece. Queremos ouvir essas histórias de quem esteve na sala, não inventá-las.</p></div>
+      </article>
+      <article class="people__scene people__scene--staff" data-reveal>
+        <div class="people__visual" aria-hidden="true"><span class="people__number">02</span><div class="people__mosaic"><i></i><i></i><i></i><i></i></div><span class="people__label">ANTES DA PRIMEIRA AULA</span></div>
+        <div class="people__copy"><span class="eyebrow">FUNCIONÁRIOS</span><h3>QUEM A GENTE<br><em>ENCONTRAVA TODO DIA.</em></h3><p>Na entrada, na limpeza, na cantina, na secretaria, nos corredores. Essas pessoas também fazem parte do que a gente lembra da escola.</p></div>
+      </article>
+      <article class="people__scene people__scene--students" data-reveal>
+        <div class="people__visual" aria-hidden="true"><span class="people__number">03</span><div class="people__mosaic"><i></i><i></i><i></i><i></i></div><span class="people__label">AS CINCO TURMAS</span></div>
+        <div class="people__copy"><span class="eyebrow">OS FERAS</span><h3>CADA SALA,<br><em>SUAS HISTÓRIAS.</em></h3><p>3º A, B, C, D e E. Tem coisa que foi de todo mundo. E tem muita coisa que só uma sala vai entender.</p></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="small" id="entre" aria-labelledby="smallTitle">
+    <div class="small__filmstrip" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="small__center section-wrap">
+      <div class="section-index" data-reveal><span>05 / AS ENTRELINHAS</span><span>O QUE NÃO TEM DATA NO CALENDÁRIO</span></div>
+      <h2 id="smallTitle" data-reveal>O QUE ACONTECEU<br><em>ENTRE UMA COISA E OUTRA.</em></h2>
+      <div class="small__collage">
+        <div class="small__note small__note--one" data-reveal><span>UMA FOTO TREMIDA</span><strong>às vezes era a melhor de todas.</strong></div>
+        <div class="small__note small__note--two" data-reveal><span>UM BORDÃO DA SALA</span><strong>aquele que não precisa explicar.</strong></div>
+        <div class="small__note small__note--three" data-reveal><span>UM DIA NORMAL</span><strong>que acabou rendendo história.</strong></div>
+        <img class="small__sticker" src="assets/quadros-feras.png" alt="" aria-hidden="true">
       </div>
-      <div class="people-panels">
-        <article class="people-panel people-panel--teachers" data-reveal><span class="people-panel__index">01</span><div class="people-panel__symbol" aria-hidden="true">A+</div><div><span class="people-panel__tag">PROFESSORES</span><h3>Quem estava na frente da sala.</h3><p>As explicações, os conselhos, as broncas, as piadas repetidas. Queremos lembrar de quem ensinou muito além da matéria.</p></div><span class="people-panel__footer">RETRATOS E HISTÓRIAS EM PREPARAÇÃO ↗</span></article>
-        <article class="people-panel people-panel--staff" data-reveal><span class="people-panel__index">02</span><div class="people-panel__symbol" aria-hidden="true">✳</div><div><span class="people-panel__tag">FUNCIONÁRIOS</span><h3>Quem fazia tudo acontecer.</h3><p>A portaria, a limpeza, a secretaria, a cantina e tanta gente que estava lá antes da primeira aula começar.</p></div><span class="people-panel__footer">NOMES E DEPOIMENTOS EM PREPARAÇÃO ↗</span></article>
-        <article class="people-panel people-panel--class" data-reveal><span class="people-panel__index">03</span><div class="people-panel__symbol" aria-hidden="true">26</div><div><span class="people-panel__tag">ALUNOS</span><h3>Cada sala tinha seu jeito.</h3><p>As turmas, os grupos, as amizades que cruzaram de sala e as histórias que ninguém de fora entenderia de primeira.</p></div><span class="people-panel__footer">ANUÁRIO E TURMAS EM PREPARAÇÃO ↗</span></article>
-      </div>
-    </section>
+      <p class="small__invitation">Quando a gente conseguir juntar essas histórias, elas também vão morar aqui.</p>
+    </div>
+  </section>
 
-    <section class="everyday" id="cotidiano" aria-labelledby="everydayTitle">
-      <div class="everyday__intro" data-reveal><p class="section-code">05 / ENTRE UMA AULA E OUTRA</p><h2 id="everydayTitle">A PARTE QUE QUASE <i>NUNCA</i> VAI PRA RETROSPECTIVA.</h2><p>Uma conversa no intervalo. Um bilhete. Um dia qualquer que acabou virando história. Vai ter espaço para isso também.</p></div>
-      <div class="scrap-stage" aria-label="Objetos do nosso futuro mural de memórias">
-        <div class="scrap-paper scrap-paper--blue" data-reveal><span>COISAS QUE SÓ A GENTE ENTENDE</span><b>?</b></div>
-        <div class="scrap-polaroid" data-reveal><div class="scrap-polaroid__inside"><span>FOTO EM<br>PREPARAÇÃO</span></div><span>entre uma aula e outra…</span></div>
-        <div class="scrap-paper scrap-paper--green" data-reveal><span>HISTÓRIAS QUE NÃO DÁ PRA INVENTAR</span><b>!</b></div>
-        <span class="scrap-note">o mural vai crescer com o acervo</span>
-      </div>
-    </section>
-
-    <section class="ending" id="final" aria-labelledby="endingTitle">
-      <div class="ending__lines" aria-hidden="true"></div>
-      <p class="section-code section-code--inverse" data-reveal>06 / DEPOIS DO SINAL</p>
-      <h2 id="endingTitle" data-reveal>AINDA NÃO <em>ACABOU</em> POR AQUI.</h2>
-      <p data-reveal>O memorial vai continuar recebendo fotos, vídeos, lembranças e histórias. A ideia é simples: daqui a alguns anos, ainda conseguir voltar e reconhecer esse lugar.</p>
-      <img class="ending__logo" src="./assets/feras26.png" alt="Feras 26">
-      <div class="ending__actions"><a href="#acontecimentos">VER OS CAPÍTULOS <span aria-hidden="true">↗</span></a><a href="#inicio">VOLTAR AO COMEÇO <span aria-hidden="true">↑</span></a></div>
-    </section>
-  </main>
-
-  <footer class="footer"><span>FERAS 26 · AGOSTINIANO</span><span>FEITO PELA TURMA. PARA A TURMA.</span><span>MEMORIAL EM CONSTRUÇÃO</span></footer>
-
-  <dialog class="memory-dialog" id="memoryDialog" aria-labelledby="dialogTitle">
-    <div class="memory-dialog__head"><span id="dialogCode">CAPÍTULO</span><button id="dialogClose" type="button" aria-label="Fechar capítulo">✕</button></div>
-    <div class="memory-dialog__content"><h2 id="dialogTitle"></h2><p id="dialogText"></p><div class="memory-dialog__images" id="dialogImages"></div><p class="memory-dialog__note" id="dialogNote">O acervo deste capítulo está sendo selecionado. Ainda não publicamos imagens pessoais aqui.</p></div>
-  </dialog>
+  <section class="finale" id="final" aria-labelledby="finalTitle">
+    <div class="finale__halo" aria-hidden="true"></div>
+    <div class="finale__claw" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="finale__content">
+      <div class="section-index" data-reveal><span>06 / DEPOIS DO SINAL</span><span>AGOSTINIANO · 2026</span></div>
+      <h2 id="finalTitle" data-reveal>DAQUI A UNS ANOS,<br><em>ABRE DE NOVO.</em></h2>
+      <p data-reveal>Ainda tem muita foto pra escolher, muito vídeo pra encontrar e muita história pra ouvir. A gente vai montando, aos poucos, pra ter onde voltar.</p>
+      <img src="assets/feras26.png" alt="FERAS 26, Agostiniano 2026" class="finale__logo">
+      <a class="finale__restart" href="#inicio">VOLTAR AO COMEÇO <span aria-hidden="true">↗</span></a>
+    </div>
+  </section>
+</main>
+<footer class="footer"><span>FERAS 26 · AGOSTINIANO</span><span>MEMORIAL EM CONSTRUÇÃO</span><a href="#inicio">VOLTAR ↑</a></footer>
+<dialog class="chapter-modal" id="chapterDialog" aria-labelledby="chapterTitle">
+  <div class="chapter-modal__top"><span id="chapterCode">FERAS 26 / ACERVO</span><button type="button" id="chapterClose" aria-label="Fechar capítulo">FECHAR ✕</button></div>
+  <div class="chapter-modal__body">
+    <div class="chapter-modal__heading"><span class="eyebrow" id="chapterCategory"></span><h2 id="chapterTitle"></h2><p id="chapterText"></p></div>
+    <div class="chapter-modal__media" id="chapterMedia"></div>
+    <div class="chapter-modal__empty" id="chapterEmpty">As fotos selecionadas para o memorial vão aparecer aqui. Por enquanto, este capítulo está sendo montado.</div>
+  </div>
+</dialog>
 </body>
 </html>

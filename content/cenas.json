@@ -1,0 +1,35 @@
+{
+  "versao": "0.2",
+  "nota": "Os caminhos de imagem só podem apontar para cópias autorizadas em media/. Nunca colocar dados de pessoas ou tokens privados aqui.",
+  "locais": [
+    {
+      "id": "portao",
+      "numero": "01",
+      "nome": "O PORTÃO",
+      "descricao": "O começo de todo dia. A entrada, a espera, o caminho pra dentro.",
+      "imagem": null
+    },
+    {
+      "id": "patio",
+      "numero": "02",
+      "nome": "O PÁTIO",
+      "descricao": "Era onde a gente se encontrava antes de ir pra sala.",
+      "imagem": null
+    },
+    {
+      "id": "salas",
+      "numero": "03",
+      "nome": "AS SALAS",
+      "descricao": "Cada uma com seu jeito, suas conversas e seus professores.",
+      "imagem": null
+    },
+    {
+      "id": "auditorio",
+      "numero": "04",
+      "nome": "O AUDITÓRIO",
+      "descricao": "Tem aulão e outros encontros que merecem entrar no arquivo.",
+      "imagem": null
+    }
+  ],
+  "recortes": []
+}
