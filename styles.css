@@ -160,3 +160,8 @@ body.cinema-on .nav__cinema{position:absolute;top:14px;right:clamp(16px,3.4vw,58
 }
 @media(max-width:900px){.year__pin{position:static;height:auto;min-height:0}}
 @media(prefers-reduced-motion:reduce){body.cinema-on .nav__logo,body.cinema-on .nav__edition,body.cinema-on .nav__menu{opacity:1;pointer-events:auto}}
+
+/* Recortes intencionalmente fora da área visível não devem criar rolagem lateral. */
+html,body{max-width:100%;overflow-x:clip}
+main{overflow-x:clip}
+.year__pin,.year__rail{width:100%;max-width:100%}
