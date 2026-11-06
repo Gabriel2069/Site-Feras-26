@@ -26,6 +26,10 @@ try {
    assert.equal(await page.locator("#mosaicWall").count(), 1, "mosaic missing");
    assert.equal(await page.locator("#chapterDialog").count(), 1, "dialog missing");
    const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+   if (scrollWidth > config.viewport.width + 3) {
+     const offenders = await page.evaluate(() => [...document.querySelectorAll("body *")].map(el => ({el,rect:el.getBoundingClientRect()})).filter(({el,rect}) => rect.width>0 && rect.left < innerWidth && rect.right > innerWidth+3 && getComputedStyle(el).position!=="fixed").slice(0,15).map(({el,rect})=>({tag:el.tagName,cls:el.className?.toString().slice(0,80),right:Math.round(rect.right),left:Math.round(rect.left),text:el.textContent?.trim().slice(0,30)})));
+     console.log("OVERFLOW ELEMENTS "+config.name+": "+JSON.stringify(offenders));
+   }
    assert.ok(scrollWidth <= config.viewport.width + 3, "unexpected horizontal page overflow: "+scrollWidth);
    await page.screenshot({ path: "visual-snapshots/" + config.name + "-hero.png" });
    await page.locator("#menuButton").click();
