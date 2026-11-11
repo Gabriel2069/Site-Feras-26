@@ -2,7 +2,7 @@
 
 Memorial audiovisual do Terceirão do Agostiniano 2026.
 
-**Estado:** fundação e primeiro protótipo. A experiência visual já funciona, mas ainda não representa o memorial final. Fotografias dos estudantes, vídeos oficiais, relatos e depoimentos só serão publicados após triagem, autorização e edição.
+**Estado:** montagem audiovisual navegável. A [revisão de montagem](docs/montagem-do-memorial.md) descreve as cenas, a prévia privada com fotografias e o fluxo para selecionar o material do site público.
 
 ## Princípio editorial
 
@@ -26,7 +26,7 @@ Não tratar a turma como uma peça publicitária. Narrar o que realmente acontec
 - HTML/CSS/JS estáticos, sem login, servidor ou banco de dados.
 - Componentes de rolagem e montagem responsiva, com alternativa de movimento reduzido.
 - Arquivo `content/acervo.json` para dados editoriais e imagens autorizadas.
-- `assets/feras26.png` do kit gráfico original fornecido pela organização.
+- `assets/marca-garra.webp`, marca Feras com a garra atrás do nome.
 - `docs/roteiro-editorial.md` contém as cenas propostas e lacunas a preencher.
 - Não colocamos imagens pessoais no repositório público.
 
@@ -35,7 +35,7 @@ A arquitetura pode evoluir para Astro e GSAP quando o roteiro audiovisual e as f
 ## Publicação Cloudflare Pages
 
 1. **Workers & Pages → Create application → Pages → Connect to Git**.
-2. Escolha `Gabriel2069/SiteFeras`, branch `main`.
+2. Escolha `Gabriel2069/Site-Feras-26`, branch `main`.
 3. **Framework preset:** None; **Build command:** `exit 0`; **Output directory:** `.`.
 4. Publique e teste a URL fornecida pela Cloudflare. Commits seguintes podem gerar novas versões automaticamente.
 

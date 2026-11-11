@@ -23,6 +23,9 @@ try {
    page.on("pageerror", error => errors.push(error.message));
    await page.goto("http://127.0.0.1:4173/", { waitUntil: "domcontentloaded" });
    await page.locator("#eventTrack .episode").first().waitFor({ timeout: 15000 });
+   assert.equal(await page.locator(".film.is-directed").count(), 0);
+   assert.equal(await page.locator(".film__layer:visible").count(), 4);
+   assert.match(await page.locator(".film__mark").getAttribute("src"), /marca-garra/);
    assert.equal(await page.locator("#mosaicWall").count(), 1, "mosaic missing");
    assert.equal(await page.locator("#chapterDialog").count(), 1, "dialog missing");
    const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
@@ -50,6 +53,14 @@ try {
  const motion = await browser.newPage({ viewport:{width:1440,height:900}, reducedMotion:"no-preference" });
  await motion.goto("http://127.0.0.1:4173/",{waitUntil:"domcontentloaded"});
  await motion.locator("#eventTrack .episode").first().waitFor({timeout:15000});
+ const filmTravel = await motion.locator(".film").evaluate(el => el.offsetHeight - el.querySelector(".film__stage").offsetHeight);
+ for (const [position, layer] of [[0.36, "opening"], [0.66, "reel"], [0.95, "collective"], [0.02, "slate"]]) {
+   await motion.evaluate(top => scrollTo({top, behavior: "instant"}), filmTravel * position);
+   await motion.waitForFunction(expected =>
+     [...document.querySelectorAll(".film__layer:not([hidden])")].map(node => node.dataset.layer).join() === expected,
+     layer
+   );
+ }
  await motion.waitForTimeout(180);
  const initial = await motion.locator("#yearPin").evaluate(el=>el.getBoundingClientRect().top+window.scrollY);
  const railRange = await motion.locator("#eventTrack").evaluate(el=>el.scrollWidth-el.clientWidth);

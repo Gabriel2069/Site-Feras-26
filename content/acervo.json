@@ -8,8 +8,8 @@
       "subtitulo": "Túnel do Tempo",
       "simbolo": "01",
       "categoria": "TROTE",
-      "resumo": "Túnel do Tempo. As primeiras fotos deste capítulo já estão no acervo da turma.",
-      "texto": "O Trote I teve como tema Túnel do Tempo. Estamos selecionando as fotografias e reunindo as histórias para contar esse dia sem inventar o que não foi registrado.",
+      "resumo": "",
+      "texto": "",
       "estado": "em_preparacao",
       "midias": []
     },
@@ -19,8 +19,8 @@
       "subtitulo": "Personagens",
       "simbolo": "02",
       "categoria": "TROTE",
-      "resumo": "No segundo trote, o tema foi Personagens. O resto merece ser visto nas fotos.",
-      "texto": "O Trote II foi o dos personagens. Quando as imagens forem selecionadas, este espaço vai reunir os registros e as lembranças de cada turma.",
+      "resumo": "",
+      "texto": "",
       "estado": "em_preparacao",
       "midias": []
     },
@@ -30,8 +30,8 @@
       "subtitulo": "Coisas que Só Tem no Brasil",
       "simbolo": "03",
       "categoria": "TROTE",
-      "resumo": "Coisas que Só Tem no Brasil. Só o nome já dá uma ideia do que apareceu.",
-      "texto": "A terceira edição teve o tema Coisas que Só Tem no Brasil. As fotografias estão sendo catalogadas para que a montagem mantenha o humor das cenas reais.",
+      "resumo": "",
+      "texto": "",
       "estado": "em_preparacao",
       "midias": []
     },
@@ -40,8 +40,8 @@
       "titulo": "Recreaço",
       "simbolo": "✳",
       "categoria": "ACONTECIMENTO",
-      "resumo": "Tem um álbum inteiro para lembrar o Recreaço. E ainda falta contar o que ficou fora das fotos.",
-      "texto": "O Recreaço faz parte do acervo dos Feras. Vamos reunir os melhores registros, identificar o que aconteceu e ouvir quem esteve lá antes de escrever a versão final.",
+      "resumo": "",
+      "texto": "",
       "estado": "em_preparacao",
       "midias": []
     },
@@ -50,8 +50,8 @@
       "titulo": "Day-Off",
       "simbolo": "↗",
       "categoria": "ACONTECIMENTO",
-      "resumo": "O Day-Off já tem suas fotos guardadas. O capítulo está ganhando forma.",
-      "texto": "As fotos e vídeos do Day-Off estão no acervo. A sequência audiovisual será construída a partir deles e dos relatos da turma.",
+      "resumo": "",
+      "texto": "",
       "estado": "em_preparacao",
       "midias": []
     },
@@ -60,8 +60,18 @@
       "titulo": "Festa Junina",
       "simbolo": "✷",
       "categoria": "ACONTECIMENTO",
-      "resumo": "Também tem Festa Junina no nosso ano. Os registros vão ganhar seu espaço.",
-      "texto": "Há fotografias da Festa Junina no arquivo dos Feras. Antes de publicar o capítulo, vamos selecionar as imagens e identificar os momentos com mais precisão.",
+      "resumo": "",
+      "texto": "",
+      "estado": "em_preparacao",
+      "midias": []
+    },
+    {
+      "id": "aula-da-saudade",
+      "titulo": "Aula da Saudade",
+      "subtitulo": "Pizzada",
+      "categoria": "ACONTECIMENTO",
+      "resumo": "",
+      "texto": "",
       "estado": "em_preparacao",
       "midias": []
     }

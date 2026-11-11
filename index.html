@@ -8,67 +8,95 @@
 <meta property="og:title" content="FERAS 26 · Depois do Sinal">
 <meta property="og:description" content="Fotos, histórias e gente do nosso último ano.">
 <title>FERAS 26 · Depois do Sinal</title>
-<link rel="icon" href="assets/feras26.png" type="image/png">
+<link rel="icon" href="assets/marca-garra.webp" type="image/webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;1,500;1,600&family=DM+Sans:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;1,500;1,600&family=DM+Sans:wght@400;500;600;700&family=Caveat:wght@600;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./styles.css">
+<link rel="stylesheet" href="./montagem.css">
+<script src="./montagem.js" defer></script>
 <script src="./main.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#caminho">Ir para a história</a>
-<div class="film-grain" aria-hidden="true"></div>
+
 <div class="progress" aria-hidden="true"><div id="progress"></div></div>
 <header class="nav" id="masthead">
-  <a href="#inicio" class="nav__logo" aria-label="Feras 26, voltar ao começo"><img src="assets/feras26.png" alt="FERAS 26"></a>
-  <span class="nav__edition">AGOSTINIANO <i aria-hidden="true">✳</i> 2026</span>
+  <a href="#inicio" class="nav__logo" aria-label="Feras 26, voltar ao começo"><img src="assets/marca-garra.webp" alt="FERAS 26"></a>
+
   <div class="nav__actions">
     <button class="nav__cinema" id="cinemaButton" type="button" aria-pressed="false"><span class="dot"></span><span id="cinemaLabel">MODO CINEMA</span></button>
     <button class="nav__menu" id="menuButton" type="button" aria-expanded="false" aria-controls="navigation">CAPÍTULOS <span class="menu-lines" aria-hidden="true"><i></i><i></i></span></button>
   </div>
 </header>
 <nav class="navigation" id="navigation" aria-label="Navegação do memorial" inert>
-  <span class="navigation__overline">ESSE ANO, VISTO DE NOVO.</span>
-  <a href="#inicio"><small>00</small><span>O COMEÇO</span></a>
-  <a href="#caminho"><small>01</small><span>A ESCOLA</span></a>
-  <a href="#acontecimentos"><small>02</small><span>O ANO</span></a>
-  <a href="#mosaico"><small>03</small><span>AS FOTOS</span></a>
-  <a href="#pessoas"><small>04</small><span>AS PESSOAS</span></a>
-  <a href="#entre"><small>05</small><span>AS ENTRELINHAS</span></a>
-  <a href="#final"><small>06</small><span>DEPOIS</span></a>
-  <span class="navigation__foot">FERAS 26 · UM MEMORIAL EM CONSTRUÇÃO</span>
+
+  <a href="#inicio"><span>O COMEÇO</span></a>
+  <a href="#caminho"><span>A ESCOLA</span></a>
+  <a href="#acontecimentos"><span>O ANO</span></a>
+  <a href="#mosaico"><span>AS FOTOS</span></a>
+  <a href="#pessoas"><span>AS PESSOAS</span></a>
+  <a href="#entre"><span>AS ENTRELINHAS</span></a>
+  <a href="#final"><span>DEPOIS</span></a>
+
 </nav>
 <main>
-  <section class="intro" id="inicio" aria-label="Abertura do memorial">
-    <div class="intro__sticky" id="introStage">
-      <div class="intro__lights" aria-hidden="true"></div>
-      <div class="intro__film-frame intro__film-frame--left" aria-hidden="true"><span>06 / 2026</span><div class="film-abstract film-abstract--one"></div><i>um retrato do ano</i></div>
-      <div class="intro__film-frame intro__film-frame--right" aria-hidden="true"><span>AGOSTINIANO</span><div class="film-abstract film-abstract--two"></div><i>as coisas de sempre</i></div>
-      <div class="intro__collage intro__collage--burst"><img src="assets/burst-sticker.png" alt=""></div>
-      <div class="intro__collage intro__collage--clapper"><img src="assets/clapper-sticker.png" alt=""></div>
-      <div class="intro__slash" aria-hidden="true"><i></i><i></i><i></i></div>
-      <div class="intro__center" id="introCenter">
-        <p class="eyebrow intro__eyebrow">O TERCEIRÃO DO AGOSTINIANO · 2026</p>
-        <img class="intro__logo" id="introLogo" src="assets/feras26.png" alt="FERAS 26, Agostiniano 2026">
-        <div class="intro__title" id="introTitle">
-          <h1>DEPOIS DO <em>SINAL.</em></h1>
-          <p>Pra rever as fotos, encontrar quem estava lá e lembrar até das coisas pequenas.</p>
+  <section class="film" id="inicio" aria-labelledby="filmTitle">
+    <h1 id="filmTitle" class="film__sr">Depois do Sinal · Feras 26</h1>
+    <span id="primeira-cena" class="film__anchor"></span>
+    <div class="film__stage">
+      <div class="film__layer film__slate" data-layer="slate">
+        <p class="film__slate-text"><span>Goiânia, GO</span><span>Colégio Agostiniano</span><span>3º ano · Turma 2026</span></p>
+        <a class="film__enter" href="#primeira-cena">Entrar no memorial <span aria-hidden="true">↓</span></a>
+      </div>
+      <div class="film__layer film__opening" data-layer="opening">
+        <div class="film__ground" aria-hidden="true"></div>
+        <div class="film__photograph" aria-hidden="true"><img data-shot="patio" alt=""></div>
+        <div class="film__ink film__ink--blue" aria-hidden="true"></div>
+        <div class="film__ink film__ink--green" aria-hidden="true"></div>
+        <div class="film__tile film__tile--ledge" aria-hidden="true"><img data-shot="patio-detalhe" alt=""></div>
+        <div class="film__tile film__tile--school" aria-hidden="true"><img data-shot="fachada" alt=""></div>
+        <div class="film__opening-type">
+          <span class="film__kicker">Colégio Agostiniano · 2026</span>
+          <p class="film__title">Depois<br><i>do sinal</i></p>
         </div>
+        <img class="film__mark" src="assets/marca-garra.webp" alt="Feras Agostiniano 2026, com a garra atrás">
+        <span class="film__caption" data-shot-label="patio">Colégio Agostiniano</span>
       </div>
-      <div class="intro__bottom">
-        <span>UM MEMORIAL EM CONSTRUÇÃO</span>
-        <a href="#caminho">ENTRAR NA HISTÓRIA <span aria-hidden="true">↓</span></a>
-        <span>00 — 06</span>
+      <div class="film__layer film__reel" data-layer="reel">
+        <div class="film__reel-ground" aria-hidden="true"></div>
+        <div class="film__reel-type">
+          <span class="film__kicker">Os três trotes</span>
+          <p class="film__title">Dia<br><i>de trote</i></p>
+        </div>
+        <div class="film__strip film__strip--one" aria-hidden="true"><img data-shot="trote-1" alt=""></div>
+        <div class="film__strip film__strip--two" aria-hidden="true"><img data-shot="trote-2" alt=""></div>
+        <div class="film__strip film__strip--three" aria-hidden="true"><img data-shot="trote-3" alt=""></div>
+        <img class="film__reel-print" src="assets/kit-trote-ii.webp" alt="" aria-hidden="true">
+        <span class="film__caption">Túnel do Tempo · Personagens · Coisas que Só Tem no Brasil</span>
       </div>
-      <div class="intro__framecount" aria-hidden="true">REC <b>●</b> 26</div>
+      <div class="film__layer film__collective" data-layer="collective">
+        <div class="film__collective-copy">
+          <span class="film__kicker">Aula da Saudade</span>
+          <p class="film__title">A foto<br><i>da turma</i></p>
+        </div>
+        <div class="film__grid" aria-hidden="true">
+          <div><img data-shot="saudade-1" alt=""></div>
+          <div><img data-shot="saudade-2" alt=""></div>
+          <div><img data-shot="saudade-3" alt=""></div>
+          <div><img data-shot="saudade-4" alt=""></div>
+        </div>
+        <a class="film__to-archive" href="#mosaico">Ver as fotos <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="film__grain" aria-hidden="true"></div>
     </div>
   </section>
 
   <section class="passage" id="caminho" aria-labelledby="passageTitle">
-    <div class="passage__index section-index" data-reveal><span>01 / OS LUGARES</span><span>AGOSTINIANO · 2026</span></div>
+    <div class="passage__index section-index" data-reveal><span>Os lugares</span></div>
     <div class="passage__headline" data-reveal>
-      <p class="eyebrow">PASSA TANTA VEZ QUE NEM PENSA.</p>
-      <h2 id="passageTitle">A GENTE AINDA <span>SABE O CAMINHO.</span></h2>
+      <p class="eyebrow">COLÉGIO AGOSTINIANO</p>
+      <h2 id="passageTitle">A <span>ESCOLA.</span></h2>
     </div>
     <div class="passage__sequence">
       <div class="corridor" id="corridor" aria-label="Composição dos lugares da escola">
@@ -77,28 +105,28 @@
         <div class="corridor__scene" id="locationScene">
           <div class="corridor__image" id="locationImage" aria-hidden="true"></div>
           <span class="corridor__stamp" id="locationStamp">01 / 04</span>
-          <div class="corridor__caption"><small>UM LUGAR DA NOSSA ROTINA</small><strong id="locationName">O PÁTIO</strong><p id="locationDescription">Era onde a gente se encontrava antes de ir pra sala.</p></div>
+          <div class="corridor__caption"><small>COLÉGIO AGOSTINIANO</small><strong id="locationName">O PÁTIO</strong><p id="locationDescription">Era onde a gente se encontrava antes de ir pra sala.</p></div>
         </div>
         <div class="corridor__ticker" aria-hidden="true">01—02—03—04<span>FERAS 26</span>01—02—03—04</div>
       </div>
       <div class="passage__aside">
-        <p>O portão, o pátio, os corredores, as salas. Os mesmos caminhos o ano inteiro, com histórias diferentes todos os dias.</p>
+
         <div class="place-switch" role="group" aria-label="Escolher lugar">
           <button type="button" data-place="portao">PORTÃO <span>01</span></button>
           <button type="button" data-place="patio" class="is-active">PÁTIO <span>02</span></button>
           <button type="button" data-place="salas">SALAS <span>03</span></button>
           <button type="button" data-place="auditorio">AUDITÓRIO <span>04</span></button>
         </div>
-        <span class="handwritten">Tem lugar que a gente reconhece de longe.</span>
+
       </div>
     </div>
   </section>
 
   <section class="year" id="acontecimentos" aria-labelledby="yearTitle">
     <div class="year__head section-wrap">
-      <div class="section-index" data-reveal><span>02 / O ANO</span><span>NOSSOS ACONTECIMENTOS</span></div>
-      <h2 id="yearTitle" data-reveal>O CALENDÁRIO <em>NÃO DÁ CONTA.</em></h2>
-      <div class="year__sub" data-reveal><p>Trotes, Recreaço, Day-Off, Festa Junina. Em cada pasta aparece um pedaço do ano.</p><div class="year__controls"><button id="eventPrev" type="button" aria-label="Capítulo anterior">←</button><button id="eventNext" type="button" aria-label="Próximo capítulo">→</button></div></div>
+      <div class="section-index" data-reveal><span>Acontecimentos</span></div>
+      <h2 id="yearTitle" data-reveal>O QUE A GENTE <em>VIVEU.</em></h2>
+      <div class="year__sub" data-reveal><div class="year__controls"><button id="eventPrev" type="button" aria-label="Capítulo anterior">←</button><button id="eventNext" type="button" aria-label="Próximo capítulo">→</button></div></div>
     </div>
     <div class="year__pin" id="yearPin"><div class="year__rail" id="eventTrack" aria-label="Capítulos dos acontecimentos" tabindex="0"><p class="loading">Abrindo os capítulos…</p></div></div>
     <div class="year__foot section-wrap"><span>DESLIZE PARA ENCONTRAR OS PRÓXIMOS CAPÍTULOS</span><span>FERAS 26 · ACERVO</span></div>
@@ -106,8 +134,8 @@
 
   <section class="archive" id="mosaico" aria-labelledby="archiveTitle">
     <div class="archive__heading section-wrap">
-      <div class="section-index" data-reveal><span>03 / O ACERVO</span><span>FOTOS, VÍDEOS E ACHADOS</span></div>
-      <div class="archive__headline" data-reveal><h2 id="archiveTitle">TEM FOTO QUE <em>CONTA TUDO.</em></h2><p>Outras só fazem sentido pra quem tava lá. O arquivo vai ter espaço pras duas.</p></div>
+      <div class="section-index" data-reveal><span>Fotos e vídeos</span></div>
+      <div class="archive__headline" data-reveal><h2 id="archiveTitle">O <em>ACERVO.</em></h2></div>
     </div>
     <div class="archive__controls" id="archiveFilters" aria-label="Filtrar acervo"><button type="button" class="is-selected" data-filter="todos" aria-pressed="true">TUDO</button></div>
     <div class="mosaic" id="mosaicWall" aria-live="polite">
@@ -122,13 +150,13 @@
 
   <section class="people" id="pessoas" aria-labelledby="peopleTitle">
     <div class="section-wrap">
-      <div class="section-index" data-reveal><span>04 / AS PESSOAS</span><span>QUEM ESTAVA POR AQUI</span></div>
-      <h2 id="peopleTitle" data-reveal>LEMBRAR DO ANO É <em>LEMBRAR DE GENTE.</em></h2>
+      <div class="section-index" data-reveal><span>As pessoas</span></div>
+      <h2 id="peopleTitle" data-reveal>QUEM ESTAVA <em>COM A GENTE.</em></h2>
     </div>
     <div class="people__sequence">
       <article class="people__scene people__scene--teachers" data-reveal>
         <div class="people__visual" aria-hidden="true"><span class="people__number">01</span><div class="people__mosaic"><i></i><i></i><i></i><i></i></div><span class="people__label">FRENTE DA SALA / 2026</span></div>
-        <div class="people__copy"><span class="eyebrow">PROFESSORES</span><h3>AS AULAS<br><em>E TUDO ALÉM DELAS.</em></h3><p>Tem explicação que ficou. Tem frase que a turma não esquece. Queremos ouvir essas histórias de quem esteve na sala, não inventá-las.</p></div>
+        <div class="people__copy"><span class="eyebrow">PROFESSORES</span><h3>AS AULAS<br><em>E TUDO ALÉM DELAS.</em></h3></div>
       </article>
       <article class="people__scene people__scene--staff" data-reveal>
         <div class="people__visual" aria-hidden="true"><span class="people__number">02</span><div class="people__mosaic"><i></i><i></i><i></i><i></i></div><span class="people__label">ANTES DA PRIMEIRA AULA</span></div>
@@ -161,9 +189,9 @@
     <div class="finale__claw" aria-hidden="true"><i></i><i></i><i></i></div>
     <div class="finale__content">
       <div class="section-index" data-reveal><span>06 / DEPOIS DO SINAL</span><span>AGOSTINIANO · 2026</span></div>
-      <h2 id="finalTitle" data-reveal>DAQUI A UNS ANOS,<br><em>ABRE DE NOVO.</em></h2>
-      <p data-reveal>Ainda tem muita foto pra escolher, muito vídeo pra encontrar e muita história pra ouvir. A gente vai montando, aos poucos, pra ter onde voltar.</p>
-      <img src="assets/feras26.png" alt="FERAS 26, Agostiniano 2026" class="finale__logo">
+      <h2 id="finalTitle" data-reveal>Até a próxima, <em>Feras.</em></h2>
+
+      <img src="assets/marca-garra.webp" alt="FERAS 26, Agostiniano 2026" class="finale__logo">
       <a class="finale__restart" href="#inicio">VOLTAR AO COMEÇO <span aria-hidden="true">↗</span></a>
     </div>
   </section>

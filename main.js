@@ -8,12 +8,6 @@ const nav = $("#masthead");
 const navigation = $("#navigation");
 const menuButton = $("#menuButton");
 const progress = $("#progress");
-const intro = $(".intro");
-const introCenter = $("#introCenter");
-const introLogo = $("#introLogo");
-const introTitle = $("#introTitle");
-const introSlash = $(".intro__slash");
-const introFrames = $$(".intro__film-frame");
 const corridor = $("#corridor");
 const corridorBackdrop = $("#corridorBackdrop");
 const eventTrack = $("#eventTrack");
@@ -61,6 +55,7 @@ let previousFocus = null;
 function filePath(src) {
   if (typeof src !== "string") return null;
   // Publicação de mídia é deliberada e local. IDs e tokens privados do Drive não entram aqui.
+  if (Object.hasOwn(window.ferasPreview?.images ?? {}, src)) return window.ferasPreview.images[src];
   return /^\.\/media\/[a-zA-Z0-9/_-]+\.(jpg|jpeg|png|webp|avif|mp4|webm)$/i.test(src) ? src : null;
 }
 function isVideo(src) { return /\.(mp4|webm)$/i.test(src); }
@@ -81,20 +76,6 @@ function updateMotion() {
   nav.classList.toggle("is-scrolled", scrollY > 46);
   if (yearPinned) eventTrack.scrollLeft = clamp(scrollY - pinStart, 0, railRange);
   if (reduced.matches) return;
-  const introBounds = intro.getBoundingClientRect();
-  const introTravel = Math.max(1, intro.offsetHeight - innerHeight);
-  const p = clamp(-introBounds.top / introTravel, 0, 1);
-  if (introBounds.bottom >= 0 && introBounds.top <= innerHeight) {
-    introCenter.style.transform = "translate3d(0," + (-95*p) + "px,0) scale(" + (1+0.14*p) + ")";
-    introCenter.style.opacity = String(clamp(1 - p*1.15,.06,1));
-    introLogo.style.filter = "drop-shadow(0 20px 22px #0009)";
-    introSlash.style.opacity = String(.1 + .65*p);
-    introSlash.style.transform = "translate3d(" + (-50*p) + "px,0,0) scale(" + (1+0.18*p) + ")";
-    introFrames.forEach((frame, i) => {
-      const shift = (i === 0 ? -1 : 1) * p * 180;
-      frame.style.translate = shift + "px " + (p * (i === 0 ? -115 : 125)) + "px";
-    });
-  }
   if (corridor) {
     const r = corridor.getBoundingClientRect();
     if (r.top <= innerHeight && r.bottom >= 0) {
@@ -109,6 +90,7 @@ function requestMotion() {
 addEventListener("scroll", requestMotion, {passive:true});
 addEventListener("resize", requestMotion, {passive:true});
 addEventListener("resize",()=>requestAnimationFrame(measureYear),{passive:true});
+reduced.addEventListener("change", measureYear);
 if(document.fonts?.ready) document.fonts.ready.then(()=>requestAnimationFrame(measureYear));
 requestMotion();
 
@@ -196,7 +178,7 @@ function makeEpisode(item,index) {
   card.type="button";card.className="episode";
   card.setAttribute("aria-label","Abrir capítulo: "+item.titulo);
   const top=text("div","","episode__top");
-  top.append(text("span",String(index+1).padStart(2,"0")+" / 06"),text("span",item.subtitulo||item.categoria));
+  if (item.subtitulo) top.append(text("span",item.subtitulo));
   const numeral=text("div",String(index+1).padStart(2,"0"),"episode__number");
   numeral.setAttribute("aria-hidden","true");
   const polaroid=text("div","","episode__photo");
@@ -205,7 +187,7 @@ function makeEpisode(item,index) {
   const first=(item.midias||[]).find(m=>filePath(m.src)&&!isVideo(m.src));
   if(first) {
     const img=document.createElement("img");
-    img.src=first.src;img.alt="";img.loading="lazy";photo.append(img);
+    img.src=filePath(first.src);img.alt="";img.loading="lazy";photo.append(img);
   } else {
     photo.append(text("span","FERAS 26 / ARQUIVO"));
   }
@@ -214,9 +196,9 @@ function makeEpisode(item,index) {
   decal.className="episode__decal";decal.src=safeAsset(index);decal.alt="";decal.loading="lazy";decal.setAttribute("aria-hidden","true");
   const bottom=text("div","","episode__bottom");
   bottom.append(text("h3",item.titulo));
-  bottom.append(text("p",item.resumo));
+  if (item.resumo) bottom.append(text("p",item.resumo));
   const footer=text("div","","episode__footer");
-  footer.append(text("span","FERAS 26"),text("span","ABRIR CAPÍTULO ↗"));
+  footer.append(text("span","ABRIR CAPÍTULO ↗"));
   bottom.append(footer);
   card.append(top,numeral,polaroid,decal,bottom);
   card.addEventListener("click",()=>openChapter(item));
@@ -246,7 +228,7 @@ function renderMosaic(events,filter="todos"){
   }else{
     selected.slice(0,36).forEach(item=>{
       const button=document.createElement("button");button.type="button";button.className="mosaic__photo";
-      const image=document.createElement("img");image.src=item.src;image.alt=item.alt||item.event.titulo;image.loading="lazy";image.decoding="async";
+      const image=document.createElement("img");image.src=filePath(item.src);image.alt=item.alt||item.event.titulo;image.loading="lazy";image.decoding="async";
       const cap=text("span",item.legenda||item.event.titulo);
       button.append(image,cap);
       button.addEventListener("click",()=>openChapter(item.event));
@@ -308,6 +290,7 @@ modal.addEventListener("close",()=>{
 });
 
 async function fetchJson(path){
+  if (Object.hasOwn(window.ferasPreview?.content ?? {}, path)) return window.ferasPreview.content[path];
   const r=await fetch(path,{cache:"no-cache"});
   if(!r.ok)throw Error("Não foi possível abrir "+path+": HTTP "+r.status);
   return await r.json();
@@ -327,6 +310,10 @@ async function loadContent(){
   }
   if(scenesResult.status==="fulfilled"){
     const data=scenesResult.value;
+    for (const image of document.querySelectorAll(".film [data-shot]")) {
+      const source = filePath(data.planos?.[image.dataset.shot]);
+      if (source && !("previewShot" in image.dataset)) image.src = source;
+    }
     currentScenes={locais:Array.isArray(data.locais)?data.locais:[],recortes:Array.isArray(data.recortes)?data.recortes:[]};
   }else{console.warn("Cenas complementares indisponíveis:",scenesResult.reason);}
   switchLocation("patio");
