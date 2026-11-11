@@ -44,7 +44,7 @@ try {
    await page.locator("#chapterClose").click();
    assert.equal(await page.locator("#chapterDialog").evaluate(el => el.open), false);
    await page.locator('[data-place="portao"]').click();
-   assert.equal(await page.locator("#locationName").innerText(), "O PORTÃO");
+   assert.equal(await page.locator("#locationName").textContent(), "O PORTÃO");
    await page.locator("#mosaico").scrollIntoViewIfNeeded();
    await page.screenshot({ path: "visual-snapshots/" + config.name + "-mosaic.png" });
    assert.deepEqual(errors, [], "page errors in "+config.name);

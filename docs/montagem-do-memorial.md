@@ -25,3 +25,9 @@ A direção aplica a hierarquia temporal, as pausas para leitura, a materialidad
 4. Conferir o recorte vertical de cada imagem e a abertura da galeria antes de integrar.
 
 Gravações dedicadas dos espaços, portão e auditório, além de retratos e relatos próprios de professores e funcionários, continuam como conteúdo a incorporar quando estiver disponível.
+
+## Continuação: da cena ao álbum
+
+Na sequência da Aula da Saudade, “Ver as fotos” leva ao álbum daquele dia. A área da escola usa os registros reais de pátio e salas na prévia privada. As capas dos acontecimentos ampliam a imagem de cada álbum, e a mesa de fotos alterna um quadro maior com conjuntos de registros menores.
+
+Ao selecionar um registro, o visor abre naquele item e permite percorrer o álbum por setas, miniaturas ou teclado. Fotos e vídeos usam a proporção original no visor. Fechar devolve o foco à foto ou à capa do acontecimento que abriu o visor.

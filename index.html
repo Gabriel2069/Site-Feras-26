@@ -86,28 +86,24 @@
           <div><img data-shot="saudade-3" alt=""></div>
           <div><img data-shot="saudade-4" alt=""></div>
         </div>
-        <a class="film__to-archive" href="#mosaico">Ver as fotos <span aria-hidden="true">↗</span></a>
+        <a class="film__to-archive" href="#mosaico" data-archive-album="aula-da-saudade">Ver as fotos <span aria-hidden="true">↗</span></a>
       </div>
       <div class="film__grain" aria-hidden="true"></div>
     </div>
   </section>
 
   <section class="passage" id="caminho" aria-labelledby="passageTitle">
-    <div class="passage__index section-index" data-reveal><span>Os lugares</span></div>
-    <div class="passage__headline" data-reveal>
-      <p class="eyebrow">COLÉGIO AGOSTINIANO</p>
-      <h2 id="passageTitle">A <span>ESCOLA.</span></h2>
+    <div class="passage__headline">
+      <p class="eyebrow">Colégio Agostiniano</p>
+      <h2 id="passageTitle">Por dentro <i>da escola.</i></h2>
     </div>
     <div class="passage__sequence">
       <div class="corridor" id="corridor" aria-label="Composição dos lugares da escola">
         <div class="corridor__backdrop" id="corridorBackdrop" aria-hidden="true"></div>
-        <div class="corridor__perspective" aria-hidden="true"><span></span><span></span><span></span></div>
         <div class="corridor__scene" id="locationScene">
           <div class="corridor__image" id="locationImage" aria-hidden="true"></div>
-          <span class="corridor__stamp" id="locationStamp">01 / 04</span>
-          <div class="corridor__caption"><small>COLÉGIO AGOSTINIANO</small><strong id="locationName">O PÁTIO</strong><p id="locationDescription">Era onde a gente se encontrava antes de ir pra sala.</p></div>
+          <div class="corridor__caption" aria-live="polite"><strong id="locationName">O PÁTIO</strong><p id="locationDescription">Era onde a gente se encontrava antes de ir pra sala.</p></div>
         </div>
-        <div class="corridor__ticker" aria-hidden="true">01—02—03—04<span>FERAS 26</span>01—02—03—04</div>
       </div>
       <div class="passage__aside">
 
@@ -134,18 +130,15 @@
 
   <section class="archive" id="mosaico" aria-labelledby="archiveTitle">
     <div class="archive__heading section-wrap">
-      <div class="section-index" data-reveal><span>Fotos e vídeos</span></div>
-      <div class="archive__headline" data-reveal><h2 id="archiveTitle">O <em>ACERVO.</em></h2></div>
+      <div class="archive__headline">
+        <h2 id="archiveTitle" tabindex="-1">O nosso <em>álbum.</em></h2>
+        <p class="archive__note" id="archiveNote" role="status">As fotos entram aqui conforme forem selecionadas.</p>
+      </div>
     </div>
     <div class="archive__controls" id="archiveFilters" aria-label="Filtrar acervo"><button type="button" class="is-selected" data-filter="todos" aria-pressed="true">TUDO</button></div>
-    <div class="mosaic" id="mosaicWall" aria-live="polite">
-      <div class="mosaic__graphic mosaic__graphic--big"><span class="mosaic__micro">FERAS 26 / MEMÓRIAS</span><strong>UM MONTE DE<br>HISTÓRIA JUNTA.</strong><img src="assets/camera-sticker.png" alt=""></div>
-      <div class="mosaic__graphic mosaic__graphic--cyan"><span>COISAS DO NOSSO ANO</span><b>26</b></div>
-      <div class="mosaic__graphic mosaic__graphic--paper"><img src="assets/paper-note.png" alt=""><span>ÁLBUM EM<br>MONTAGEM</span></div>
-      <div class="mosaic__graphic mosaic__graphic--purple"><span>FOTOS · VÍDEOS<br>VOZES · RECADOS</span><img src="assets/ink-stroke.png" alt=""></div>
-      <div class="mosaic__graphic mosaic__graphic--last"><strong>AINDA TEM<br>MUITA COISA.</strong><span>OS REGISTROS AUTORIZADOS ENTRAM AQUI</span></div>
+    <div class="mosaic" id="mosaicWall">
+      <div class="archive__empty"><img src="assets/quadros-feras.png" alt=""></div>
     </div>
-    <p class="archive__note section-wrap" id="archiveNote">Estamos selecionando as fotos e os vídeos que poderão fazer parte do memorial.</p>
   </section>
 
   <section class="people" id="pessoas" aria-labelledby="peopleTitle">
@@ -202,6 +195,12 @@
   <div class="chapter-modal__body">
     <div class="chapter-modal__heading"><span class="eyebrow" id="chapterCategory"></span><h2 id="chapterTitle"></h2><p id="chapterText"></p></div>
     <div class="chapter-modal__media" id="chapterMedia"></div>
+    <div class="chapter-modal__controls" id="chapterControls" hidden>
+      <button type="button" id="photoPrev" aria-label="Mídia anterior">←</button>
+      <p id="photoPosition" aria-live="polite"></p>
+      <button type="button" id="photoNext" aria-label="Próxima mídia">→</button>
+    </div>
+    <div class="chapter-modal__strip" id="chapterStrip" role="group" aria-label="Escolher registro"></div>
     <div class="chapter-modal__empty" id="chapterEmpty">As fotos selecionadas para o memorial vão aparecer aqui. Por enquanto, este capítulo está sendo montado.</div>
   </div>
 </dialog>

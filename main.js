@@ -158,7 +158,6 @@ function switchLocation(id) {
     b.setAttribute("aria-pressed",String(active));
   });
   $("#locationName").textContent=loc.nome;
-  $("#locationStamp").textContent=loc.numero+" / 04";
   $("#locationDescription").textContent=loc.descricao;
   corridor.dataset.place=id;
   const surface=$("#locationImage");
@@ -166,6 +165,12 @@ function switchLocation(id) {
   if(src && !isVideo(src)) {
     surface.style.backgroundImage="url('"+src+"')";
     surface.classList.add("has-image");
+    if (!reduced.matches) {
+      surface.getAnimations().forEach(animation => animation.cancel());
+      surface.animate([{ opacity: .3, transform: "scale(1.045)" }, { opacity: 1, transform: "scale(1)" }], {
+        duration: 360, easing: "cubic-bezier(.2,.7,.3,1)"
+      });
+    }
   } else {
     surface.style.backgroundImage="";
     surface.classList.remove("has-image");
@@ -176,6 +181,7 @@ $$("[data-place]").forEach(b=>b.addEventListener("click",()=>switchLocation(b.da
 function makeEpisode(item,index) {
   const card=document.createElement("button");
   card.type="button";card.className="episode";
+  card.dataset.album = item.id;
   card.setAttribute("aria-label","Abrir capítulo: "+item.titulo);
   const top=text("div","","episode__top");
   if (item.subtitulo) top.append(text("span",item.subtitulo));
@@ -201,7 +207,7 @@ function makeEpisode(item,index) {
   footer.append(text("span","ABRIR CAPÍTULO ↗"));
   bottom.append(footer);
   card.append(top,numeral,polaroid,decal,bottom);
-  card.addEventListener("click",()=>openChapter(item));
+  card.addEventListener("click",()=>openChapter(item, null, card));
   return card;
 }
 function renderEpisodes(events){
@@ -218,66 +224,171 @@ eventTrack.addEventListener("keydown",event=>{
   if(event.key==="ArrowLeft"){event.preventDefault();advanceYear(-1);}
 });
 
-function renderMosaic(events,filter="todos"){
-  const available=events.flatMap(event=>(event.midias||[]).filter(m=>filePath(m.src)&&!isVideo(m.src)).map(m=>({...m,event})));
-  if(!available.length){archiveNote.textContent="Estamos selecionando as fotos e os vídeos que poderão fazer parte do memorial.";return;}
-  const selected=available.filter(m=>filter==="todos" || m.event.id===filter);
+function selectAlbum(filter) {
+  const selected = currentEvents.filter(event => filter === "todos" || event.id === filter);
+  const available = selected.flatMap(event =>
+    (event.midias || []).filter(media => filePath(media.src)).map(media => ({ media, event }))
+  );
+  if (!available.length) return;
+  for (const button of archiveFilters.querySelectorAll("button")) {
+    const active = button.dataset.filter === filter;
+    button.classList.toggle("is-selected", active);
+    button.setAttribute("aria-pressed", String(active));
+    if (active) {
+      const bounds = button.getBoundingClientRect();
+      const strip = archiveFilters.getBoundingClientRect();
+      if (bounds.left < strip.left || bounds.right > strip.right) {
+        archiveFilters.scrollLeft += bounds.left - strip.left - (strip.width - bounds.width) / 2;
+      }
+    }
+  }
   mosaic.replaceChildren();
-  if(!selected.length){
-    mosaic.append(text("div","Esse capítulo ainda não tem fotos publicadas.","mosaic__graphic mosaic__graphic--last"));
-  }else{
-    selected.slice(0,36).forEach(item=>{
-      const button=document.createElement("button");button.type="button";button.className="mosaic__photo";
-      const image=document.createElement("img");image.src=filePath(item.src);image.alt=item.alt||item.event.titulo;image.loading="lazy";image.decoding="async";
-      const cap=text("span",item.legenda||item.event.titulo);
-      button.append(image,cap);
-      button.addEventListener("click",()=>openChapter(item.event));
-      mosaic.append(button);
+  mosaic.dataset.view = filter === "todos" ? "all" : "album";
+  const albumName = filter === "todos" ? "Todos os álbuns" : selected[0].titulo;
+  archiveNote.textContent = albumName + " · " + available.length + (available.length === 1 ? " registro" : " registros");
+  for (const { media, event } of available) {
+    const button = text("button", "", "mosaic__photo");
+    button.type = "button";
+    const caption = text("span", media.legenda || event.titulo, "mosaic__caption");
+    const src = filePath(media.src);
+    if (isVideo(src)) {
+      button.classList.add("mosaic__photo--video");
+      button.append(text("strong", "▶", "mosaic__play"));
+      button.setAttribute("aria-label", "Ver vídeo: " + (media.alt || event.titulo));
+    } else {
+      const image = document.createElement("img");
+      image.src = src;
+      image.alt = media.alt || event.titulo;
+      image.loading = "lazy";
+      image.decoding = "async";
+      button.append(image);
+    }
+    button.append(caption);
+    button.addEventListener("click", () => openChapter(event, media, button));
+    mosaic.append(button);
+  }
+  if (!reduced.matches) {
+    mosaic.getAnimations().forEach(animation => animation.cancel());
+    mosaic.animate([{ opacity: .45, transform: "translateY(10px)" }, { opacity: 1, transform: "translateY(0)" }], {
+      duration: 240, easing: "ease-out"
     });
   }
-  archiveNote.textContent=selected.length+" foto"+(selected.length===1?"":"s")+" selecionada"+(selected.length===1?"":"s")+" para esta parte do memorial.";
 }
-function setupFilters(events){
-  const available=events.filter(e=>(e.midias||[]).some(m=>filePath(m.src)&&!isVideo(m.src)));
-  if(!available.length){archiveFilters.replaceChildren();return;}
+
+function setupFilters(events) {
+  const available = events.filter(event => (event.midias || []).some(media => filePath(media.src)));
   archiveFilters.replaceChildren();
-  const options=[{id:"todos",name:"TUDO"},...available.map(e=>({id:e.id,name:e.titulo.toUpperCase()}))];
-  options.forEach(({id,name},index)=>{
-    const b=document.createElement("button");b.type="button";b.dataset.filter=id;b.className=index===0?"is-selected":"";b.setAttribute("aria-pressed",String(index===0));b.textContent=name;
-    b.addEventListener("click",()=>{
-      $$("button",archiveFilters).forEach(x=>{const selected=x.dataset.filter===id;x.classList.toggle("is-selected",selected);x.setAttribute("aria-pressed",String(selected));});
-      renderMosaic(events,id);
-    });
-    archiveFilters.append(b);
+  if (!available.length) return;
+  const options = [{ id: "todos", titulo: "Todos" }, ...available];
+  for (const { id, titulo } of options) {
+    const button = text("button", titulo);
+    button.type = "button";
+    button.dataset.filter = id;
+    button.addEventListener("click", () => selectAlbum(id));
+    archiveFilters.append(button);
+  }
+  selectAlbum("todos");
+}
+
+for (const link of document.querySelectorAll("[data-archive-album]")) {
+  link.addEventListener("click", event => {
+    if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+    event.preventDefault();
+    selectAlbum(link.dataset.archiveAlbum);
+    if (location.hash !== link.hash) history.pushState(null, "", link.hash);
+    $("#mosaico").scrollIntoView({ behavior: "instant" });
+    $("#archiveTitle").focus({ preventScroll: true });
   });
 }
 
-function openChapter(item){
-  previousFocus=document.activeElement;
-  $("#chapterCode").textContent="FERAS 26 / "+(item.categoria||"ACERVO");
-  $("#chapterCategory").textContent=item.subtitulo||"NOSSAS FOTOS";
-  $("#chapterTitle").textContent=item.titulo;
-  $("#chapterText").textContent=item.texto||item.resumo;
-  const list=$("#chapterMedia");
-  list.replaceChildren();
-  let count=0;
-  (item.midias||[]).forEach(media=>{
-    const src=filePath(media.src);
-    if(!src)return;
-    const figure=document.createElement("figure");
-    let element;
-    if(isVideo(src)){
-      element=document.createElement("video");element.src=src;element.controls=true;element.preload="metadata";element.playsInline=true;
-      element.setAttribute("aria-label",media.alt||"Vídeo do "+item.titulo);
-    }else{
-      element=document.createElement("img");element.src=src;element.loading="lazy";element.alt=media.alt||item.titulo;element.decoding="async";
-    }
-    const caption=text("figcaption",media.legenda||"");
-    figure.append(element,caption);list.append(figure);count++;
+const mediaView = $("#chapterMedia");
+const mediaStrip = $("#chapterStrip");
+const mediaControls = $("#chapterControls");
+const mediaPosition = $("#photoPosition");
+let viewer = { item: null, entries: [], index: 0 };
+
+function showMedia(index, keepThumbVisible = true) {
+  const { entries, item } = viewer;
+  if (index < 0 || index >= entries.length) return;
+  viewer.index = index;
+  const { media, src } = entries[index];
+  const video = isVideo(src);
+  const element = document.createElement(video ? "video" : "img");
+  if (video) {
+    element.controls = true;
+    element.preload = "metadata";
+    element.playsInline = true;
+    element.setAttribute("aria-label", media.alt || item.titulo);
+  } else {
+    element.alt = media.alt || item.titulo;
+    element.decoding = "async";
+  }
+  element.src = src;
+  $("video", mediaView)?.pause();
+  const figure = document.createElement("figure");
+  figure.append(element);
+  if (media.legenda) figure.append(text("figcaption", media.legenda));
+  mediaView.replaceChildren(figure);
+  mediaPosition.textContent = (index + 1) + " / " + entries.length;
+  $("#photoPrev").setAttribute("aria-disabled", String(index === 0));
+  $("#photoNext").setAttribute("aria-disabled", String(index === entries.length - 1));
+  [...mediaStrip.children].forEach((button, position) => {
+    button.setAttribute("aria-current", position === index ? "true" : "false");
   });
-  $("#chapterEmpty").hidden=count>0;
-  modal.showModal();
+  if (keepThumbVisible) {
+    const active = mediaStrip.children[index];
+    const stripBounds = mediaStrip.getBoundingClientRect();
+    const activeBounds = active.getBoundingClientRect();
+    if (activeBounds.left < stripBounds.left || activeBounds.right > stripBounds.right) {
+      mediaStrip.scrollLeft += activeBounds.left - stripBounds.left - (stripBounds.width - activeBounds.width) / 2;
+    }
+  }
 }
+
+function openChapter(item, selectedMedia, trigger) {
+  previousFocus = trigger;
+  const entries = (item.midias || []).map(media => ({ media, src: filePath(media.src) })).filter(entry => entry.src);
+  viewer = { item, entries, index: 0 };
+  $("#chapterCode").textContent = item.categoria || "Acervo";
+  $("#chapterCategory").textContent = item.subtitulo || "";
+  $("#chapterTitle").textContent = item.titulo;
+  $("#chapterText").textContent = item.texto || item.resumo || "";
+  mediaView.replaceChildren();
+  mediaStrip.replaceChildren();
+  mediaControls.hidden = entries.length < 2;
+  mediaStrip.hidden = entries.length < 2;
+  $("#chapterEmpty").hidden = entries.length > 0;
+  if (entries.length > 1) {
+    entries.forEach(({ media, src }, index) => {
+      const button = text("button", "", "chapter-modal__thumb");
+      button.type = "button";
+      button.setAttribute("aria-label", media.alt || "Registro " + (index + 1));
+      if (isVideo(src)) {
+        button.textContent = "▶";
+      } else {
+        const image = document.createElement("img");
+        image.src = src;
+        image.alt = "";
+        image.loading = "lazy";
+        button.append(image);
+      }
+      button.addEventListener("click", () => showMedia(index));
+      mediaStrip.append(button);
+    });
+  }
+  modal.showModal();
+  if (entries.length) showMedia(Math.max(0, entries.findIndex(entry => entry.media === selectedMedia)), entries.length > 1);
+}
+
+$("#photoPrev").addEventListener("click", () => showMedia(viewer.index - 1));
+$("#photoNext").addEventListener("click", () => showMedia(viewer.index + 1));
+modal.addEventListener("keydown", event => {
+  if (event.target.closest("video") || event.altKey || event.ctrlKey || event.metaKey) return;
+  if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+  event.preventDefault();
+  showMedia(viewer.index + (event.key === "ArrowRight" ? 1 : -1));
+});
+
 function closeChapter(){if(modal.open)modal.close();}
 $("#chapterClose").addEventListener("click",closeChapter);
 modal.addEventListener("click",event=>{
@@ -301,7 +412,6 @@ async function loadContent(){
     const data=eventsResult.value;
     currentEvents=Array.isArray(data.eventos)?data.eventos:[];
     renderEpisodes(currentEvents);
-    renderMosaic(currentEvents);
     setupFilters(currentEvents);
   }else{
     eventTrack.replaceChildren();
