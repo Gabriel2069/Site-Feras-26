@@ -45,3 +45,9 @@ O relato do Tadeu organiza a passagem do encerramento do JICA ao último semestr
 A escola tem nove lugares, incluindo Guarita e Salão de Palestras como ambientes próprios. Os planos que Tadeu ainda vai fotografar entram pelo campo `imagem` em `content/cenas.json`. Os retratos da equipe e os nomes dos Feras de Medalha entram quando forem enviados.
 
 Os Mini Feras usam a estrutura e os estilos das Polaroids do mural original. A galeria integrada lê `content/mini-feras.json`, com `nome`, `apelido` e o caminho `src` de cada imagem em `media/mini-feras/`. A prévia privada incorpora os arquivos; o manifest versionado no repositório público fica vazio até a publicação das cópias autorizadas. O álbum geral apresenta lotes de 42 registros por filtro. A paginação organiza o carregamento e mantém os registros restantes acessíveis pelo botão “Mostrar mais fotos”.
+
+## Ampliação da linha do tempo e do acervo
+
+A narrativa ganhou o convite à Poly, Feira de Ciências, Espaço das Profissões, Maratona UFG, Time Olímpico e aprovações. A homenagem à Aryana inclui a surpresa da turma. Os agradecimentos distinguem professores, funcionários, representantes e vices. A despedida acompanha o fim das provas, os Sprints, André, Juju, a Aula da Saudade e a música do baile.
+
+As variantes clara e escura da marca com garra usam transparência. O mosaico do ano usa fotos de capítulos do acervo quando disponíveis, carregadas pelo mesmo catálogo do álbum. As mídias continuam privadas na prévia. As subdivisões do Drive foram aplicadas por evidência visual ou contexto de data e pasta. A triagem de outros registros continua em aberto.

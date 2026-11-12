@@ -88,6 +88,69 @@
       "categoria": "ACERVO",
       "estado": "em_preparacao",
       "midias": []
+    },
+    {
+      "id": "convite-poly",
+      "titulo": "Convite à Poly",
+      "subtitulo": "Madrinha da turma",
+      "categoria": "ACERVO",
+      "estado": "em_preparacao",
+      "texto": "Teve “Poly já”, teve “Vote certo” e teve o 46. Os cartazes guardaram o jeito que a turma achou de pedir pra Poly ser nossa madrinha.",
+      "midias": []
+    },
+    {
+      "id": "feira-ciencias",
+      "titulo": "Feira de Ciências",
+      "subtitulo": "Feira do Ensino Médio",
+      "categoria": "ACERVO",
+      "estado": "em_preparacao",
+      "texto": "Da Fonte de Heron à cabine de fotos, o álbum guardou um pouco do que a gente apresentou e do que aconteceu pelo caminho.",
+      "midias": []
+    },
+    {
+      "id": "espaco-profissoes",
+      "titulo": "Espaço das Profissões",
+      "subtitulo": "UFG",
+      "categoria": "ACERVO",
+      "estado": "em_preparacao",
+      "texto": "A gente saiu do Agostiniano pra conhecer de perto a universidade e pensar no que podia vir depois do terceirão.",
+      "midias": []
+    },
+    {
+      "id": "time-olimpico",
+      "titulo": "Time Olímpico",
+      "subtitulo": "Feras de Medalha",
+      "categoria": "ACERVO",
+      "estado": "em_preparacao",
+      "texto": "Teve Fera que manteve o time olímpico na rotina mesmo no meio de provas, simulados e plantões.",
+      "midias": []
+    },
+    {
+      "id": "maratona-ufg",
+      "titulo": "Maratona UFG",
+      "subtitulo": "Preparação",
+      "categoria": "ACERVO",
+      "estado": "em_preparacao",
+      "texto": "A Maratona UFG foi um daqueles dias em que a turma se juntou pra se preparar. Os registros guardaram o encontro e os bastidores.",
+      "midias": []
+    },
+    {
+      "id": "retratos-sala",
+      "titulo": "Retratos em sala",
+      "subtitulo": "",
+      "categoria": "ACERVO",
+      "estado": "em_preparacao",
+      "texto": "",
+      "midias": []
+    },
+    {
+      "id": "convivencia",
+      "titulo": "Pátio, corredores e convivência",
+      "subtitulo": "",
+      "categoria": "ACERVO",
+      "estado": "em_preparacao",
+      "texto": "",
+      "midias": []
     }
   ]
 }

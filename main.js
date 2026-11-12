@@ -430,6 +430,13 @@ async function loadContent(){
     const data=eventsResult.value;
     currentEvents=Array.isArray(data.eventos)?data.eventos:[];
     renderEpisodes(currentEvents.filter(item => item.categoria !== "ACERVO"));
+    for (const image of $$("[data-moment-image]")) {
+      const item = currentEvents.find(event => event.id === image.dataset.momentImage);
+      const photo = item?.midias.find(media => filePath(media.src) && !isVideo(media.src));
+      if (!photo) continue;
+      image.src = filePath(photo.src);
+      image.closest("figure").hidden = false;
+    }
     for (const button of $$("[data-open-event]")) {
       const event = currentEvents.find(item => item.id === button.dataset.openEvent);
       if (!event) continue;
