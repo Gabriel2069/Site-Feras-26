@@ -4,30 +4,56 @@
   "locais": [
     {
       "id": "portao",
-      "numero": "01",
-      "nome": "O PORTÃO",
-      "descricao": "O começo de todo dia. A entrada, a espera, o caminho pra dentro.",
+      "nome": "A GUARITA",
+      "descricao": "As catracas de vez em quando travavam. Aí era esperar o tio ou arriscar passar por baixo e levar esporro.",
       "imagem": null
     },
     {
       "id": "patio",
-      "numero": "02",
       "nome": "O PÁTIO",
-      "descricao": "Era onde a gente se encontrava antes de ir pra sala.",
+      "descricao": "Tem história demais nesse pátio. Era onde todo mundo acabava se encontrando.",
       "imagem": null
     },
     {
       "id": "salas",
-      "numero": "03",
       "nome": "AS SALAS",
-      "descricao": "Cada uma com seu jeito, suas conversas e seus professores.",
+      "descricao": "O nosso andar, as nossas salas. Cada uma com um jeito que só quem estudava ali sabe.",
+      "imagem": null
+    },
+    {
+      "id": "coordenacao",
+      "nome": "COORDENAÇÃO E ORIENTADORES",
+      "descricao": "As salas da coordenação e dos orientadores também faziam parte do caminho.",
+      "imagem": null
+    },
+    {
+      "id": "quadras",
+      "nome": "AS QUADRAS",
+      "descricao": "As mesmas que já ralaram tanto joelho e torceram tanto pé.",
       "imagem": null
     },
     {
       "id": "auditorio",
-      "numero": "04",
       "nome": "O AUDITÓRIO",
-      "descricao": "Tem aulão e outros encontros que merecem entrar no arquivo.",
+      "descricao": "O lugar marcado no aviso do aulão do primeiro dia do ENEM.",
+      "imagem": null
+    },
+    {
+      "id": "salao",
+      "nome": "O SALÃO DE PALESTRAS",
+      "descricao": "Nos Sprints Finais, coube todo mundo assistindo aula junto.",
+      "imagem": null
+    },
+    {
+      "id": "recepcao",
+      "nome": "A RECEPÇÃO",
+      "descricao": "",
+      "imagem": null
+    },
+    {
+      "id": "estudos",
+      "nome": "A SALA DE ESTUDOS",
+      "descricao": "",
       "imagem": null
     }
   ],

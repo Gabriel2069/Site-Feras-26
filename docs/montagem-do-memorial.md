@@ -37,3 +37,11 @@ Ao selecionar um registro, o visor abre naquele item e permite percorrer o álbu
 O memorial ganhou capítulos para a infância, as pessoas e a despedida. A ação de reunir fotos de infância aparece apenas como história da turma. As imagens continuam fora do site. A homenagem inicial registra a escolha da música do baile pela professora Aryana, tradição relatada pelo representante. O capítulo do aulão usa o horário e o ponto de encontro do aviso original. As legendas dos sete álbuns partem dos nomes dos eventos e dos registros selecionados.
 
 O caderno de memórias gera um arquivo de texto no aparelho do visitante. O formulário não salva nem envia dados. A turma pode enviar o arquivo aos representantes, que decidem o que entra no memorial junto com quem fez o relato. Perfis adicionais, falas, imagens de infância e registros da cerimônia continuam dependendo de material próprio e autorização.
+
+## História contada pelos Feras
+
+O relato do Tadeu organiza a passagem do encerramento do JICA ao último semestre: anúncio da identidade, estreia do andar, camisa, provas e simulados, últimos rituais e despedidas. O texto preserva os detalhes da turma, como os ensaios de sexta, o Manteigão, a pergunta da Juju e a última aula do André. “Metralhadora” é citada como a música escolhida pela professora Aryana. O vídeo e a faixa seguem fora do código até haver arquivo e autorização adequados.
+
+A escola tem nove lugares, incluindo Guarita e Salão de Palestras como ambientes próprios. Os planos que Tadeu ainda vai fotografar entram pelo campo `imagem` em `content/cenas.json`. Os retratos da equipe e os nomes dos Feras de Medalha entram quando forem enviados.
+
+Os Mini Feras usam a estrutura e os estilos das Polaroids do mural original. A galeria integrada lê `content/mini-feras.json`, com `nome`, `apelido` e o caminho `src` de cada imagem em `media/mini-feras/`. A prévia privada incorpora os arquivos; o manifest versionado no repositório público fica vazio até a publicação das cópias autorizadas. O álbum geral apresenta lotes de 42 registros por filtro. A paginação organiza o carregamento e mantém os registros restantes acessíveis pelo botão “Mostrar mais fotos”.

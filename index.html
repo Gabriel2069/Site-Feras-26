@@ -32,7 +32,8 @@
 <nav class="navigation" id="navigation" aria-label="Navegação do memorial" inert>
 
   <a href="#inicio"><span>O COMEÇO</span></a>
-  <a href="#antes"><span>ANTES DO TERCEIRÃO</span></a>
+  <a href="#antes"><span>A NOSSA HISTÓRIA</span></a>
+  <a href="#mini-feras" data-mini-open><span>MINI FERAS</span></a>
   <a href="#caminho"><span>A ESCOLA</span></a>
   <a href="#acontecimentos"><span>O ANO</span></a>
   <a href="#mosaico"><span>AS FOTOS</span></a>
@@ -98,13 +99,54 @@
     <div class="memory-before__inner section-wrap">
       <div class="memory-before__art" aria-hidden="true">
         <div class="memory-before__frame"></div>
-        <img src="assets/kit-trote-i.webp" alt="">
+        <img src="assets/marca-garra.webp" alt="">
       </div>
       <div class="memory-before__copy">
-        <p class="eyebrow">Antes do terceirão</p>
-        <h2 id="beforeTitle">Quando a gente<br><em>era pequeno.</em></h2>
-        <p>Pra montar um vídeo da turma, os Feras pediram que cada um mandasse uma foto de quando era criança. Antes de aparecerem juntos nas fotos do terceirão, cada um tinha uma história bem diferente.</p>
-        <button class="memory-link" type="button" data-open-event="trote-1" hidden>Rever o Trote do Túnel do Tempo <span aria-hidden="true">↗</span></button>
+        <p class="eyebrow">No encerramento do JICA</p>
+        <h2 id="beforeTitle">Antes de<br><em>começar.</em></h2>
+        <p>O nosso terceirão começou no encerramento do JICA do ano passado. Foi ali que anunciaram quem a gente ia ser. Vieram as cores, os recortes, a garra. E uma logo que é nossa e de mais ninguém.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="year-story" aria-labelledby="yearStoryTitle">
+    <div class="section-wrap">
+      <h2 id="yearStoryTitle">Quando a ficha <em>caiu.</em></h2>
+      <div class="year-story__scenes">
+        <article>
+          <h3>Um andar pra chamar de nosso</h3>
+          <p>A gente estreou o nosso andar, todo personalizado. Vieram professores novos, aula segunda à tarde, aula sábado e aquelas pilhas de material que a gente buscava de três em três meses. No contraturno ainda tinha coisa só pra nós. A gente é Fera, a gente pode.</p>
+        </article>
+        <article class="year-story__shirt">
+          <h3>Agora é pra valer</h3>
+          <p>Chegou o dia de ganhar a camisa. A gente já sabia o nome, conhecia as cores, já subia pro nosso andar. Foi com a camisa na mão que a ficha caiu.</p>
+          <strong>Somos Feras.</strong>
+        </article>
+        <article>
+          <h3>Os riscos no calendário</h3>
+          <p>As aulas foram indo. As tarefas foram vindo, embora uma ou outra a gente deixasse pra lá. Simulados e provas foram ocupando o histórico de progresso. Na metade do ano, riscar mais um dia do calendário já virava comemoração. Aí a gente teve o nosso último Dia das Mães.</p>
+        </article>
+        <article class="year-story__dance">
+          <h3>A nossa última dança</h3>
+          <p>Sexta era dia de ensaio. Tinha gente caindo nos cavalinhos e uma falta completa de ritmo nos passinhos do Michael J. E, no meio disso tudo, chegou a Festa Junina. A nossa última dança.</p>
+          <button class="memory-link" type="button" data-open-event="festa-junina" hidden>Rever a Festa Junina <span aria-hidden="true">↗</span></button>
+        </article>
+        <article>
+          <h3>Depois das férias, o trem virou jato</h3>
+          <p>Caímos no gap anual do Manteigão. Caímos atirando, porque mesmo assim ficávamos acima das médias de resultado. E o cansaço já tava batendo quando veio tudo junto: Recreaço, Maratona UFG, trotes e Maratona EVO.</p>
+          <p>Teve gente que segurou o time olímpico, que apareceu no plantão mesmo em semana de feriado ou férias, que foi pro Agos Mundi e que saiu pra ver arte nas exposições que a escola levava.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="mini-intro" id="mini-feras" aria-labelledby="miniTitle">
+    <div class="section-wrap mini-intro__inner">
+      <img src="assets/quadros-feras.png" alt="">
+      <div>
+        <h2 id="miniTitle">Mini <em>Feras.</em></h2>
+        <p>Antes de caber na camisa do terceirão, a gente cabia nessas fotos.</p>
+        <button class="memory-link" type="button" data-mini-open>Abrir as Polaroids <span aria-hidden="true">↗</span></button>
       </div>
     </div>
   </section>
@@ -125,10 +167,15 @@
       <div class="passage__aside">
 
         <div class="place-switch" role="group" aria-label="Escolher lugar">
-          <button type="button" data-place="portao">PORTÃO <span>01</span></button>
-          <button type="button" data-place="patio" class="is-active">PÁTIO <span>02</span></button>
-          <button type="button" data-place="salas">SALAS <span>03</span></button>
-          <button type="button" data-place="auditorio">AUDITÓRIO <span>04</span></button>
+          <button type="button" data-place="portao">GUARITA</button>
+          <button type="button" data-place="patio" class="is-active">PÁTIO</button>
+          <button type="button" data-place="salas">SALAS</button>
+          <button type="button" data-place="coordenacao">COORDENAÇÃO E ORIENTADORES</button>
+          <button type="button" data-place="quadras">QUADRAS</button>
+          <button type="button" data-place="auditorio">AUDITÓRIO</button>
+          <button type="button" data-place="salao">SALÃO DE PALESTRAS</button>
+          <button type="button" data-place="recepcao">RECEPÇÃO</button>
+          <button type="button" data-place="estudos">SALA DE ESTUDOS</button>
         </div>
 
       </div>
@@ -156,6 +203,7 @@
     <div class="mosaic" id="mosaicWall">
       <div class="archive__empty"><img src="assets/quadros-feras.png" alt=""></div>
     </div>
+    <div class="archive__more section-wrap"><button id="archiveMore" type="button" hidden>Mostrar mais fotos</button></div>
   </section>
 
   <section class="memory-people" id="pessoas" aria-labelledby="peopleTitle">
@@ -165,7 +213,7 @@
         <article class="memory-people__story">
           <p class="eyebrow">Professores</p>
           <h3>Professora Aryana</h3>
-          <p>Todo ano, a Aryana escolhe uma música pra turma dançar no baile. Pros Feras 26, a escolha chegou de surpresa. É uma das tradições que a gente quis guardar aqui.</p>
+          <p>Todo ano a Aryana escolhe uma música pra turma dançar no baile. A nossa é “Metralhadora”. A escolha apareceu no vídeo que ela fez pra gente, no meio de tanta despedida que ainda tava caindo a ficha.</p>
           <a class="memory-link" href="#despedida">A música do baile <span aria-hidden="true">↓</span></a>
         </article>
         <div class="memory-people__notes">
@@ -216,17 +264,17 @@
       <h2 id="farewellTitle">Os últimos <em>dias.</em></h2>
       <div class="memory-farewell__chapters">
         <article>
-          <h3>O aulão do ENEM</h3>
-          <p>No aviso do primeiro dia do ENEM, o encontro era às 7h30 no canto do pátio, antes de ir pro auditório.</p>
+          <h3>Uma última vez, de tudo</h3>
+          <p>Último simulado, últimas provas. Nos Sprints Finais, todo mundo assistiu aula junto no Salão de Palestras. Depois foram chegando as últimas aulas de cada matéria. A do André era também a última dele. A gente teve a honra de ser a última geração a ter aula com ele.</p>
         </article>
         <article>
           <h3>A Aula da Saudade</h3>
-          <p>O álbum reúne a Aula da Saudade e a pizzada, com fotos da turma no pátio.</p>
-          <button class="memory-link" type="button" data-open-event="aula-da-saudade" hidden>Abrir o capítulo <span aria-hidden="true">↗</span></button>
+          <p>Veio a despedida dos professores, a pergunta surpresa da Juju e o vídeo da Aryana. Depois, nas fotos da Aula da Saudade e da pizzada, a gente ainda tá tentando caber todo mundo no quadro.</p>
+          <button class="memory-link" type="button" data-open-event="aula-da-saudade" hidden>Abrir o álbum da Aula da Saudade <span aria-hidden="true">↗</span></button>
         </article>
         <article>
-          <h3>A música do baile</h3>
-          <p>A surpresa começou com a escolha da Aryana. A tradição termina na pista, com a turma dançando a música que ela escolheu.</p>
+          <h3>“Metralhadora”</h3>
+          <p>A música que a Aryana escolheu pra gente dançar junto no baile.</p>
         </article>
       </div>
     </div>
@@ -258,6 +306,10 @@
     <div class="chapter-modal__strip" id="chapterStrip" role="group" aria-label="Escolher registro"></div>
     <div class="chapter-modal__empty" id="chapterEmpty">As fotos selecionadas para o memorial vão aparecer aqui. Por enquanto, este capítulo está sendo montado.</div>
   </div>
+</dialog>
+<dialog id="miniDialog" class="mini-dialog" aria-label="Mini Feras">
+  <button class="mini-dialog__close" type="button" aria-label="Fechar Mini Feras">Fechar ×</button>
+  <iframe id="miniFrame" title="Polaroids dos Mini Feras"></iframe>
 </dialog>
 </body>
 </html>

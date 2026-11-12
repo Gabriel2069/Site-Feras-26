@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Mini Feras · Polaroid</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&amp;family=Barlow&#43;Condensed:wght@700;800;900&amp;display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --roxo:#5820da;
+  --verde:#baff4c;
+  --ciano:#10c5ed;
+  --papel:#fffefa;
+}
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+}
+body{
+  background:#19191e;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-family:Arial,sans-serif;
+}
+.polaroid{
+  position:relative;
+  width:min(88vw,740px,calc(85dvh * .83));
+  aspect-ratio:.83;
+  background:var(--papel);
+  padding:clamp(10px,2vw,19px);
+  display:flex;
+  flex-direction:column;
+  box-shadow:0 22px 70px #0007,7px 9px 0 #0003;
+  transform:rotate(-.6deg);
+  transition:transform .28s ease;
+  touch-action:pan-y;
+  user-select:none;
+  -webkit-user-select:none;
+  overflow:hidden;
+}
+.polaroid.next{transform:rotate(1deg)}
+.photo{
+  position:relative;
+  width:100%;
+  flex:1;
+  min-height:0;
+  background:#25232b;
+  overflow:hidden;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+.photo img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:none;
+}
+.photo img.visible{display:block}
+.loading{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:25px;
+  font:800 20px 'Barlow Condensed',sans-serif;
+  letter-spacing:.08em;
+  color:#eee;
+}
+.photo-label{
+  height:clamp(78px,11vh,114px);
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:9px 7px 0;
+  gap:15px;
+}
+.identidade{
+  flex:1;
+  min-width:0;
+  text-align:center;
+  padding-left:30px;
+}
+.nome{
+  display:block;
+  color:#211b2d;
+  font:700 clamp(35px,6vw,61px)/.86 'Caveat',cursive;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+.apelido{
+  margin-top:5px;
+  color:#77717c;
+  font:700 clamp(14px,2vw,21px)/1 'Caveat',cursive;
+}
+.selo{
+  background:var(--roxo);
+  color:white;
+  border:2px solid #171126;
+  width:clamp(53px,7vw,79px);
+  height:clamp(53px,7vw,79px);
+  border-radius:50%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  flex-shrink:0;
+  font:900 clamp(12px,2vw,19px)/.86 'Barlow Condensed',sans-serif;
+  transform:rotate(12deg);
+  box-shadow:3px 3px 0 #191424;
+}
+.selo small{
+  color:var(--verde);
+  font-size:1.3em;
+  margin-top:3px;
+}
+.counter{
+  position:absolute;
+  left:8px;
+  bottom:5px;
+  color:#a6a2ac;
+  font:700 10px Arial,sans-serif;
+  letter-spacing:.14em;
+}
+@media(max-height:530px){
+ .photo-label{height:58px}
+ .nome{font-size:30px}
+ .apelido{font-size:12px}
+ .selo{width:42px;height:42px;font-size:10px}
+ .identidade{padding-left:15px}
+}
+@media(prefers-reduced-motion:reduce){.polaroid{transition:none}}
+</style>
+</head>
+
+<body>
+
+<main class="polaroid" id="polaroid"
+  aria-label="Galeria de fotos dos Feras 26">
+  <div class="photo" id="photo">
+    <div class="loading" id="loading" role="status">
+      ABRINDO NOSSO ÁLBUM…
+    </div>
+    <img id="imagem" alt="Foto de infância">
+  </div>
+
+  <div class="photo-label">
+    <div class="identidade">
+      <span class="nome" id="nome"></span>
+      <div class="apelido" id="apelido"></div>
+    </div>
+
+    <div class="selo">
+      FERAS
+      <small>26</small>
+    </div>
+
+    <span class="counter" id="counter" aria-live="polite"></span>
+  </div>
+</main>
+
+<script>
+"use strict";
+const card = document.querySelector("#polaroid");
+const picture = document.querySelector("#imagem");
+const loading = document.querySelector("#loading");
+const nome = document.querySelector("#nome");
+const apelido = document.querySelector("#apelido");
+const counter = document.querySelector("#counter");
+let photos = [];
+let index = 0;
+let gesture = null;
+let touchedAt = 0;
+
+function show() {
+  const photo = photos[index];
+  if (!photo) {
+    loading.textContent = "AINDA NÃO TEMOS FOTOS";
+    return;
+  }
+  nome.textContent = photo.nome;
+  apelido.textContent = photo.apelido || "";
+  apelido.hidden = !photo.apelido;
+  counter.textContent = String(index + 1).padStart(2, "0") + " / " + String(photos.length).padStart(2, "0");
+  card.classList.toggle("next", index % 2 === 1);
+  loading.style.display = "flex";
+  loading.textContent = "REVELANDO MEMÓRIA…";
+  picture.classList.remove("visible");
+  picture.onload = () => {
+    if (photos[index] !== photo) return;
+    picture.classList.add("visible");
+    loading.style.display = "none";
+    if (photos.length > 1) {
+      new Image().src = photos[(index + 1) % photos.length].src;
+      new Image().src = photos[(index + photos.length - 1) % photos.length].src;
+    }
+  };
+  picture.onerror = () => {
+    if (photos[index] === photo) loading.textContent = "NÃO FOI POSSÍVEL ABRIR ESTA FOTO";
+  };
+  picture.alt = "Foto de infância de " + photo.nome;
+  picture.src = photo.src;
+}
+function move(direction) {
+  if (photos.length < 2) return;
+  index = (index + direction + photos.length) % photos.length;
+  show();
+}
+card.addEventListener("touchstart", event => {
+  const touch = event.changedTouches[0];
+  gesture = { x: touch.screenX, y: touch.screenY };
+}, { passive: true });
+card.addEventListener("touchend", event => {
+  if (!gesture) return;
+  const touch = event.changedTouches[0];
+  const dx = touch.screenX - gesture.x;
+  const dy = touch.screenY - gesture.y;
+  gesture = null;
+  if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) {
+    touchedAt = Date.now();
+    move(dx < 0 ? 1 : -1);
+  }
+}, { passive: true });
+card.addEventListener("click", event => {
+  if (Date.now() - touchedAt < 450) return;
+  const rect = card.getBoundingClientRect();
+  const x = (event.clientX - rect.left) / rect.width;
+  if (x < .3) move(-1);
+  if (x > .7) move(1);
+});
+document.addEventListener("keydown", event => {
+  if (event.key === "ArrowRight") move(1);
+  if (event.key === "ArrowLeft") move(-1);
+  if (event.key === "Escape" && window.parent !== window) {
+    window.parent.postMessage("feras:close-mini", "*");
+  }
+});
+async function start() {
+  try {
+    const embedded = document.querySelector("#miniData");
+    const rows = embedded ? JSON.parse(embedded.textContent) : await (await fetch("./content/mini-feras.json")).json();
+    photos = rows.filter(row => row.nome && (embedded ? /^data:image\/webp;base64,/.test(row.src) : /^\.\/media\/mini-feras\/[\w/-]+\.(webp|jpe?g|png)$/i.test(row.src)));
+    show();
+  } catch {
+    loading.textContent = "NÃO FOI POSSÍVEL ABRIR O ÁLBUM";
+  }
+}
+start();
+</script>
+
+</body>
+</html>

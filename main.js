@@ -144,7 +144,7 @@ document.addEventListener("fullscreenchange",()=>{
 });
 
 const defaultLocations=[
-  {id:"portao",nome:"O PORTÃO",numero:"01",descricao:"O começo de todo dia. A entrada, a espera, o caminho pra dentro.",imagem:null},
+  {id:"portao",nome:"A GUARITA",descricao:"As catracas de vez em quando travavam.",imagem:null},
   {id:"patio",nome:"O PÁTIO",numero:"02",descricao:"Era onde a gente se encontrava antes de ir pra sala.",imagem:null},
   {id:"salas",nome:"AS SALAS",numero:"03",descricao:"Cada uma com seu jeito, suas conversas e seus professores.",imagem:null},
   {id:"auditorio",nome:"O AUDITÓRIO",numero:"04",descricao:"Tem aulão e outros encontros que merecem entrar no arquivo.",imagem:null}
@@ -152,13 +152,13 @@ const defaultLocations=[
 function switchLocation(id) {
   const loc=(currentScenes.locais||[]).find(x=>x.id===id) || defaultLocations.find(x=>x.id===id);
   if(!loc)return;
-  $$("[data-place]").forEach(b=>{
+  $$("button[data-place]").forEach(b=>{
     const active=b.dataset.place===id;
     b.classList.toggle("is-active",active);
     b.setAttribute("aria-pressed",String(active));
   });
   $("#locationName").textContent=loc.nome;
-  $("#locationDescription").textContent=loc.descricao;
+  $("#locationDescription").textContent=loc.descricao || "";
   corridor.dataset.place=id;
   const surface=$("#locationImage");
   const src=filePath(loc.imagem);
@@ -176,7 +176,7 @@ function switchLocation(id) {
     surface.classList.remove("has-image");
   }
 }
-$$("[data-place]").forEach(b=>b.addEventListener("click",()=>switchLocation(b.dataset.place)));
+$$("button[data-place]").forEach(b=>b.addEventListener("click",()=>switchLocation(b.dataset.place)));
 
 function makeEpisode(item,index) {
   const card=document.createElement("button");
@@ -224,6 +224,10 @@ eventTrack.addEventListener("keydown",event=>{
   if(event.key==="ArrowLeft"){event.preventDefault();advanceYear(-1);}
 });
 
+const archiveMore = $("#archiveMore");
+let albumEntries = [];
+let albumOffset = 0;
+
 function selectAlbum(filter) {
   const selected = currentEvents.filter(event => filter === "todos" || event.id === filter);
   const available = selected.flatMap(event =>
@@ -246,7 +250,22 @@ function selectAlbum(filter) {
   mosaic.dataset.view = filter === "todos" ? "all" : "album";
   const albumName = filter === "todos" ? "Todos os álbuns" : selected[0].titulo;
   archiveNote.textContent = albumName + " · " + available.length + (available.length === 1 ? " registro" : " registros");
-  for (const { media, event } of available) {
+  albumEntries = available;
+  albumOffset = 0;
+  appendArchivePage();
+  if (!reduced.matches) {
+    mosaic.getAnimations().forEach(animation => animation.cancel());
+    mosaic.animate([{ opacity: .45, transform: "translateY(10px)" }, { opacity: 1, transform: "translateY(0)" }], {
+      duration: 240, easing: "ease-out"
+    });
+  }
+}
+
+function appendArchivePage(moveFocus = false) {
+  const start = albumOffset;
+  const end = Math.min(start + 42, albumEntries.length);
+  const fragment = document.createDocumentFragment();
+  for (const { media, event } of albumEntries.slice(start, end)) {
     const button = text("button", "", "mosaic__photo");
     button.type = "button";
     const caption = text("span", media.legenda || event.titulo, "mosaic__caption");
@@ -265,15 +284,14 @@ function selectAlbum(filter) {
     }
     button.append(caption);
     button.addEventListener("click", () => openChapter(event, media, button));
-    mosaic.append(button);
+    fragment.append(button);
   }
-  if (!reduced.matches) {
-    mosaic.getAnimations().forEach(animation => animation.cancel());
-    mosaic.animate([{ opacity: .45, transform: "translateY(10px)" }, { opacity: 1, transform: "translateY(0)" }], {
-      duration: 240, easing: "ease-out"
-    });
-  }
+  mosaic.append(fragment);
+  albumOffset = end;
+  archiveMore.hidden = albumOffset === albumEntries.length;
+  if (moveFocus) mosaic.children[start]?.focus();
 }
+archiveMore.addEventListener("click", () => appendArchivePage(true));
 
 function setupFilters(events) {
   const available = events.filter(event => (event.midias || []).some(media => filePath(media.src)));
@@ -411,7 +429,7 @@ async function loadContent(){
   if(eventsResult.status==="fulfilled"){
     const data=eventsResult.value;
     currentEvents=Array.isArray(data.eventos)?data.eventos:[];
-    renderEpisodes(currentEvents);
+    renderEpisodes(currentEvents.filter(item => item.categoria !== "ACERVO"));
     for (const button of $$("[data-open-event]")) {
       const event = currentEvents.find(item => item.id === button.dataset.openEvent);
       if (!event) continue;
@@ -434,6 +452,30 @@ async function loadContent(){
   }else{console.warn("Cenas complementares indisponíveis:",scenesResult.reason);}
   switchLocation("patio");
 }
+const miniDialog = $("#miniDialog");
+const miniFrame = $("#miniFrame");
+let miniTrigger;
+for (const trigger of $$("[data-mini-open]")) {
+  trigger.addEventListener("click", event => {
+    if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+    event.preventDefault();
+    miniTrigger = trigger.closest("#navigation") ? menuButton : trigger;
+    if (!miniFrame.hasAttribute("src") && !miniFrame.hasAttribute("srcdoc")) {
+      if (window.ferasPreview?.miniHtml) miniFrame.srcdoc = window.ferasPreview.miniHtml;
+      else miniFrame.src = "./mini-feras.html";
+    }
+    miniDialog.showModal();
+    miniFrame.focus();
+  });
+}
+$(".mini-dialog__close").addEventListener("click", () => miniDialog.close());
+miniDialog.addEventListener("close", () => miniTrigger?.focus({ preventScroll: true }));
+addEventListener("message", event => {
+  if (miniDialog.open && event.source === miniFrame.contentWindow && event.data === "feras:close-mini") {
+    miniDialog.close();
+  }
+});
+
 const memoryForm = $("#relato");
 const memoryKind = $("#memoryKind");
 const memoryText = $("#memoryText");

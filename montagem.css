@@ -688,3 +688,66 @@ body.preview-media .people__visual, body.preview-media .small__filmstrip { opaci
   .memory-before__art img { width: min(80%, 360px); }
   .memory-farewell__chapters { grid-template-columns: 1fr; }
 }
+
+.year-story {
+  padding: clamp(68px, 10vw, 145px) 0;
+  color: #f2e9de;
+  background: radial-gradient(ellipse at 86% 25%,#322442,transparent 58%),#18131e;
+}
+.year-story h2,.mini-intro h2 {
+  margin: 0 0 .48em;
+  font: 500 clamp(3.5rem, 9vw, 9rem)/.83 var(--film-serif);
+  letter-spacing: -.07em;
+}
+.year-story h2 em { color: #d0b3e0; }
+.year-story__scenes {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: clamp(25px, 5.7vw, 90px);
+}
+.year-story__scenes article { border-top: 1px solid #dac6e04d; padding-top: 1.15rem; }
+.year-story__scenes h3 {
+  font: 600 clamp(2rem, 3.8vw, 4.3rem)/.94 var(--film-serif);
+  margin: 0 0 .5em;
+}
+.year-story__scenes p { max-width: 53ch; font-size: clamp(1rem, 1.6vw, 1.18rem); }
+.year-story__scenes article:last-child { grid-column: 1/-1; }
+.year-story__scenes .year-story__shirt {
+  color: #261d2d;
+  padding: clamp(23px, 3.7vw, 55px);
+  background: url("assets/grao.webp") repeat,#dfd7c7;
+  background-blend-mode: soft-light;
+  border-top: 0;
+  transform: rotate(-1deg);
+  clip-path: polygon(0 2%,32% 0,59% 1%,100% 0,99% 43%,100% 98%,56% 100%,25% 98%,0 100%);
+}
+.year-story__shirt strong { font: 600 italic clamp(2.9rem, 5.2vw, 5.7rem)/.88 var(--film-serif); color: #644575; }
+.year-story__dance h3 { color: #edc790; }
+.mini-intro { padding: clamp(52px, 8vw, 115px) 0; background: #19191e; color: #f4e9db; }
+.mini-intro__inner {
+  display: grid;
+  grid-template-columns: minmax(0, .65fr) minmax(0, 1fr);
+  gap: clamp(20px, 8vw, 105px);
+  align-items: center;
+}
+.mini-intro__inner > img { width: min(65%,290px); justify-self: center; transform: rotate(-8deg); }
+.mini-intro h2 em { color: #c8b4e5; }
+.mini-intro p { font-size: clamp(1rem, 1.7vw, 1.23rem); }
+.mini-dialog { background:#19191e; color:#fff; padding:0; border:0; width:100%; height:100%; max-width:100%; max-height:100%; }
+.mini-dialog::backdrop { background:#19191e; }
+.mini-dialog iframe { display:block; border:0; width:100%; height:100%; }
+.mini-dialog__close {
+  position:absolute; top:max(.65rem, env(safe-area-inset-top)); right:max(.65rem, env(safe-area-inset-right));
+  z-index:2; padding:.62rem .85rem; color:#fff; background:#19191e; border:1px solid #ffffff75;
+  cursor:pointer; font:700 .78rem var(--film-mono);
+}
+.archive__more { margin-top: 2rem; display: flex; justify-content: center; }
+.archive__more button { color:#f8eee2; background:#3e2d4c; border:0; padding:.82rem 1.15rem; cursor:pointer; }
+.corridor__caption p:empty { display:none; }
+.navigation { justify-content:safe center; }
+@media(max-width:740px) {
+  .year-story__scenes { grid-template-columns: 1fr; }
+  .mini-intro__inner { grid-template-columns: minmax(76px,.36fr) minmax(0,1fr); }
+  .mini-intro__inner > img { width:min(100%,140px); }
+  .place-switch button { min-height:48px; letter-spacing:.04em; }
+}

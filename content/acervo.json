@@ -74,6 +74,20 @@
       "texto": "Aula da Saudade e pizzada ficaram no mesmo álbum. Tem foto da turma em pé, agachada e espremida pra caber todo mundo no quadro.",
       "estado": "em_preparacao",
       "midias": []
+    },
+    {
+      "id": "outros",
+      "titulo": "Outros registros",
+      "categoria": "ACERVO",
+      "estado": "em_preparacao",
+      "midias": []
+    },
+    {
+      "id": "oficiais",
+      "titulo": "Oficiais",
+      "categoria": "ACERVO",
+      "estado": "em_preparacao",
+      "midias": []
     }
   ]
 }
