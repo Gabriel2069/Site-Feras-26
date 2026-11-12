@@ -412,6 +412,12 @@ async function loadContent(){
     const data=eventsResult.value;
     currentEvents=Array.isArray(data.eventos)?data.eventos:[];
     renderEpisodes(currentEvents);
+    for (const button of $$("[data-open-event]")) {
+      const event = currentEvents.find(item => item.id === button.dataset.openEvent);
+      if (!event) continue;
+      button.hidden = false;
+      button.addEventListener("click", () => openChapter(event, null, button));
+    }
     setupFilters(currentEvents);
   }else{
     eventTrack.replaceChildren();
@@ -428,4 +434,47 @@ async function loadContent(){
   }else{console.warn("Cenas complementares indisponíveis:",scenesResult.reason);}
   switchLocation("patio");
 }
+const memoryForm = $("#relato");
+const memoryKind = $("#memoryKind");
+const memoryText = $("#memoryText");
+const memoryStatus = $("#memoryStatus");
+
+memoryForm.hidden = false;
+memoryText.addEventListener("input", () => {
+  memoryText.setCustomValidity("");
+  memoryStatus.textContent = "";
+});
+for (const link of $$("[data-memory-kind]")) {
+  link.addEventListener("click", event => {
+    if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+    event.preventDefault();
+    memoryKind.value = link.dataset.memoryKind;
+    if (location.hash !== link.hash) history.pushState(null, "", link.hash);
+    memoryForm.scrollIntoView({ behavior: "instant", block: "start" });
+    memoryText.focus({ preventScroll: true });
+  });
+}
+memoryForm.addEventListener("submit", event => {
+  event.preventDefault();
+  const message = memoryText.value.trim();
+  if (!message) {
+    memoryText.setCustomValidity("Escreva uma lembrança antes de baixar.");
+    memoryText.reportValidity();
+    return;
+  }
+  const author = $("#memoryName").value.trim();
+  const lines = ["Feras 26 · Caderno de memórias", memoryKind.value, "", message];
+  if (author) lines.push("", author);
+  const content = new Blob([lines.join("\n") + "\n"], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(content);
+  const download = document.createElement("a");
+  download.href = url;
+  download.download = "Lembranca_Feras_26.txt";
+  document.body.append(download);
+  download.click();
+  download.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  memoryStatus.textContent = "Arquivo preparado. Você pode continuar editando seu texto aqui.";
+});
+
 loadContent();

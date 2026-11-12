@@ -31,3 +31,9 @@ Gravações dedicadas dos espaços, portão e auditório, além de retratos e re
 Na sequência da Aula da Saudade, “Ver as fotos” leva ao álbum daquele dia. A área da escola usa os registros reais de pátio e salas na prévia privada. As capas dos acontecimentos ampliam a imagem de cada álbum, e a mesa de fotos alterna um quadro maior com conjuntos de registros menores.
 
 Ao selecionar um registro, o visor abre naquele item e permite percorrer o álbum por setas, miniaturas ou teclado. Fotos e vídeos usam a proporção original no visor. Fechar devolve o foco à foto ou à capa do acontecimento que abriu o visor.
+
+## Continuação editorial: o que ficou fora da foto
+
+O memorial ganhou capítulos para a infância, as pessoas e a despedida. A ação de reunir fotos de infância aparece apenas como história da turma. As imagens continuam fora do site. A homenagem inicial registra a escolha da música do baile pela professora Aryana, tradição relatada pelo representante. O capítulo do aulão usa o horário e o ponto de encontro do aviso original. As legendas dos sete álbuns partem dos nomes dos eventos e dos registros selecionados.
+
+O caderno de memórias gera um arquivo de texto no aparelho do visitante. O formulário não salva nem envia dados. A turma pode enviar o arquivo aos representantes, que decidem o que entra no memorial junto com quem fez o relato. Perfis adicionais, falas, imagens de infância e registros da cerimônia continuam dependendo de material próprio e autorização.

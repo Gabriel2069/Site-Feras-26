@@ -32,11 +32,13 @@
 <nav class="navigation" id="navigation" aria-label="Navegação do memorial" inert>
 
   <a href="#inicio"><span>O COMEÇO</span></a>
+  <a href="#antes"><span>ANTES DO TERCEIRÃO</span></a>
   <a href="#caminho"><span>A ESCOLA</span></a>
   <a href="#acontecimentos"><span>O ANO</span></a>
   <a href="#mosaico"><span>AS FOTOS</span></a>
   <a href="#pessoas"><span>AS PESSOAS</span></a>
   <a href="#entre"><span>AS ENTRELINHAS</span></a>
+  <a href="#despedida"><span>A DESPEDIDA</span></a>
   <a href="#final"><span>DEPOIS</span></a>
 
 </nav>
@@ -92,6 +94,21 @@
     </div>
   </section>
 
+  <section class="memory-before" id="antes" aria-labelledby="beforeTitle">
+    <div class="memory-before__inner section-wrap">
+      <div class="memory-before__art" aria-hidden="true">
+        <div class="memory-before__frame"></div>
+        <img src="assets/kit-trote-i.webp" alt="">
+      </div>
+      <div class="memory-before__copy">
+        <p class="eyebrow">Antes do terceirão</p>
+        <h2 id="beforeTitle">Quando a gente<br><em>era pequeno.</em></h2>
+        <p>Pra montar um vídeo da turma, os Feras pediram que cada um mandasse uma foto de quando era criança. Antes de aparecerem juntos nas fotos do terceirão, cada um tinha uma história bem diferente.</p>
+        <button class="memory-link" type="button" data-open-event="trote-1" hidden>Rever o Trote do Túnel do Tempo <span aria-hidden="true">↗</span></button>
+      </div>
+    </div>
+  </section>
+
   <section class="passage" id="caminho" aria-labelledby="passageTitle">
     <div class="passage__headline">
       <p class="eyebrow">Colégio Agostiniano</p>
@@ -141,39 +158,77 @@
     </div>
   </section>
 
-  <section class="people" id="pessoas" aria-labelledby="peopleTitle">
+  <section class="memory-people" id="pessoas" aria-labelledby="peopleTitle">
     <div class="section-wrap">
-      <div class="section-index" data-reveal><span>As pessoas</span></div>
-      <h2 id="peopleTitle" data-reveal>QUEM ESTAVA <em>COM A GENTE.</em></h2>
-    </div>
-    <div class="people__sequence">
-      <article class="people__scene people__scene--teachers" data-reveal>
-        <div class="people__visual" aria-hidden="true"><span class="people__number">01</span><div class="people__mosaic"><i></i><i></i><i></i><i></i></div><span class="people__label">FRENTE DA SALA / 2026</span></div>
-        <div class="people__copy"><span class="eyebrow">PROFESSORES</span><h3>AS AULAS<br><em>E TUDO ALÉM DELAS.</em></h3></div>
-      </article>
-      <article class="people__scene people__scene--staff" data-reveal>
-        <div class="people__visual" aria-hidden="true"><span class="people__number">02</span><div class="people__mosaic"><i></i><i></i><i></i><i></i></div><span class="people__label">ANTES DA PRIMEIRA AULA</span></div>
-        <div class="people__copy"><span class="eyebrow">FUNCIONÁRIOS</span><h3>QUEM A GENTE<br><em>ENCONTRAVA TODO DIA.</em></h3><p>Na entrada, na limpeza, na cantina, na secretaria, nos corredores. Essas pessoas também fazem parte do que a gente lembra da escola.</p></div>
-      </article>
-      <article class="people__scene people__scene--students" data-reveal>
-        <div class="people__visual" aria-hidden="true"><span class="people__number">03</span><div class="people__mosaic"><i></i><i></i><i></i><i></i></div><span class="people__label">AS CINCO TURMAS</span></div>
-        <div class="people__copy"><span class="eyebrow">OS FERAS</span><h3>CADA SALA,<br><em>SUAS HISTÓRIAS.</em></h3><p>3º A, B, C, D e E. Tem coisa que foi de todo mundo. E tem muita coisa que só uma sala vai entender.</p></div>
-      </article>
+      <h2 id="peopleTitle">Quem tava <em>lá.</em></h2>
+      <div class="memory-people__spread">
+        <article class="memory-people__story">
+          <p class="eyebrow">Professores</p>
+          <h3>Professora Aryana</h3>
+          <p>Todo ano, a Aryana escolhe uma música pra turma dançar no baile. Pros Feras 26, a escolha chegou de surpresa. É uma das tradições que a gente quis guardar aqui.</p>
+          <a class="memory-link" href="#despedida">A música do baile <span aria-hidden="true">↓</span></a>
+        </article>
+        <div class="memory-people__notes">
+          <article>
+            <p class="eyebrow">Representantes e vices</p>
+            <h3>Entre os avisos e o Pátio</h3>
+            <p>Os representantes reuniram os Feras numa comunidade. De um lado, os avisos dos últimos dias. Do outro, o Pátio, onde a turma podia conversar.</p>
+          </article>
+          <article>
+            <p class="eyebrow">Funcionários</p>
+            <h3>Quem via a gente todo dia</h3>
+            <p>Quem ficava no portão, quem atendia na cantina e quem cuidava das salas também tem histórias desse ano.</p>
+            <a class="memory-link" href="#relato" data-memory-kind="Homenagem">Escrever uma homenagem <span aria-hidden="true">↓</span></a>
+          </article>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="small" id="entre" aria-labelledby="smallTitle">
-    <div class="small__filmstrip" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-    <div class="small__center section-wrap">
-      <div class="section-index" data-reveal><span>05 / AS ENTRELINHAS</span><span>O QUE NÃO TEM DATA NO CALENDÁRIO</span></div>
-      <h2 id="smallTitle" data-reveal>O QUE ACONTECEU<br><em>ENTRE UMA COISA E OUTRA.</em></h2>
-      <div class="small__collage">
-        <div class="small__note small__note--one" data-reveal><span>UMA FOTO TREMIDA</span><strong>às vezes era a melhor de todas.</strong></div>
-        <div class="small__note small__note--two" data-reveal><span>UM BORDÃO DA SALA</span><strong>aquele que não precisa explicar.</strong></div>
-        <div class="small__note small__note--three" data-reveal><span>UM DIA NORMAL</span><strong>que acabou rendendo história.</strong></div>
-        <img class="small__sticker" src="assets/quadros-feras.png" alt="" aria-hidden="true">
+  <section class="memory-notebook" id="entre" aria-labelledby="smallTitle">
+    <div class="memory-notebook__inner section-wrap">
+      <div>
+        <p class="eyebrow">Caderno de memórias</p>
+        <h2 id="smallTitle">O que ficou<br><em>fora da foto.</em></h2>
+        <p>Um bordão que pegou, um intervalo que rendeu história, um gesto que só você viu. Escreve do jeito que você contaria pra alguém da sala.</p>
+        <img class="memory-notebook__art" src="assets/quadros-feras.png" alt="">
       </div>
-      <p class="small__invitation">Quando a gente conseguir juntar essas histórias, elas também vão morar aqui.</p>
+      <form id="relato" class="memory-note" aria-labelledby="memoryFormTitle" hidden>
+        <h3 id="memoryFormTitle">Uma lembrança sua</h3>
+        <label for="memoryKind">Sobre o que é?</label>
+        <select id="memoryKind" name="tipo">
+          <option>Cotidiano</option><option>Homenagem</option><option>Acontecimento</option><option>Despedida</option>
+        </select>
+        <label for="memoryText">O que você lembra?</label>
+        <textarea id="memoryText" name="relato" rows="5" maxlength="2000" required placeholder="Quem tava lá? Onde foi?"></textarea>
+        <label for="memoryName">Como você quer assinar? <span>(opcional)</span></label>
+        <input id="memoryName" name="assinatura" type="text" maxlength="80" autocomplete="off">
+        <p id="memoryPrivacy">O texto fica com você. Se quiser incluir no memorial, envie o arquivo aos representantes.</p>
+        <button type="submit" aria-describedby="memoryPrivacy">Baixar minha lembrança <span aria-hidden="true">↓</span></button>
+        <p class="memory-note__status" id="memoryStatus" role="status"></p>
+      </form>
+      <noscript><p>Você pode escrever a lembrança e enviar aos representantes.</p></noscript>
+    </div>
+  </section>
+
+  <section class="memory-farewell" id="despedida" aria-labelledby="farewellTitle">
+    <div class="section-wrap">
+      <h2 id="farewellTitle">Os últimos <em>dias.</em></h2>
+      <div class="memory-farewell__chapters">
+        <article>
+          <h3>O aulão do ENEM</h3>
+          <p>No aviso do primeiro dia do ENEM, o encontro era às 7h30 no canto do pátio, antes de ir pro auditório.</p>
+        </article>
+        <article>
+          <h3>A Aula da Saudade</h3>
+          <p>O álbum reúne a Aula da Saudade e a pizzada, com fotos da turma no pátio.</p>
+          <button class="memory-link" type="button" data-open-event="aula-da-saudade" hidden>Abrir o capítulo <span aria-hidden="true">↗</span></button>
+        </article>
+        <article>
+          <h3>A música do baile</h3>
+          <p>A surpresa começou com a escolha da Aryana. A tradição termina na pista, com a turma dançando a música que ela escolheu.</p>
+        </article>
+      </div>
     </div>
   </section>
 
