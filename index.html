@@ -53,6 +53,11 @@
       </div>
       <div class="film__layer film__opening" data-layer="opening">
         <div class="film__ground" aria-hidden="true"></div>
+        <div class="film__shapes" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="feras-tiles film__tiles" aria-hidden="true">
+          <i class="tile-arc"></i><i class="tile-dots"></i><i class="tile-triangles"></i><i class="tile-rays"></i>
+          <i class="tile-triangles"></i><i class="tile-arc"></i><i class="tile-rays"></i><i class="tile-dots"></i>
+        </div>
         <div class="film__photograph" aria-hidden="true"><img data-shot="patio" alt=""></div>
         <div class="film__ink film__ink--blue" aria-hidden="true"></div>
         <div class="film__ink film__ink--green" aria-hidden="true"></div>
@@ -60,27 +65,35 @@
         <div class="film__tile film__tile--school" aria-hidden="true"><img data-shot="fachada" alt=""></div>
         <div class="film__opening-type">
           <span class="film__kicker">Colégio Agostiniano · 2026</span>
-          <p class="film__title">Depois<br><i>do sinal</i></p>
+          <p class="film__title"><span>Depois</span><i>do sinal</i></p>
         </div>
-        <img class="film__mark" src="assets/marca-garra-clara.webp" alt="Feras Agostiniano 2026, com a garra atrás">
+        <img class="film__mark" src="assets/marca-garra-escura.webp" alt="Feras Agostiniano 2026, com a garra atrás">
         <span class="film__caption" data-shot-label="patio">Colégio Agostiniano</span>
       </div>
       <div class="film__layer film__reel" data-layer="reel">
         <div class="film__reel-ground" aria-hidden="true"></div>
+        <div class="film__reel-paper" aria-hidden="true"></div>
+        <div class="feras-tiles film__reel-tiles" aria-hidden="true"><i class="tile-arc"></i><i class="tile-triangles"></i><i class="tile-dots"></i><i class="tile-rays"></i></div>
         <div class="film__reel-type">
           <span class="film__kicker">Os três trotes</span>
-          <p class="film__title">Dia<br><i>de trote</i></p>
+          <p class="film__title"><span>Dia</span><i>de trote</i></p>
         </div>
         <div class="film__strip film__strip--one" aria-hidden="true"><img data-shot="trote-1" alt=""></div>
         <div class="film__strip film__strip--two" aria-hidden="true"><img data-shot="trote-2" alt=""></div>
         <div class="film__strip film__strip--three" aria-hidden="true"><img data-shot="trote-3" alt=""></div>
-        <img class="film__reel-print" src="assets/kit-trote-ii.webp" alt="" aria-hidden="true">
+        <div class="film__decals" aria-hidden="true">
+          <img class="film__reel-print" src="assets/kit-trote-i.webp" alt="">
+          <img class="film__reel-print" src="assets/kit-trote-ii.webp" alt="">
+          <img class="film__reel-print" src="assets/kit-trote-iii.webp" alt="">
+        </div>
         <span class="film__caption">Túnel do Tempo · Personagens · Coisas que Só Tem no Brasil</span>
       </div>
       <div class="film__layer film__collective" data-layer="collective">
+        <div class="film__collective-wash" aria-hidden="true"></div>
+        <div class="feras-tiles film__collective-tiles" aria-hidden="true"><i class="tile-rays"></i><i class="tile-dots"></i><i class="tile-arc"></i><i class="tile-triangles"></i></div>
         <div class="film__collective-copy">
           <span class="film__kicker">Aula da Saudade</span>
-          <p class="film__title">A foto<br><i>da turma</i></p>
+          <p class="film__title"><span>A foto</span><i>da turma</i></p>
         </div>
         <div class="film__grid" aria-hidden="true">
           <div><img data-shot="saudade-1" alt=""></div>
@@ -90,13 +103,23 @@
         </div>
         <a class="film__to-archive" href="#mosaico" data-archive-album="aula-da-saudade">Ver as fotos <span aria-hidden="true">↗</span></a>
       </div>
+      <div class="film__splice" aria-hidden="true" hidden>
+        <div class="film__splice-paper"></div>
+        <div class="film__splice-ink"></div>
+        <div class="feras-tiles film__splice-tiles">
+          <i class="tile-dots"></i><i class="tile-arc"></i><i class="tile-triangles"></i><i class="tile-rays"></i>
+          <i class="tile-arc"></i><i class="tile-triangles"></i><i class="tile-rays"></i><i class="tile-dots"></i>
+        </div>
+      </div>
       <div class="film__grain" aria-hidden="true"></div>
     </div>
   </section>
 
   <section class="year-timeline" id="acontecimentos" aria-labelledby="yearTitle">
     <div class="section-wrap" id="antes">
-      <header class="timeline-heading"><h2 id="yearTitle">Do JICA<br><em>até a despedida.</em></h2>
+      <header class="timeline-heading">
+      <div class="feras-tiles timeline-heading__tiles" aria-hidden="true"><i class="tile-rays"></i><i class="tile-arc"></i><i class="tile-dots"></i><i class="tile-triangles"></i></div>
+      <h2 id="yearTitle">Do JICA<br><em>até a despedida.</em></h2>
       <nav class="timeline-index" aria-label="Períodos do terceirão">
         <a href="#jica-2025">Antes do ano</a><a href="#inicio-2026">Começo de 2026</a><a href="#primeiro-semestre">Maio e junho</a><a href="#volta-das-ferias">Volta das férias</a><a href="#outubro">Outubro</a><a href="#despedida">Reta final</a>
       </nav></header>

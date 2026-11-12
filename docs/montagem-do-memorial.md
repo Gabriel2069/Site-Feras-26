@@ -63,3 +63,9 @@ As fotos da linha do tempo são lidas pelo catálogo do álbum. Os registros de 
 Outubro volta a ter uma montagem lateral dentro da ordem do ano. Cinco cenas reúnem fotos do acervo e recortes do kit original. Em telas amplas com espaço vertical suficiente, a posição da rolagem conduz o deslocamento. As abas, as setas e o teclado permitem escolher uma cena. No toque e com movimento reduzido, a faixa usa rolagem horizontal nativa.
 
 A apresentação da marca, as fotos da camisa, a Festa Junina, a Feira, o convite à Poly e a Aula da Saudade ganharam composições próprias. Os textos acompanham o ano da turma. A despedida do André, o convite à madrinha e a escolha da música pela Ary entram nos acontecimentos correspondentes. A lembrança do Bohr aparece brevemente à margem da cronologia. O quadro da comunidade de WhatsApp saiu da seção de pessoas, que continua reservando o espaço para a foto dos funcionários.
+
+## Abertura a partir das referências de 12/11
+
+A demonstração de movimento orienta a sobreposição das transições. A cartela âmbar abre por um rasgo de papel. Um recorte orgânico revela a turma e os azulejos entram em sequência. A mancha azul e verde atravessa o quadro para abrir a faixa de trotes. O mosaico fecha em oito peças e se abre sobre as fotos da Aula da Saudade. O papel claro, os arcos, os triângulos, os pontos e os raios vieram das artes de identidade. O vídeo da turma orienta as cores e o enquadramento de fotos como papel recortado. Os vídeos de referência não integram a distribuição do memorial.
+
+A animação acompanha o mesmo progresso nos dois sentidos de rolagem. Os quatro quadros têm composição estática quando a preferência de movimento reduzido está ativa.

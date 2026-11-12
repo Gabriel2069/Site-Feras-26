@@ -37,7 +37,17 @@
   const strips = [...film.querySelectorAll(".film__strip")];
   const grid = film.querySelector(".film__grid");
   const gridPieces = [...grid.children];
-  const reelPrint = film.querySelector(".film__reel-print");
+  const reelPrints = [...film.querySelectorAll(".film__reel-print")];
+  const openingWords = [...openingTitle.querySelector(".film__title").children];
+  const reelWords = [...reel.querySelector(".film__title").children];
+  const collectiveWords = [...collective.querySelector(".film__title").children];
+  const openingTiles = [...opening.querySelector(".film__tiles").children];
+  const paper = reel.querySelector(".film__reel-paper");
+  const shapes = opening.querySelector(".film__shapes");
+  const splice = film.querySelector(".film__splice");
+  const spliceInk = splice.querySelector(".film__splice-ink");
+  const spliceTiles = [...splice.querySelector(".film__splice-tiles").children];
+  const wash = collective.querySelector(".film__collective-wash");
 
   let current = 0;
   let frame = 0;
@@ -48,68 +58,126 @@
   const ease = value => value * value * (3 - 2 * value);
   const section = (value, start, end) => ease(between(value, start, end));
 
-  // Fixed irregular edges let the exposed image read like the same piece of paper throughout.
-  const edge = [0, 3, 4, 6, 2, 2, -3, -1, 1, 5, 7, 8, 4, 3, 5, 1, -4, -2, 1, 3, 2, 4, 0, -2, 1];
-  const reveal = (value, direction) => {
-    const amount = value * 124 - 12;
-    const points = edge.map((offset, i) => {
-      const along = i * 100 / (edge.length - 1);
-      return direction === "up"
-        ? along + "% " + (100 - amount + offset) + "%"
-        : (100 - amount + offset) + "% " + along + "%";
+  // The same scroll position produces the same exposed fibres, even when played backwards.
+  const fibres = Array.from({length: 65}, (_, i) =>
+    Math.sin(i * .41) * 3.7 + Math.sin(i * .99) * 2.1 + Math.sin(i * 2.67) * 1.6);
+  function torn(value, direction) {
+    const edge = fibres.map((offset, index) => {
+      const along = index * 100 / (fibres.length - 1);
+      const position = 112 - value * 125 + offset;
+      return direction === "up" ? `${along}% ${position}%` : `${position}% ${along}%`;
     });
-    return "polygon(" + points.join(",") + (direction === "up" ? ",100% 100%,0 100%)" : ",100% 100%,100% 0)");
-  };
+    return "polygon(" + edge.join(",") + (direction === "up" ? ",100% 100%,0 100%)" : ",100% 100%,100% 0)");
+  }
   const show = (layer, visible) => {
     if (layer.hidden !== !visible) layer.hidden = !visible;
     if (layer.inert !== !visible) layer.inert = !visible;
   };
+  function title(words, p, first, last) {
+    words.forEach((word, i) => {
+      const reveal = section(p, first + i * .033, last + i * .027);
+      word.style.clipPath = `inset(0 0 ${(1 - reveal) * 110}% -12%)`;
+      word.style.translate = `${(1 - reveal) * (i ? 13 : -9)}vw ${(1 - reveal) * 10}vh`;
+    });
+  }
+
+  function cut(p, start, end, kind) {
+    const phase = between(p, start, end);
+    if (phase === 0 || phase === 1) return false;
+    splice.dataset.cut = kind;
+    if (kind === "mosaic") {
+      splice.style.clipPath = "none";
+      splice.style.translate = "0 0";
+      spliceTiles.forEach((tile, i) => {
+        const close = section(phase, (i % 4) * .057, .34 + (i % 4) * .052);
+        const open = section(phase, .51 + (i % 4) * .036, .84 + (i % 4) * .048);
+        const direction = i < 4 ? -1 : 1;
+        tile.style.translate = `${((1 - close) - open) * (i % 2 ? 16 : -16)}vw ${(1 - close + open) * direction * 65}vh`;
+        tile.style.rotate = `${(1 - close + open) * direction * 11}deg`;
+        tile.style.opacity = "1";
+      });
+      return true;
+    }
+    const fall = section(phase, 0, .58);
+    const pull = section(phase, .44, 1);
+    const direction = kind === "ink" ? "right" : "up";
+    splice.style.clipPath = torn(fall, direction);
+    splice.style.translate = kind === "ink" ? `${-pull * 119}% 0` : `0 ${-pull * 119}%`;
+    spliceInk.style.scale = `${.48 + fall * .66}`;
+    spliceTiles.forEach((tile, i) => {
+      const stamp = section(phase, .12 + (i % 4) * .048, .57 + (i % 4) * .044);
+      tile.style.translate = `${(1 - stamp) * (i % 2 ? 21 : -18)}vw ${(1 - stamp) * (i < 4 ? -15 : 12)}vh`;
+      tile.style.rotate = `${(1 - stamp) * (i % 2 ? 38 : -25)}deg`;
+      tile.style.opacity = stamp;
+    });
+    return true;
+  }
+
   function compose(p) {
-    const enter = section(p, .105, .272);
-    const leaveOpening = section(p, .43, .62);
-    const enterCollective = section(p, .70, .86);
+    const enter = section(p, .096, .239);
+    const leaveOpening = section(p, .409, .585);
+    const enterCollective = section(p, .711, .854);
     show(layers.slate, enter < 1);
     document.body.classList.toggle("film-in-slate", p < .075);
     show(opening, enter > 0 && leaveOpening < 1);
     show(reel, leaveOpening > 0 && enterCollective < 1);
     show(collective, enterCollective > 0);
-    const push = section(p, .11, .50);
+    splice.hidden = !(cut(p, .088, .248, "paper") || cut(p, .394, .557, "ink") || cut(p, .697, .835, "mosaic"));
+
     if (!opening.hidden) {
-      opening.style.clipPath = enter < 1 ? reveal(enter, "up") : "none";
-      openingPhoto.style.transform = "translate3d(" + ((push - .5) * 5) + "%,0,0) scale(" + (1.12 + push * .23) + ")";
-      const titles = section(p, .18, .29);
-      openingTitle.style.opacity = titles;
-      openingTitle.style.transform = "translate3d(0," + ((1 - titles) * 32 - push * 13) + "px,0)";
-      openingMark.style.opacity = section(p, .23, .33);
-      openingMark.style.translate = ((1 - section(p, .23, .33)) * 50) + "px";
+      const push = section(p, .15, .42);
+      opening.style.clipPath = enter < 1 ? torn(enter, "up") : "none";
+      openingPhoto.style.transform = `translate3d(${(push - .5) * 9}%,${(push - .5) * 6}%,0) scale(${1.08 + push * .19})`;
+      shapes.style.transform = `translate3d(${(push - .5) * -5}%,${(push - .5) * 4}%,0) rotate(${push * 9 - 4}deg)`;
+      title(openingWords, p, .195, .278);
+      openingMark.style.opacity = section(p, .277, .346);
+      openingMark.style.translate = `${(1 - section(p, .256, .344)) * 15}vw`;
       inks.forEach((ink, index) => {
-        const spread = section(p, .135 + index * .04, .36);
-        ink.style.scale = String(.44 + spread * .56);
-        ink.style.rotate = (index ? -1 : 1) * (1 - spread) * 16 + "deg";
+        const spread = section(p, .15 + index * .05, .32 + index * .035);
+        ink.style.scale = String(.48 + spread * .52);
+        ink.style.rotate = (index ? -1 : 1) * (1 - spread) * 23 + "deg";
+      });
+      openingTiles.forEach((tile, index) => {
+        const stamp = section(p, .164 + index * .011, .261 + index * .011);
+        tile.style.scale = String(.2 + stamp * .8);
+        tile.style.opacity = stamp;
+        tile.style.rotate = `${(1 - stamp) * (index % 2 ? 45 : -35)}deg`;
       });
       tiles.forEach((tile, index) => {
-        const landing = section(p, .18 + index * .025, .34 + index * .018);
-        tile.style.translate = (index ? 1 : -1) * (1 - landing) * 34 + "vw " + (1 - landing) * 11 + "vh";
+        const landing = section(p, .208 + index * .039, .306 + index * .031);
+        tile.style.translate = `${(index ? 1 : -1) * (1 - landing) * 35}vw ${(1 - landing) * 16}vh`;
+        tile.style.rotate = `${(1 - landing) * (index ? 25 : -22)}deg`;
       });
     }
     if (!reel.hidden) {
-      reel.style.clipPath = leaveOpening < 1 ? reveal(leaveOpening, "right") : "none";
+      reel.style.clipPath = leaveOpening < 1 ? torn(leaveOpening, "right") : "none";
+      const conveyor = section(p, .51, .747);
+      paper.style.translate = `${-conveyor * 6}vw ${(1 - section(p, .423, .553)) * 16}vh`;
+      title(reelWords, p, .49, .55);
       strips.forEach((strip, index) => {
-        const landing = section(p, .43 + index * .027, .61 + index * .028);
-        const lift = section(p, .71, .86);
-        strip.style.translate = ((1 - landing) * (26 - index * 6) - lift * 12) + "vw " +
-          ((1 - landing) * (index === 1 ? -28 : 24) - lift * 8) + "vh";
+        const landing = section(p, .463 + index * .04, .577 + index * .034);
+        const pull = section(p, .66, .781);
+        strip.style.translate = `${(1 - landing) * (43 - index * 8) - conveyor * 11 - pull * index * 3}vw ${(1 - landing) * (index === 1 ? -42 : 36) - pull * (index - 1) * 10}vh`;
+        strip.style.rotate = `${(1 - landing) * (index === 1 ? 21 : -20) + conveyor * (index - 1) * 6}deg`;
       });
-      reelPrint.style.opacity = section(p, .58, .66);
+      reelPrints.forEach((sticker, i) => {
+        const pop = section(p, .528 + i * .033, .6 + i * .03);
+        sticker.style.opacity = pop;
+        sticker.style.scale = `${.45 + pop * .55}`;
+        sticker.style.translate = `0 ${(1 - pop) * 9}vh`;
+      });
     }
     if (!collective.hidden) {
-      collective.style.clipPath = enterCollective < 1 ? reveal(enterCollective, "up") : "none";
-      const settle = section(p, .78, .96);
-      grid.style.scale = String(1.15 - settle * .15);
+      collective.style.clipPath = enterCollective < 1 ? torn(enterCollective, "up") : "none";
+      const settle = section(p, .805, .972);
+      wash.style.scale = `${.69 + settle * .33}`;
+      title(collectiveWords, p, .819, .907);
+      grid.style.scale = String(1.18 - settle * .18);
       gridPieces.forEach((piece, index) => {
-        const land = section(p, .74 + index * .025, .86 + index * .022);
-        piece.style.translate = (index % 2 ? 1 : -1) * (1 - land) * 20 + "vw " +
-          (index < 2 ? -1 : 1) * (1 - land) * 12 + "vh";
+        const land = section(p, .749 + index * .027, .866 + index * .027);
+        piece.style.translate = `${(index % 2 ? 1 : -1) * (1 - land) * 31}vw ${(index < 2 ? -1 : 1) * (1 - land) * 19}vh`;
+        piece.style.rotate = `${(index % 2 ? -1 : 1) * (1 - land) * 18}deg`;
+        piece.style.scale = `${.68 + land * .32}`;
       });
     }
   }
@@ -141,7 +209,9 @@
       cancelAnimationFrame(frame);
       frame = 0;
       for (const layer of Object.values(layers)) show(layer, true);
-      for (const node of [opening, reel, collective, openingPhoto, openingTitle, openingMark, reelPrint, grid, ...tiles, ...inks, ...strips, ...gridPieces]) {
+      splice.hidden = true;
+      for (const node of [opening, reel, collective, openingPhoto, openingMark, paper, shapes, wash, grid,
+        ...openingWords, ...reelWords, ...collectiveWords, ...openingTiles, ...reelPrints, ...tiles, ...inks, ...strips, ...gridPieces]) {
         node.removeAttribute("style");
       }
     } else {
