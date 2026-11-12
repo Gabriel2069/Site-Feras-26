@@ -350,13 +350,16 @@ async function loadContent(){
     currentEvents=Array.isArray(data.eventos)?data.eventos:[];
     for (const image of $$("[data-timeline-album]")) {
       const event = currentEvents.find(item => item.id === image.dataset.timelineAlbum);
-      const images = (event?.midias ?? []).filter(media => filePath(media.src) && !isVideo(media.src));
-      const photo = images[Number(image.dataset.timelineIndex)];
-      if (photo) showTimelinePhoto(image, filePath(photo.src));
+      const photo = event?.midias?.find(media => media.src === image.dataset.timelineSrc);
+      const source = filePath(photo?.src);
+      if (!source || isVideo(photo.src)) continue;
+      photo.alt = image.alt;
+      photo.legenda = image.closest("figure").querySelector("figcaption").textContent;
+      showTimelinePhoto(image, source);
     }
     for (const button of $$("[data-open-event]")) {
       const event = currentEvents.find(item => item.id === button.dataset.openEvent);
-      if (!event) continue;
+      if (!event?.midias?.some(media => filePath(media.src))) continue;
       button.hidden = false;
       button.addEventListener("click", () => openChapter(event, null, button));
     }

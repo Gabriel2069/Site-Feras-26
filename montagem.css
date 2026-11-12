@@ -910,7 +910,6 @@ body.preview-media .people__visual, body.preview-media .small__filmstrip { opaci
   box-shadow:5px 6px #73628b;
   clip-path:polygon(0 2%,14% 0,35% 2%,62% 0,89% 2%,100% 0,100% 96%,87% 100%,68% 97%,42% 100%,22% 98%,0 100%);
 }
-.timeline-mini .memory-link, #junina .memory-link, #poly-madrinha .memory-link { color:inherit; }
 
 #visita-ufg .timeline-photos { grid-template-columns:1.35fr 1fr; align-items:start; }
 #visita-ufg figure:nth-child(2) { transform:rotate(4deg); margin-top:12%; }
@@ -1396,3 +1395,69 @@ body.preview-media .people__visual, body.preview-media .small__filmstrip { opaci
   .film__decals { left:12%; bottom:12%; width:68%; }
   .timeline-heading__tiles { inset:2% 2% auto auto; opacity:.44; }
 }
+
+/* The actions read as buttons against both the paper spreads and the dark pages. */
+.timeline-copy .memory-link,
+.timeline-mini .memory-link,
+.memory-people__notes .memory-link {
+  display:inline-flex;
+  align-items:center;
+  justify-content:space-between;
+  min-height:44px;
+  max-width:100%;
+  margin-top:.55rem;
+  padding:.62rem .83rem;
+  border:1px solid #79d5cf;
+  border-radius:4px;
+  color:#fff;
+  background:#254392;
+  font:700 .9rem/1.25 "DM Sans",sans-serif;
+  text-decoration:none;
+}
+.timeline-copy .memory-link[hidden] { display:none; }
+.timeline-copy .memory-link:hover,
+.timeline-mini .memory-link:hover,
+.memory-people__notes .memory-link:hover {
+  background:#152c70;
+  opacity:1;
+}
+.memory-link:focus-visible,
+.film__to-archive:focus-visible,
+.chapter-modal button:focus-visible {
+  outline:2px solid currentColor;
+  outline-offset:3px;
+  box-shadow:0 0 0 5px #176e75;
+}
+.film__to-archive {
+  min-height:44px;
+  max-width:86%;
+  background:#f6f3e9;
+  color:#101840;
+  padding:.78rem .95rem;
+  border:1px solid #95d4d7;
+  border-radius:4px;
+  font:700 .87rem/1.3 "DM Sans",sans-serif;
+  letter-spacing:0;
+  text-transform:none;
+}
+.film__to-archive:hover { background:#caece5; }
+.chapter-modal__controls {
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  gap:.65rem;
+  max-width:415px;
+}
+.chapter-modal__controls button {
+  width:auto;
+  min-height:44px;
+  display:inline-flex;
+  justify-content:center;
+  align-items:center;
+  gap:.4em;
+  padding:.45rem .6rem;
+  border-radius:4px;
+  background:#254392;
+  color:white;
+  font:700 .85rem/1.2 "DM Sans",sans-serif;
+}
+#feira figure:last-child img { object-fit:contain; }
+#junina figure:nth-child(3) img { object-position:center 44%; }

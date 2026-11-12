@@ -69,3 +69,7 @@ A apresentação da marca, as fotos da camisa, a Festa Junina, a Feira, o convit
 A demonstração de movimento orienta a sobreposição das transições. A cartela âmbar abre por um rasgo de papel. Um recorte orgânico revela a turma e os azulejos entram em sequência. A mancha azul e verde atravessa o quadro para abrir a faixa de trotes. O mosaico fecha em oito peças e se abre sobre as fotos da Aula da Saudade. O papel claro, os arcos, os triângulos, os pontos e os raios vieram das artes de identidade. O vídeo da turma orienta as cores e o enquadramento de fotos como papel recortado. Os vídeos de referência não integram a distribuição do memorial.
 
 A animação acompanha o mesmo progresso nos dois sentidos de rolagem. Os quatro quadros têm composição estática quando a preferência de movimento reduzido está ativa.
+
+## Revisão de fotos, legendas e leitura
+
+A seleção da linha do tempo usa o caminho de cada foto no álbum. Isso mantém a legenda ligada à imagem quando o catálogo muda de ordem. As legendas das fotos selecionadas aparecem também no visor. Os botões de álbum dizem quais fotos abrem. Os textos do JICA, da camisa, da Junina, da despedida e das aprovações retomam o relato da turma com frases mais curtas.
