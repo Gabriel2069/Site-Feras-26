@@ -10,38 +10,6 @@ const menuButton = $("#menuButton");
 const progress = $("#progress");
 const corridor = $("#corridor");
 const corridorBackdrop = $("#corridorBackdrop");
-const eventTrack = $("#eventTrack");
-const yearSection = $(".year");
-const yearPin = $("#yearPin");
-const yearHead = $(".year__head");
-const yearFoot = $(".year__foot");
-let yearPinned = false;
-let pinStart = 0;
-let railRange = 0;
-function measureYear() {
-  const previous = yearPinned;
-  railRange = Math.max(0, eventTrack.scrollWidth - eventTrack.clientWidth);
-  yearPinned = innerWidth > 900 && !reduced.matches && railRange > 30;
-  if (!yearPinned) {
-    yearSection.style.minHeight = "";
-    if (previous) eventTrack.scrollLeft = 0;
-    return;
-  }
-  const padding = parseFloat(getComputedStyle(yearSection).paddingTop) || 0;
-  const base = padding + yearHead.offsetHeight + innerHeight + yearFoot.offsetHeight + 180;
-  yearSection.style.minHeight = Math.ceil(base + railRange) + "px";
-  pinStart = yearPin.offsetTop;
-  requestMotion();
-}
-function advanceYear(direction) {
-  if (yearPinned) {
-    const p = clamp(scrollY - pinStart + direction * eventTrack.clientWidth * .76, 0, railRange);
-    window.scrollTo({top: pinStart + p, behavior: reduced.matches ? "auto" : "smooth"});
-  } else {
-    eventTrack.scrollBy({left:direction * eventTrack.clientWidth * .76,behavior:reduced.matches?"auto":"smooth"});
-  }
-}
-
 const archiveFilters = $("#archiveFilters");
 const mosaic = $("#mosaicWall");
 const archiveNote = $("#archiveNote");
@@ -65,16 +33,11 @@ function text(tag, value, cls) {
   el.textContent = value == null ? "" : String(value);
   return el;
 }
-function safeAsset(index) {
-  return ["assets/camera-sticker.png", "assets/clapper-sticker.png", "assets/burst-sticker.png"][index % 3];
-}
-
 function updateMotion() {
   rafPending = false;
   const maximum = Math.max(1, document.documentElement.scrollHeight - innerHeight);
   progress.style.transform = "scaleX(" + clamp(scrollY / maximum, 0, 1) + ")";
   nav.classList.toggle("is-scrolled", scrollY > 46);
-  if (yearPinned) eventTrack.scrollLeft = clamp(scrollY - pinStart, 0, railRange);
   if (reduced.matches) return;
   if (corridor) {
     const r = corridor.getBoundingClientRect();
@@ -89,9 +52,6 @@ function requestMotion() {
 }
 addEventListener("scroll", requestMotion, {passive:true});
 addEventListener("resize", requestMotion, {passive:true});
-addEventListener("resize",()=>requestAnimationFrame(measureYear),{passive:true});
-reduced.addEventListener("change", measureYear);
-if(document.fonts?.ready) document.fonts.ready.then(()=>requestAnimationFrame(measureYear));
 requestMotion();
 
 const observer = ("IntersectionObserver" in window && !reduced.matches)
@@ -177,52 +137,6 @@ function switchLocation(id) {
   }
 }
 $$("button[data-place]").forEach(b=>b.addEventListener("click",()=>switchLocation(b.dataset.place)));
-
-function makeEpisode(item,index) {
-  const card=document.createElement("button");
-  card.type="button";card.className="episode";
-  card.dataset.album = item.id;
-  card.setAttribute("aria-label","Abrir capítulo: "+item.titulo);
-  const top=text("div","","episode__top");
-  if (item.subtitulo) top.append(text("span",item.subtitulo));
-  const numeral=text("div",String(index+1).padStart(2,"0"),"episode__number");
-  numeral.setAttribute("aria-hidden","true");
-  const polaroid=text("div","","episode__photo");
-  polaroid.setAttribute("aria-hidden","true");
-  const photo=text("div","","episode__picture");
-  const first=(item.midias||[]).find(m=>filePath(m.src)&&!isVideo(m.src));
-  if(first) {
-    const img=document.createElement("img");
-    img.src=filePath(first.src);img.alt="";img.loading="lazy";photo.append(img);
-  } else {
-    photo.append(text("span","FERAS 26 / ARQUIVO"));
-  }
-  polaroid.append(photo);
-  const decal=document.createElement("img");
-  decal.className="episode__decal";decal.src=safeAsset(index);decal.alt="";decal.loading="lazy";decal.setAttribute("aria-hidden","true");
-  const bottom=text("div","","episode__bottom");
-  bottom.append(text("h3",item.titulo));
-  if (item.resumo) bottom.append(text("p",item.resumo));
-  const footer=text("div","","episode__footer");
-  footer.append(text("span","ABRIR CAPÍTULO ↗"));
-  bottom.append(footer);
-  card.append(top,numeral,polaroid,decal,bottom);
-  card.addEventListener("click",()=>openChapter(item, null, card));
-  return card;
-}
-function renderEpisodes(events){
-  eventTrack.replaceChildren();
-  if(!events.length){eventTrack.append(text("p","Os acontecimentos estão sendo organizados.","loading"));return;}
-  events.forEach((x,i)=>eventTrack.append(makeEpisode(x,i)));
-  requestAnimationFrame(measureYear);
-}
-$("#eventPrev").addEventListener("click",()=>advanceYear(-1));
-$("#eventNext").addEventListener("click",()=>advanceYear(1));
-eventTrack.addEventListener("keydown",event=>{
-  if(event.target!==eventTrack)return;
-  if(event.key==="ArrowRight"){event.preventDefault();advanceYear(1);}
-  if(event.key==="ArrowLeft"){event.preventDefault();advanceYear(-1);}
-});
 
 const archiveMore = $("#archiveMore");
 let albumEntries = [];
@@ -424,18 +338,21 @@ async function fetchJson(path){
   if(!r.ok)throw Error("Não foi possível abrir "+path+": HTTP "+r.status);
   return await r.json();
 }
+function showTimelinePhoto(image, source) {
+  image.src = source;
+  image.closest("figure").hidden = false;
+}
+
 async function loadContent(){
   const [eventsResult,scenesResult]=await Promise.allSettled([fetchJson("./content/acervo.json"),fetchJson("./content/cenas.json")]);
   if(eventsResult.status==="fulfilled"){
     const data=eventsResult.value;
     currentEvents=Array.isArray(data.eventos)?data.eventos:[];
-    renderEpisodes(currentEvents.filter(item => item.categoria !== "ACERVO"));
-    for (const image of $$("[data-moment-image]")) {
-      const item = currentEvents.find(event => event.id === image.dataset.momentImage);
-      const photo = item?.midias.find(media => filePath(media.src) && !isVideo(media.src));
-      if (!photo) continue;
-      image.src = filePath(photo.src);
-      image.closest("figure").hidden = false;
+    for (const image of $$("[data-timeline-album]")) {
+      const event = currentEvents.find(item => item.id === image.dataset.timelineAlbum);
+      const images = (event?.midias ?? []).filter(media => filePath(media.src) && !isVideo(media.src));
+      const photo = images[Number(image.dataset.timelineIndex)];
+      if (photo) showTimelinePhoto(image, filePath(photo.src));
     }
     for (const button of $$("[data-open-event]")) {
       const event = currentEvents.find(item => item.id === button.dataset.openEvent);
@@ -445,8 +362,7 @@ async function loadContent(){
     }
     setupFilters(currentEvents);
   }else{
-    eventTrack.replaceChildren();
-    eventTrack.append(text("p","Os capítulos estão indisponíveis agora.","loading"));
+    archiveNote.textContent = "O álbum está indisponível agora.";
     console.error(eventsResult.reason);
   }
   if(scenesResult.status==="fulfilled"){
@@ -454,6 +370,19 @@ async function loadContent(){
     for (const image of document.querySelectorAll(".film [data-shot]")) {
       const source = filePath(data.planos?.[image.dataset.shot]);
       if (source && !("previewShot" in image.dataset)) image.src = source;
+    }
+    for (const image of $$("[data-timeline-plan]")) {
+      const source = filePath(data.planos?.[image.dataset.timelinePlan]);
+      if (source && !isVideo(source)) showTimelinePhoto(image, source);
+    }
+    const staffSource = filePath(data.planos?.["foto-funcionarios"]);
+    if (staffSource && !isVideo(staffSource)) {
+      const image = $("#staffPhoto");
+      image.addEventListener("load", () => {
+        image.hidden = false;
+        $("#staffPhotoPending").hidden = true;
+      }, {once: true});
+      image.src = staffSource;
     }
     currentScenes={locais:Array.isArray(data.locais)?data.locais:[],recortes:Array.isArray(data.recortes)?data.recortes:[]};
   }else{console.warn("Cenas complementares indisponíveis:",scenesResult.reason);}

@@ -51,3 +51,9 @@ Os Mini Feras usam a estrutura e os estilos das Polaroids do mural original. A g
 A narrativa ganhou o convite à Poly, Feira de Ciências, Espaço das Profissões, Maratona UFG, Time Olímpico e aprovações. A homenagem à Aryana inclui a surpresa da turma. Os agradecimentos distinguem professores, funcionários, representantes e vices. A despedida acompanha o fim das provas, os Sprints, André, Juju, a Aula da Saudade e a música do baile.
 
 As variantes clara e escura da marca com garra usam transparência. O mosaico do ano usa fotos de capítulos do acervo quando disponíveis, carregadas pelo mesmo catálogo do álbum. As mídias continuam privadas na prévia. As subdivisões do Drive foram aplicadas por evidência visual ou contexto de data e pasta. A triagem de outros registros continua em aberto.
+
+## Linha do tempo em sequência única
+
+A história do terceirão, antes distribuída entre abertura editorial, capítulos avulsos, faixa horizontal e despedida, agora segue numa seção vertical. Os períodos separam JICA de 2025, começo de 2026, maio e junho, volta das férias, outubro e reta final. O convite à Poly e as maratonas aparecem numa entrada do segundo semestre com datas ainda a confirmar. Os registros datados do acervo orientaram a ordenação dos momentos de outubro, sem atribuição de dia exato aos eventos.
+
+As fotos da linha do tempo são lidas pelo catálogo do álbum. Os registros de começo de ano são ligados por `planos.turma-comeco-1` e `planos.turma-comeco-2`. O quadro de agradecimento espera a foto coletiva dos funcionários em `planos.foto-funcionarios`; a imagem só substitui o espaço reservado depois de carregar. Os Mini Feras abrem no capítulo da camisa e mantêm o acesso pelo menu.
