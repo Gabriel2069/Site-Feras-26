@@ -57,3 +57,9 @@ As variantes clara e escura da marca com garra usam transparência. O mosaico do
 A história do terceirão, antes distribuída entre abertura editorial, capítulos avulsos, faixa horizontal e despedida, agora segue numa seção vertical. Os períodos separam JICA de 2025, começo de 2026, maio e junho, volta das férias, outubro e reta final. O convite à Poly e as maratonas aparecem numa entrada do segundo semestre com datas ainda a confirmar. Os registros datados do acervo orientaram a ordenação dos momentos de outubro, sem atribuição de dia exato aos eventos.
 
 As fotos da linha do tempo são lidas pelo catálogo do álbum. Os registros de começo de ano são ligados por `planos.turma-comeco-1` e `planos.turma-comeco-2`. O quadro de agradecimento espera a foto coletiva dos funcionários em `planos.foto-funcionarios`; a imagem só substitui o espaço reservado depois de carregar. Os Mini Feras abrem no capítulo da camisa e mantêm o acesso pelo menu.
+
+## Colagens da linha do tempo
+
+Outubro volta a ter uma montagem lateral dentro da ordem do ano. Cinco cenas reúnem fotos do acervo e recortes do kit original. Em telas amplas com espaço vertical suficiente, a posição da rolagem conduz o deslocamento. As abas, as setas e o teclado permitem escolher uma cena. No toque e com movimento reduzido, a faixa usa rolagem horizontal nativa.
+
+A apresentação da marca, as fotos da camisa, a Festa Junina, a Feira, o convite à Poly e a Aula da Saudade ganharam composições próprias. Os textos acompanham o ano da turma. A despedida do André, o convite à madrinha e a escolha da música pela Ary entram nos acontecimentos correspondentes. A lembrança do Bohr aparece brevemente à margem da cronologia. O quadro da comunidade de WhatsApp saiu da seção de pessoas, que continua reservando o espaço para a foto dos funcionários.

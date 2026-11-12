@@ -155,3 +155,96 @@
   motion.addEventListener("change", configure);
   configure();
 })();
+
+(() => {
+  const reel = document.querySelector(".october-reel");
+  if (!reel) return;
+
+  const stage = reel.querySelector(".october-stage");
+  const track = reel.querySelector(".october-track");
+  const slides = [...track.children];
+  const controls = reel.querySelector(".october-controls");
+  const steps = [...controls.querySelectorAll("[data-reel-step]")];
+  const prev = controls.querySelector("[data-reel-prev]");
+  const next = controls.querySelector("[data-reel-next]");
+  const desktop = matchMedia("(min-width: 900px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)");
+  let active = 0;
+  let range = 0;
+  let travel = 0;
+  let queued = false;
+
+  const position = slide => slide.offsetLeft - slides[0].offsetLeft;
+  const start = () => reel.getBoundingClientRect().top + window.scrollY - parseFloat(getComputedStyle(stage).top);
+
+  function mark(index) {
+    active = index;
+    steps.forEach((button, i) => {
+      if (i === index) button.setAttribute("aria-current", "true");
+      else button.removeAttribute("aria-current");
+    });
+    prev.disabled = index === 0;
+    next.disabled = index === slides.length - 1;
+  }
+
+  function render() {
+    queued = false;
+    if (reel.classList.contains("is-directed")) {
+      const progress = Math.max(0, Math.min(1, (window.scrollY - start()) / travel));
+      track.scrollLeft = range * progress;
+    }
+    const nearest = slides.reduce((best, slide, index) =>
+      Math.abs(position(slide) - track.scrollLeft) < Math.abs(position(slides[best]) - track.scrollLeft)
+        ? index : best, 0);
+    if (nearest !== active) mark(nearest);
+  }
+
+  function queueRender() {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(render);
+  }
+
+  function measure() {
+    range = track.scrollWidth - track.clientWidth;
+    const stageHeight = stage.offsetHeight;
+    const top = parseFloat(getComputedStyle(reel).getPropertyValue("--reel-top"));
+    const directed = desktop.matches && range > 0 && stageHeight + top < innerHeight - 16;
+    travel = Math.round(range * .62);
+    reel.style.setProperty("--reel-stage-height", stageHeight + "px");
+    reel.style.setProperty("--reel-travel", travel + "px");
+    reel.classList.toggle("is-directed", directed);
+    queueRender();
+  }
+
+  function go(index, immediate = false) {
+    index = Math.max(0, Math.min(slides.length - 1, index));
+    const target = Math.min(position(slides[index]), range);
+    const behavior = immediate || !desktop.matches ? "instant" : "smooth";
+    if (reel.classList.contains("is-directed")) {
+      window.scrollTo({ top: start() + travel * target / range, behavior });
+    } else {
+      track.scrollTo({ left: target, behavior });
+    }
+  }
+
+  steps.forEach((button, index) => button.addEventListener("click", () => go(index)));
+  prev.addEventListener("click", () => go(active - 1));
+  next.addEventListener("click", () => go(active + 1));
+  track.addEventListener("keydown", event => {
+    if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+    event.preventDefault();
+    go(active + (event.key === "ArrowRight" ? 1 : -1));
+  });
+  track.addEventListener("focusin", event => {
+    const slide = event.target.closest(".timeline-story");
+    if (slide && slides[active] !== slide) go(slides.indexOf(slide), true);
+  });
+  track.addEventListener("scroll", queueRender, { passive: true });
+  window.addEventListener("scroll", queueRender, { passive: true });
+  window.addEventListener("resize", measure, { passive: true });
+  desktop.addEventListener("change", measure);
+  controls.hidden = false;
+  mark(0);
+  new ResizeObserver(measure).observe(stage);
+  measure();
+})();
