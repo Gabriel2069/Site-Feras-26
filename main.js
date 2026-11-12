@@ -144,8 +144,8 @@ document.addEventListener("fullscreenchange",()=>{
 });
 
 const defaultLocations=[
-  {id:"portao",nome:"A GUARITA",descricao:"As catracas de vez em quando travavam.",imagem:null},
-  {id:"patio",nome:"O PÁTIO",numero:"02",descricao:"Era onde a gente se encontrava antes de ir pra sala.",imagem:null},
+  {id:"portao",nome:"A GUARITA",descricao:"A catraca travou? Era esperar o tio ou tentar passar por baixo e levar esporro. Quem passou por ali sabe.",imagem:null},
+  {id:"patio",nome:"O PÁTIO",numero:"02",descricao:"Antes de subir pra sala, a gente acabava se encontrando por aqui.",imagem:null},
   {id:"salas",nome:"AS SALAS",numero:"03",descricao:"Cada uma com seu jeito, suas conversas e seus professores.",imagem:null},
   {id:"auditorio",nome:"O AUDITÓRIO",numero:"04",descricao:"Tem aulão e outros encontros que merecem entrar no arquivo.",imagem:null}
 ];
@@ -500,7 +500,7 @@ memoryForm.addEventListener("submit", event => {
   event.preventDefault();
   const message = memoryText.value.trim();
   if (!message) {
-    memoryText.setCustomValidity("Escreva uma lembrança antes de baixar.");
+    memoryText.setCustomValidity("Escreve uma lembrança antes de baixar.");
     memoryText.reportValidity();
     return;
   }
@@ -516,7 +516,7 @@ memoryForm.addEventListener("submit", event => {
   download.click();
   download.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
-  memoryStatus.textContent = "Arquivo preparado. Você pode continuar editando seu texto aqui.";
+  memoryStatus.textContent = "Sua lembrança foi preparada. Se quiser, ainda dá pra editar o texto e baixar outra versão.";
 });
 
 loadContent();

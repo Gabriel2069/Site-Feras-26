@@ -5,43 +5,43 @@
     {
       "id": "portao",
       "nome": "A GUARITA",
-      "descricao": "As catracas de vez em quando travavam. Aí era esperar o tio ou arriscar passar por baixo e levar esporro.",
+      "descricao": "A catraca travou? Era esperar o tio ou tentar passar por baixo e levar esporro. Quem passou por ali sabe.",
       "imagem": null
     },
     {
       "id": "patio",
       "nome": "O PÁTIO",
-      "descricao": "Tem história demais nesse pátio. Era onde todo mundo acabava se encontrando.",
+      "descricao": "Antes de subir pra sala, a gente acabava se encontrando por aqui. Só de olhar as fotos já dá vontade de perguntar: lembra daquele dia?",
       "imagem": null
     },
     {
       "id": "salas",
       "nome": "AS SALAS",
-      "descricao": "O nosso andar, as nossas salas. Cada uma com um jeito que só quem estudava ali sabe.",
+      "descricao": "No ano em que a gente ganhou o nosso andar, cada sala foi ficando com a cara de quem passava o dia ali.",
       "imagem": null
     },
     {
       "id": "coordenacao",
       "nome": "COORDENAÇÃO E ORIENTADORES",
-      "descricao": "As salas da coordenação e dos orientadores também faziam parte do caminho.",
+      "descricao": "No nosso caminho pela escola também ficavam as salas da coordenação e dos orientadores.",
       "imagem": null
     },
     {
       "id": "quadras",
       "nome": "AS QUADRAS",
-      "descricao": "As mesmas que já ralaram tanto joelho e torceram tanto pé.",
+      "descricao": "Essas quadras ainda devem saber quantos joelhos ralados e pés torcidos saíram daqui.",
       "imagem": null
     },
     {
       "id": "auditorio",
       "nome": "O AUDITÓRIO",
-      "descricao": "O lugar marcado no aviso do aulão do primeiro dia do ENEM.",
+      "descricao": "No primeiro dia do ENEM, o aviso era encontrar a turma no pátio às 7h30. De lá, a gente ia pro aulão no auditório.",
       "imagem": null
     },
     {
       "id": "salao",
       "nome": "O SALÃO DE PALESTRAS",
-      "descricao": "Nos Sprints Finais, coube todo mundo assistindo aula junto.",
+      "descricao": "Nos Sprints Finais, coube todo mundo aqui. A gente tava acostumado a assistir aula na própria sala. Dessa vez, foi a turma inteira junta.",
       "imagem": null
     },
     {
