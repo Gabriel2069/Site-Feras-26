@@ -4,32 +4,59 @@
   "locais": [
     {
       "id": "portao",
-      "numero": "01",
-      "nome": "O PORTÃO",
-      "descricao": "O começo de todo dia. A entrada, a espera, o caminho pra dentro.",
+      "nome": "A GUARITA",
+      "descricao": "A catraca travou? Era esperar o tio ou tentar passar por baixo e levar esporro. Quem passou por ali sabe.",
       "imagem": null
     },
     {
       "id": "patio",
-      "numero": "02",
       "nome": "O PÁTIO",
-      "descricao": "Era onde a gente se encontrava antes de ir pra sala.",
+      "descricao": "Antes de subir pra sala, a gente acabava se encontrando por aqui. Só de olhar as fotos já dá vontade de perguntar: lembra daquele dia?",
       "imagem": null
     },
     {
       "id": "salas",
-      "numero": "03",
       "nome": "AS SALAS",
-      "descricao": "Cada uma com seu jeito, suas conversas e seus professores.",
+      "descricao": "No ano em que a gente ganhou o nosso andar, cada sala foi ficando com a cara de quem passava o dia ali.",
+      "imagem": null
+    },
+    {
+      "id": "coordenacao",
+      "nome": "COORDENAÇÃO E ORIENTADORES",
+      "descricao": "No nosso caminho pela escola também ficavam as salas da coordenação e dos orientadores.",
+      "imagem": null
+    },
+    {
+      "id": "quadras",
+      "nome": "AS QUADRAS",
+      "descricao": "Essas quadras ainda devem saber quantos joelhos ralados e pés torcidos saíram daqui.",
       "imagem": null
     },
     {
       "id": "auditorio",
-      "numero": "04",
       "nome": "O AUDITÓRIO",
-      "descricao": "Tem aulão e outros encontros que merecem entrar no arquivo.",
+      "descricao": "No primeiro dia do ENEM, o aviso era encontrar a turma no pátio às 7h30. De lá, a gente ia pro aulão no auditório.",
+      "imagem": null
+    },
+    {
+      "id": "salao",
+      "nome": "O SALÃO DE PALESTRAS",
+      "descricao": "Nos Sprints Finais, coube todo mundo aqui. A gente tava acostumado a assistir aula na própria sala. Dessa vez, foi a turma inteira junta.",
+      "imagem": null
+    },
+    {
+      "id": "recepcao",
+      "nome": "A RECEPÇÃO",
+      "descricao": "",
+      "imagem": null
+    },
+    {
+      "id": "estudos",
+      "nome": "A SALA DE ESTUDOS",
+      "descricao": "",
       "imagem": null
     }
   ],
-  "recortes": []
+  "recortes": [],
+  "planos": {}
 }

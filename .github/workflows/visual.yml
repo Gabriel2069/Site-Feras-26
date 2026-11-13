@@ -5,6 +5,9 @@ on:
     paths:
       - "index.html"
       - "styles.css"
+      - "montagem.css"
+      - "montagem.js"
+      - "mini-feras.html"
       - "main.js"
       - "content/**"
       - "tests/**"

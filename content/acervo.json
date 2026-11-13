@@ -8,8 +8,8 @@
       "subtitulo": "Túnel do Tempo",
       "simbolo": "01",
       "categoria": "TROTE",
-      "resumo": "Túnel do Tempo. As primeiras fotos deste capítulo já estão no acervo da turma.",
-      "texto": "O Trote I teve como tema Túnel do Tempo. Estamos selecionando as fotografias e reunindo as histórias para contar esse dia sem inventar o que não foi registrado.",
+      "resumo": "",
+      "texto": "O nosso primeiro trote foi o Túnel do Tempo. O pátio juntou tanta gente fantasiada que vale abrir as fotos de grupo e olhar rosto por rosto.",
       "estado": "em_preparacao",
       "midias": []
     },
@@ -19,8 +19,8 @@
       "subtitulo": "Personagens",
       "simbolo": "02",
       "categoria": "TROTE",
-      "resumo": "No segundo trote, o tema foi Personagens. O resto merece ser visto nas fotos.",
-      "texto": "O Trote II foi o dos personagens. Quando as imagens forem selecionadas, este espaço vai reunir os registros e as lembranças de cada turma.",
+      "resumo": "",
+      "texto": "No trote de Personagens, as salas e o pátio ficaram cheios de fantasia. Dá vontade de abrir as fotos e tentar adivinhar quem era quem.",
       "estado": "em_preparacao",
       "midias": []
     },
@@ -30,8 +30,8 @@
       "subtitulo": "Coisas que Só Tem no Brasil",
       "simbolo": "03",
       "categoria": "TROTE",
-      "resumo": "Coisas que Só Tem no Brasil. Só o nome já dá uma ideia do que apareceu.",
-      "texto": "A terceira edição teve o tema Coisas que Só Tem no Brasil. As fotografias estão sendo catalogadas para que a montagem mantenha o humor das cenas reais.",
+      "resumo": "",
+      "texto": "No dia de Coisas que Só Tem no Brasil, vale olhar as fantasias com calma pra pegar as referências. Até a lousa serviu de fundo pras fotos.",
       "estado": "em_preparacao",
       "midias": []
     },
@@ -40,8 +40,8 @@
       "titulo": "Recreaço",
       "simbolo": "✳",
       "categoria": "ACONTECIMENTO",
-      "resumo": "Tem um álbum inteiro para lembrar o Recreaço. E ainda falta contar o que ficou fora das fotos.",
-      "texto": "O Recreaço faz parte do acervo dos Feras. Vamos reunir os melhores registros, identificar o que aconteceu e ouvir quem esteve lá antes de escrever a versão final.",
+      "resumo": "",
+      "texto": "No Recreaço, a camisa dos Feras já aparecia por todo lado. Aqui ela tá nas fotos que a turma tirou no pátio.",
       "estado": "em_preparacao",
       "midias": []
     },
@@ -50,8 +50,8 @@
       "titulo": "Day-Off",
       "simbolo": "↗",
       "categoria": "ACONTECIMENTO",
-      "resumo": "O Day-Off já tem suas fotos guardadas. O capítulo está ganhando forma.",
-      "texto": "As fotos e vídeos do Day-Off estão no acervo. A sequência audiovisual será construída a partir deles e dos relatos da turma.",
+      "resumo": "",
+      "texto": "Tem foto em grupo, tem gente que aparece sozinha e tem até um cachorro no álbum do Day-Off.",
       "estado": "em_preparacao",
       "midias": []
     },
@@ -60,9 +60,96 @@
       "titulo": "Festa Junina",
       "simbolo": "✷",
       "categoria": "ACONTECIMENTO",
-      "resumo": "Também tem Festa Junina no nosso ano. Os registros vão ganhar seu espaço.",
-      "texto": "Há fotografias da Festa Junina no arquivo dos Feras. Antes de publicar o capítulo, vamos selecionar as imagens e identificar os momentos com mais precisão.",
+      "resumo": "",
+      "texto": "Nas fotos da Festa Junina, a gente vê a roupa e a pose. Quem ensaiou de sexta também lembra dos cavalinhos, dos passinhos do Michael J. e da falta de ritmo. Deu tudo na nossa última dança.",
       "estado": "em_preparacao",
+      "midias": []
+    },
+    {
+      "id": "aula-da-saudade",
+      "titulo": "Aula da Saudade",
+      "subtitulo": "Pizzada",
+      "categoria": "ACONTECIMENTO",
+      "resumo": "",
+      "texto": "Da Aula da Saudade à pizzada, o que ficou no álbum foi a turma junta. Uns em pé, outros agachados, todo mundo se apertando pra caber na foto.",
+      "estado": "em_preparacao",
+      "midias": []
+    },
+    {
+      "id": "outros",
+      "titulo": "Outros registros",
+      "categoria": "ACERVO",
+      "estado": "em_preparacao",
+      "midias": []
+    },
+    {
+      "id": "oficiais",
+      "titulo": "Oficiais",
+      "categoria": "ACERVO",
+      "estado": "em_preparacao",
+      "midias": []
+    },
+    {
+      "id": "convite-poly",
+      "titulo": "Convite à Poly",
+      "subtitulo": "Madrinha da turma",
+      "categoria": "ACERVO",
+      "estado": "em_preparacao",
+      "texto": "Teve “Poly já”, teve “Vote certo” e teve o 46. Os cartazes guardaram o jeito que a turma achou de pedir pra Poly ser nossa madrinha.",
+      "midias": []
+    },
+    {
+      "id": "feira-ciencias",
+      "titulo": "Feira de Ciências",
+      "subtitulo": "Feira do Ensino Médio",
+      "categoria": "ACERVO",
+      "estado": "em_preparacao",
+      "texto": "Da Fonte de Heron à cabine de fotos, o álbum guardou um pouco do que a gente apresentou e do que aconteceu pelo caminho.",
+      "midias": []
+    },
+    {
+      "id": "espaco-profissoes",
+      "titulo": "Espaço das Profissões",
+      "subtitulo": "UFG",
+      "categoria": "ACERVO",
+      "estado": "em_preparacao",
+      "texto": "A gente saiu do Agostiniano pra conhecer de perto a universidade e pensar no que podia vir depois do terceirão.",
+      "midias": []
+    },
+    {
+      "id": "time-olimpico",
+      "titulo": "Time Olímpico",
+      "subtitulo": "Feras de Medalha",
+      "categoria": "ACERVO",
+      "estado": "em_preparacao",
+      "texto": "Teve Fera que manteve o time olímpico na rotina mesmo no meio de provas, simulados e plantões.",
+      "midias": []
+    },
+    {
+      "id": "maratona-ufg",
+      "titulo": "Maratona UFG",
+      "subtitulo": "Preparação",
+      "categoria": "ACERVO",
+      "estado": "em_preparacao",
+      "texto": "A Maratona UFG foi um daqueles dias em que a turma se juntou pra se preparar. Os registros guardaram o encontro e os bastidores.",
+      "midias": []
+    },
+    {
+      "id": "retratos-sala",
+      "titulo": "Retratos em sala",
+      "subtitulo": "",
+      "categoria": "ACERVO",
+      "estado": "em_preparacao",
+      "texto": "",
+      "midias": []
+    },
+    {
+      "id": "convivencia",
+      "titulo": "Pátio, corredores e convivência",
+      "subtitulo": "",
+      "categoria": "ACERVO",
+      "estado": "em_preparacao",
+      "texto": "",
       "midias": []
     }
   ]
