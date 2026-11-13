@@ -22,7 +22,7 @@ try {
    const errors = [];
    page.on("pageerror", error => errors.push(error.message));
    await page.goto("http://127.0.0.1:4173/", { waitUntil: "domcontentloaded" });
-   await page.locator("#poly-madrinha [data-open-event]").first().waitFor({ timeout: 15000 });
+   await page.locator(".october-controls").waitFor();
    assert.equal(await page.locator(".film.is-directed").count(), 0);
    assert.equal(await page.locator(".film__layer:visible").count(), 4);
    assert.match(await page.locator(".film__mark").getAttribute("src"), /marca-garra/);
@@ -39,10 +39,16 @@ try {
    assert.equal(await page.locator("#menuButton").getAttribute("aria-expanded"), "true");
    await page.locator("#menuButton").click();
    assert.equal(await page.locator("#menuButton").getAttribute("aria-expanded"), "false");
-   await page.locator("#poly-madrinha [data-open-event]").first().click();
-   assert.equal(await page.locator("#chapterDialog").evaluate(el => el.open), true);
-   await page.locator("#chapterClose").click();
-   assert.equal(await page.locator("#chapterDialog").evaluate(el => el.open), false);
+   const poly = page.locator("#poly-madrinha [data-open-event]");
+   const catalog = await (await page.request.get("http://127.0.0.1:4173/content/acervo.json")).json();
+   if (catalog.eventos.find(event => event.id === "convite-poly")?.midias.length) {
+     await poly.click();
+     assert.equal(await page.locator("#chapterDialog").evaluate(el => el.open), true);
+     await page.locator("#chapterClose").click();
+     assert.equal(await page.locator("#chapterDialog").evaluate(el => el.open), false);
+   } else {
+     assert.equal(await poly.isHidden(), true);
+   }
    await page.locator('[data-place="portao"]').click();
    assert.equal(await page.locator("#locationName").textContent(), "A GUARITA");
    await page.locator("#mosaico").scrollIntoViewIfNeeded();
@@ -52,7 +58,7 @@ try {
  }
  const motion = await browser.newPage({ viewport:{width:1440,height:900}, reducedMotion:"no-preference" });
  await motion.goto("http://127.0.0.1:4173/",{waitUntil:"domcontentloaded"});
- await motion.locator("#poly-madrinha [data-open-event]").first().waitFor({timeout:15000});
+ await motion.locator(".october-controls").waitFor();
  const filmTravel = await motion.locator(".film").evaluate(el => el.offsetHeight - el.querySelector(".film__stage").offsetHeight);
  for (const [position, layer] of [[0.36, "opening"], [0.66, "reel"], [0.95, "collective"], [0.02, "slate"]]) {
    await motion.evaluate(top => scrollTo({top, behavior: "instant"}), filmTravel * position);

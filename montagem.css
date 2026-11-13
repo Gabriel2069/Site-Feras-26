@@ -1461,3 +1461,47 @@ body.preview-media .people__visual, body.preview-media .small__filmstrip { opaci
 }
 #feira figure:last-child img { object-fit:contain; }
 #junina figure:nth-child(3) img { object-position:center 44%; }
+
+/* Printed edges and inset arrow tiles carry the memorial's palette into its controls. */
+.timeline-copy .memory-link,
+.timeline-mini .memory-link,
+.memory-people__notes .memory-link,
+#archiveMore {
+  border-radius:2px;
+  box-shadow:3px 3px 0 #5866ab;
+  background:linear-gradient(112deg,#254392 78%,#303a84 78%);
+}
+.memory-link > span,
+.film__to-archive > span {
+  display:grid;
+  place-items:center;
+  flex:none;
+  width:1.65rem;
+  height:1.65rem;
+  color:#101840;
+  background:#a8dfd1;
+  border-radius:2px 5px 2px 2px;
+  font-family:Arial,sans-serif;
+  font-size:.9rem;
+}
+.film__to-archive {
+  display:inline-flex;
+  align-items:center;
+  gap:.6rem;
+  border-radius:2px;
+  box-shadow:3px 3px #438b90;
+}
+.film__to-archive > span { margin-left:0; }
+.mini-dialog__close {
+  min-height:44px;
+  color:#f1f2fb;
+  border-color:#72809f;
+  background:#202942;
+  border-radius:3px;
+}
+@media(hover:hover) and (prefers-reduced-motion:no-preference){
+  .memory-link > span,.film__to-archive > span {
+    transition:transform .2s cubic-bezier(.2,.8,.3,1);
+  }
+  .memory-link:hover > span,.film__to-archive:hover > span { transform:translateX(2px) rotate(-8deg); }
+}

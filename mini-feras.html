@@ -23,21 +23,65 @@ html,body{
   overflow:hidden;
 }
 body{
-  background:#19191e;
+  position:relative;
+  isolation:isolate;
+  background:
+    radial-gradient(ellipse at 50% 42%,#25263c 0,transparent 61%),
+    repeating-linear-gradient(0deg,#8d92be0a 0 1px,transparent 1px 24px),
+    repeating-linear-gradient(90deg,#8d92be0a 0 1px,transparent 1px 24px),
+    #10111b;
   display:flex;
+  flex-direction:column;
   justify-content:center;
   align-items:center;
+  gap:12px;
   font-family:Arial,sans-serif;
+}
+/* A sheet of contact prints around the portrait, at lower contrast than the paper. */
+.desk-tile{
+  position:absolute;
+  z-index:-1;
+  width:clamp(75px,15vmin,175px);
+  aspect-ratio:1;
+  transform:rotate(var(--angle));
+  pointer-events:none;
+  opacity:.49;
+}
+.desk-tile:nth-child(1){
+  --angle:-12deg;
+  left:clamp(-31px,7vw,105px);
+  top:17%;
+  background:radial-gradient(circle at 0 100%,#131723 0 28%,#5953a0 29% 59%,#235c61 60%);
+}
+.desk-tile:nth-child(2){
+  --angle:11deg;
+  right:clamp(-24px,8vw,120px);
+  top:13%;
+  background:radial-gradient(#9299bf 0 19%,transparent 22%) 0 0 / 20% 20%,#242748;
+}
+.desk-tile:nth-child(3){
+  --angle:-9deg;
+  right:clamp(-27px,6vw,95px);
+  bottom:13%;
+  background:conic-gradient(from 45deg,#474482 0 25%,#1b2237 0 50%,#2c6e74 0 75%,#1b2237 0) 0 0 / 50% 50%;
+}
+.desk-tile:nth-child(4){
+  --angle:8deg;
+  left:clamp(-29px,9vw,125px);
+  bottom:10%;
+  border-radius:49% 35% 67% 27%;
+  background:#294b60;
 }
 .polaroid{
   position:relative;
-  width:min(88vw,740px,calc(85dvh * .83));
+  width:min(88vw,740px,calc(81dvh * .83));
   aspect-ratio:.83;
+  flex:none;
   background:var(--papel);
   padding:clamp(10px,2vw,19px);
   display:flex;
   flex-direction:column;
-  box-shadow:0 22px 70px #0007,7px 9px 0 #0003;
+  box-shadow:0 22px 75px #000b,5px 6px 0 #b4b5cb31,10px 12px 0 #0c0d16a0;
   transform:rotate(-.6deg);
   transition:transform .28s ease;
   touch-action:pan-y;
@@ -105,25 +149,68 @@ body{
   font:700 clamp(14px,2vw,21px)/1 'Caveat',cursive;
 }
 .selo{
-  background:var(--roxo);
-  color:white;
-  border:2px solid #171126;
-  width:clamp(53px,7vw,79px);
-  height:clamp(53px,7vw,79px);
-  border-radius:50%;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  flex-direction:column;
+  position:relative;
+  isolation:isolate;
+  display:grid;
+  place-content:center;
+  justify-items:center;
   flex-shrink:0;
-  font:900 clamp(12px,2vw,19px)/.86 'Barlow Condensed',sans-serif;
-  transform:rotate(12deg);
-  box-shadow:3px 3px 0 #191424;
+  width:clamp(53px,7vw,77px);
+  aspect-ratio:1;
+  border-radius:50%;
+  border:2px solid #b5dbd9;
+  color:#fffdf2;
+  background:radial-gradient(ellipse at 28% 15%,#5a61a2,#29265b 54%,#191b35 82%);
+  transform:rotate(11deg);
+  box-shadow:0 0 0 1px #1b2434,0 3px 0 #182132,2px 5px 6px #1e1a3a55,inset 0 0 0 2px #1c203b;
+  font:900 clamp(11px,1.8vw,18px)/.85 'Barlow Condensed',sans-serif;
+  letter-spacing:.075em;
+}
+.selo::before{
+  content:"";
+  position:absolute;
+  inset:5px;
+  z-index:-1;
+  border:1px dashed #b5dbd999;
+  border-radius:50%;
 }
 .selo small{
-  color:var(--verde);
-  font-size:1.3em;
-  margin-top:3px;
+  color:#9de1cb;
+  font-size:1.36em;
+  margin-top:4px;
+}
+.selo::after{
+  content:"";
+  position:absolute;
+  width:26%;
+  height:12%;
+  top:11%;
+  left:20%;
+  border-top:2px solid #fff8;
+  border-radius:50%;
+  transform:rotate(-34deg);
+}
+.mini-controls{
+  position:relative;
+  z-index:1;
+  display:flex;
+  gap:8px;
+}
+.mini-controls[hidden]{display:none}
+.mini-controls button{
+  min-height:44px;
+  padding:.45rem .85rem;
+  border:1px solid #72809f;
+  border-radius:4px;
+  background:#202942;
+  color:#eef0fb;
+  font:800 1rem/1 'Barlow Condensed',Arial,sans-serif;
+  cursor:pointer;
+}
+.mini-controls button:hover{background:#35466b}
+.mini-controls button:focus-visible{outline:2px solid #9de1cb;outline-offset:2px}
+@media(max-height:570px){
+  .polaroid{width:min(88vw,740px,calc((100dvh - 106px) * .83))}
 }
 .counter{
   position:absolute;
@@ -145,6 +232,8 @@ body{
 </head>
 
 <body>
+<div class="desk-tile" aria-hidden="true"></div><div class="desk-tile" aria-hidden="true"></div>
+<div class="desk-tile" aria-hidden="true"></div><div class="desk-tile" aria-hidden="true"></div>
 
 <main class="polaroid" id="polaroid"
   aria-label="Galeria de fotos dos Feras 26">
@@ -161,7 +250,7 @@ body{
       <div class="apelido" id="apelido"></div>
     </div>
 
-    <div class="selo">
+    <div class="selo" aria-label="Feras 26">
       FERAS
       <small>26</small>
     </div>
@@ -169,6 +258,10 @@ body{
     <span class="counter" id="counter" aria-live="polite"></span>
   </div>
 </main>
+<nav class="mini-controls" aria-label="Navegar pelas polaroids" hidden>
+  <button type="button" id="miniPrev"><span aria-hidden="true">←</span> Anterior</button>
+  <button type="button" id="miniNext">Próxima <span aria-hidden="true">→</span></button>
+</nav>
 
 <script>
 "use strict";
@@ -178,6 +271,7 @@ const loading = document.querySelector("#loading");
 const nome = document.querySelector("#nome");
 const apelido = document.querySelector("#apelido");
 const counter = document.querySelector("#counter");
+const controls = document.querySelector(".mini-controls");
 let photos = [];
 let index = 0;
 let gesture = null;
@@ -217,6 +311,8 @@ function move(direction) {
   index = (index + direction + photos.length) % photos.length;
   show();
 }
+document.querySelector("#miniPrev").addEventListener("click", () => move(-1));
+document.querySelector("#miniNext").addEventListener("click", () => move(1));
 card.addEventListener("touchstart", event => {
   const touch = event.changedTouches[0];
   gesture = { x: touch.screenX, y: touch.screenY };
@@ -251,6 +347,7 @@ async function start() {
     const embedded = document.querySelector("#miniData");
     const rows = embedded ? JSON.parse(embedded.textContent) : await (await fetch("./content/mini-feras.json")).json();
     photos = rows.filter(row => row.nome && (embedded ? /^data:image\/webp;base64,/.test(row.src) : /^\.\/media\/mini-feras\/[\w/-]+\.(webp|jpe?g|png)$/i.test(row.src)));
+    controls.hidden = photos.length < 2;
     show();
   } catch {
     loading.textContent = "NÃO FOI POSSÍVEL ABRIR O ÁLBUM";
