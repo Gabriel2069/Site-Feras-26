@@ -1918,3 +1918,153 @@ body.preview-media .people__visual, body.preview-media .small__filmstrip { opaci
   .era-paper-strip { width:78px; margin-top:.85rem; }
   #andar-e-camisa { padding-inline:16px; }
 }
+
+/* The last spread unfolds from a stack of prints into the closing title. */
+.finale {
+  --finale-progress:1;
+  min-height:0;
+  display:block;
+  overflow:clip;
+  background:#10101b;
+}
+.finale--directed { min-height:169svh; overflow:visible; }
+.finale__stage {
+  position:relative;
+  display:grid;
+  place-items:center;
+  min-height:100svh;
+  isolation:isolate;
+  overflow:hidden;
+  background:
+    radial-gradient(ellipse at 49% 50%,#22203b 0,transparent 65%),
+    linear-gradient(145deg,#181a2b,#0d0d16 77%);
+}
+.finale--directed .finale__stage { position:sticky; top:0; }
+.finale__art,.finale__veil,.finale__contact { position:absolute; inset:0; pointer-events:none; }
+.finale__art { z-index:-1; }
+.finale__art::after {
+  content:""; position:absolute; inset:0; opacity:.22; mix-blend-mode:soft-light;
+  background:url("assets/grao.webp") 0 0 / 230px;
+}
+.finale__ink {
+  position:absolute;
+  mask:url("assets/mancha.webp") center / 100% 100% no-repeat;
+  transform:rotate(var(--ink-angle)) scale(calc(.81 + var(--finale-progress) * .2));
+}
+.finale__ink--left {
+  --ink-angle:-8deg;
+  inset:3% 56% 15% -9%;
+  background:linear-gradient(146deg,#362262,#594477 41%,#61728b);
+  opacity:.82;
+}
+.finale__ink--right {
+  --ink-angle:12deg;
+  inset:17% -6% 1% 58%;
+  background:linear-gradient(137deg,#1b5655,#278486 54%,#4d7b8e);
+  opacity:.72;
+}
+.finale__print {
+  --print-arrival:1;
+  position:absolute;
+  width:var(--print-width);
+  margin:0;
+  aspect-ratio:var(--print-ratio,4/5);
+  padding:clamp(4px,.65vw,10px);
+  padding-bottom:clamp(10px,1.6vw,24px);
+  background:#ded2b8;
+  box-shadow:0 8px 29px #080914b0;
+  opacity:calc(var(--print-arrival) * var(--print-opacity,.86));
+  transform:translate(calc((1 - var(--print-arrival)) * var(--from-x)),calc((1 - var(--print-arrival)) * var(--from-y)))
+    rotate(calc(var(--tilt) + (1 - var(--print-arrival)) * var(--rotation)));
+}
+.finale__print:not(:has(img[src])) { display:none; }
+.finale__print img { display:block; width:100%; height:100%; object-fit:cover; object-position:50% 56%; }
+.finale__print--back {
+  --print-width:clamp(120px,17vw,260px); --tilt:-12deg; --rotation:-23deg; --from-x:-33vw; --from-y:-12vh;
+  top:12%; left:5%;
+}
+.finale__print--main {
+  --print-width:clamp(190px,29vw,440px); --print-ratio:5/4; --tilt:-7deg; --rotation:17deg; --from-x:-23vw; --from-y:25vh;
+  bottom:9%; left:6%;
+}
+.finale__print--front {
+  --print-width:clamp(150px,24vw,360px); --tilt:9deg; --rotation:23deg; --from-x:33vw; --from-y:13vh;
+  right:7%; top:17%;
+}
+.finale__veil {
+  background:radial-gradient(ellipse at center,#100e20ee 4%,#100e20be 34%,#14132636 67%,transparent 83%);
+}
+.finale__mosaic {
+  position:absolute;
+  width:clamp(83px,12vw,195px);
+  grid-template-columns:repeat(3,1fr);
+  opacity:calc(.34 + var(--finale-progress) * .55);
+}
+.finale__mosaic--top { right:4%; top:7%; transform:translateX(calc((1 - var(--finale-progress)) * 28vw)) rotate(8deg); }
+.finale__mosaic--bottom { bottom:11%; left:4%; transform:translateX(calc((1 - var(--finale-progress)) * -22vw)) rotate(-7deg); }
+.finale__content { width:min(100% - 36px,970px); padding:clamp(100px,12vh,150px) 0 clamp(100px,12vh,150px); }
+.finale__logo {
+  width:clamp(114px,14vw,194px); margin:0 auto clamp(14px,3vw,35px);
+  opacity:clamp(.16,calc((var(--finale-progress) - .16) * 3.8),1);
+  transform:translateY(calc((1 - var(--finale-progress)) * -23px)) rotate(-4deg);
+}
+.finale h2 { margin:0 auto .35em; font:600 clamp(3.7rem,11vw,11.4rem)/.75 var(--film-serif); letter-spacing:-.075em; color:#fff2d8; }
+.finale h2 span,.finale h2 em { display:block; }
+.finale h2 span {
+  opacity:clamp(0,calc((var(--finale-progress) - .09) * 4.3),1);
+  transform:translateY(calc((1 - var(--finale-progress)) * 31px));
+}
+.finale h2 em {
+  margin:.13em auto 0; font:italic 600 .91em/.68 var(--film-serif); color:#a9dbd1;
+  clip-path:inset(0 0 clamp(0%,calc((.63 - var(--finale-progress)) * 225%),100%) 0);
+  transform:translateY(calc((1 - var(--finale-progress)) * 28px));
+}
+.finale__content>p {
+  width:min(100%,37ch); margin:0 auto 1.35rem; color:#f1e9e8;
+  font:500 clamp(1.12rem,2.3vw,1.63rem)/1.25 var(--film-serif);
+  opacity:clamp(0,calc((var(--finale-progress) - .43) * 4),1);
+}
+.finale__restart {
+  align-items:center; min-height:47px; gap:1.3em;
+  border-color:#c4bee997; background:#201d39;
+  padding:.72em 1em .72em 1.13em;
+  text-transform:uppercase; letter-spacing:.08em;
+}
+.finale__restart span { display:grid; place-items:center; width:25px; height:25px; background:#9fd4c8; color:#16192c; border-radius:2px; }
+.finale__restart:focus-visible { outline:2px solid #f8dba3; outline-offset:4px; }
+.footer {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  align-items:center;
+}
+.footer__credit { justify-self:center; text-align:center; }
+.footer > a { justify-self:end; }
+@media (max-width:740px) {
+  .finale--directed { min-height:155svh; }
+  .finale__print--back { top:6%; left:0; }
+  .finale__print--main { left:-6%; bottom:5%; }
+  .finale__print--front { right:-5%; top:13%; }
+  .finale__mosaic--top { top:5%; right:8%; }
+  .finale__mosaic--bottom { bottom:7%; left:auto; right:7%; }
+  .finale__veil { background:radial-gradient(ellipse at center,#100e20fa 9%,#100e20b5 49%,transparent 85%); }
+  .footer { grid-template-columns:1fr 1fr; column-gap:.6rem; }
+  .footer__credit { grid-column:1/-1; grid-row:1; margin-bottom:.25rem; font-size:1.27rem; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .finale__stage { --finale-progress:1 !important; }
+  .finale__print { --print-arrival:1 !important; }
+}
+
+.finale,.finale__stage { width:100%; max-width:none; margin-inline:0; }
+.finale__stage { justify-items:center; }
+.finale__print img {
+  position:absolute; inset:clamp(4px,.65vw,10px) clamp(4px,.65vw,10px) clamp(11px,1.5vw,23px);
+  width:calc(100% - 2 * clamp(4px,.65vw,10px));
+  height:calc(100% - clamp(11px,1.5vw,23px) - clamp(4px,.65vw,10px));
+}
+@media (min-width:1040px) {
+  .finale__content { width:min(100% - 48px,1120px); }
+  .finale h2 { font-size:clamp(7rem,10vw,10.5rem); }
+  .finale__print--main { left:8%; }
+  .finale__print--front { right:9%; }
+}

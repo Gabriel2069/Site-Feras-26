@@ -463,6 +463,10 @@ async function loadContent(){
         if (fallback) image.src = fallback;
       }
     }
+    for (const image of $$("[data-finale-shot]")) {
+      const source = filePath(data.planos?.[image.dataset.finaleShot]);
+      if (source && !image.hasAttribute("src")) image.src = source;
+    }
     for (const image of $$("[data-timeline-plan]")) {
       const source = filePath(data.planos?.[image.dataset.timelinePlan]);
       if (source && !isVideo(source)) showTimelinePhoto(image, source);
