@@ -26,10 +26,10 @@ const memorialAudio = (() => {
       music.pause();
       return;
     }
+    if (!music.paused) return;
     music.play().catch(error => {
-      if (error.name === "AbortError" || error.name === "NotAllowedError") return;
-      soundtrackWanted = false;
-      trackStatus.textContent = "A trilha não começou. Use o botão para tocar.";
+      if (error.name === "AbortError" || muted || featured || !soundtrackWanted) return;
+      trackStatus.textContent = "Toque em Tocar trilha para continuar.";
     });
   }
   for (const event of ["play", "pause", "ended"]) {
@@ -61,7 +61,7 @@ const memorialAudio = (() => {
       for (let i = 0; i < samples.length; i++) samples[i] = Math.random() * 2 - 1;
     }
     if (context.state !== "running") context.resume().catch(() => {});
-    if (localTrack && soundtrackWanted && music.paused) updateMusic();
+    if (soundtrackWanted && music.paused) updateMusic();
   }
   control.addEventListener("click", () => {
     muted = !muted;
@@ -80,7 +80,11 @@ const memorialAudio = (() => {
   }
   return {
     get muted() { return muted; },
-    feature(active) { featured = active; updateMusic(); },
+    feature(active) {
+      if (featured === active) return;
+      featured = active;
+      updateMusic();
+    },
     effect(name, delay = 0) {
       if (muted || context?.state !== "running") return;
       const settings = {
@@ -609,16 +613,18 @@ function watchHorizontalSwipe(surface, changePage, accepts = () => true) {
   let timer;
   let autoSeen = false;
   let waitingForSound = false;
+  let playback = 0;
   if (audio) audio.preload = "none";
 
-  function reset() {
+  function reset({resume = true} = {}) {
+    ++playback;
     clearTimeout(timer);
     if (audio) audio.pause();
     waitingForSound = false;
     scene.classList.remove("baile--firing", "baile--playing");
     button.setAttribute("aria-pressed","false");
     label.textContent = "Soltar o paredão";
-    memorialAudio.feature(false);
+    if (resume) memorialAudio.feature(false);
   }
   function play() {
     autoSeen = true;
@@ -636,13 +642,16 @@ function watchHorizontalSwipe(surface, changePage, accepts = () => true) {
       memorialAudio.feature(false);
       return;
     }
+    const attempt = ++playback;
     audio.currentTime = 0;
     audio.play().then(() => {
+      if (attempt !== playback) return;
       waitingForSound = false;
       scene.classList.add("baile--playing");
       button.setAttribute("aria-pressed","true");
       label.textContent = "Pausar música";
     }).catch(() => {
+      if (attempt !== playback) return;
       waitingForSound = true;
       button.setAttribute("aria-pressed","false");
       label.textContent = "Tocar música";
@@ -650,8 +659,8 @@ function watchHorizontalSwipe(surface, changePage, accepts = () => true) {
     });
   }
   function fire() {
-    reset();
     memorialAudio.feature(true);
+    reset({resume:false});
     scene.classList.add("baile--firing");
     button.setAttribute("aria-pressed","true");
     label.textContent = "Parar a cena";
@@ -666,7 +675,13 @@ function watchHorizontalSwipe(surface, changePage, accepts = () => true) {
     else if (waitingForSound && !memorialAudio.muted) { memorialAudio.feature(true); play(); }
     else fire();
   });
-  audio?.addEventListener("ended",reset);
+  audio?.addEventListener("ended", () => reset());
+  audio?.addEventListener("pause", () => {
+    if (scene.classList.contains("baile--playing")) reset();
+  });
+  audio?.addEventListener("error", () => {
+    if (scene.classList.contains("baile--playing")) reset();
+  });
   document.addEventListener("memorial-sound-change", () => {
     if (audio) audio.muted = memorialAudio.muted;
   });
