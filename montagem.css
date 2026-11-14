@@ -2187,7 +2187,7 @@ body.cinema-on #masthead .nav__sound { position:absolute; top:14px; right:clamp(
 }
 .soundtrack summary { cursor:pointer; padding:.7rem; font:.85rem var(--film-mono); }
 .soundtrack a { color:#e7d8f4; font-size:.83rem; }
-.soundtrack iframe { display:block; width:min(100%,440px); margin:.55rem auto; height:248px; border:0; }
+
 .october-track { cursor:grab; }
 .october-track.is-dragging { scroll-snap-type:none; cursor:grabbing; user-select:none; }
 .finale__word span:first-child { width:.73em; margin-right:.02em; --angle:-6deg; }
@@ -2214,3 +2214,33 @@ body.cinema-on #masthead .nav__sound { position:absolute; top:14px; right:clamp(
 }
 .baile-play i { display:block; width:.85em; height:.91em; background:currentColor; clip-path:polygon(14% 0,100% 50%,14% 100%); }
 .baile-play[aria-pressed="true"] i { clip-path:polygon(12% 0,37% 0,37% 100%,12% 100%,12% 0,63% 0,88% 0,88% 100%,63% 100%,63% 0); }
+
+.chapter-modal__media { position:relative; perspective:1050px; }
+.chapter-modal__media .chapter-modal__turning {
+  position:absolute; inset:0; z-index:2; pointer-events:none; overflow:hidden;
+  box-shadow:0 12px 26px #2d1d424b;
+}
+.chapter-modal__turning::after {
+  inset:0!important; width:auto!important; height:auto!important;
+  background:linear-gradient(100deg,#36224420,transparent 32% 65%,#39214056)!important;
+  transform:none!important;
+}
+.photo-reaction { position:relative; justify-self:center; margin:.65rem 0 0; z-index:3; }
+.photo-reaction[hidden],.photo-reaction__choices[hidden] { display:none; }
+#reactionToggle,#soundtrackPlay { min-height:40px; padding:.45rem .85rem; border-radius:3px; cursor:pointer; font-weight:700; }
+#reactionToggle { color:#382457; border:1px solid #a58eb7; background:#f5e8cd; }
+#soundtrackPlay { border:1px solid #c6adf2; color:#f6ecff; background:#342748; margin:.25rem 0; }
+#soundtrackStatus { font-size:.78rem; margin:.35rem 0; }
+.photo-reaction__choices {
+  position:absolute; left:50%; bottom:calc(100% + 7px); transform:translateX(-50%);
+  display:flex; gap:3px; padding:.35rem; background:#241933; border:1px solid #c3aad5;
+  border-radius:8px; box-shadow:0 5px 19px #20142d76;
+}
+.photo-reaction__choices button {
+  width:clamp(37px,10vw,44px); height:44px; background:none; border:1px solid transparent;
+  border-radius:5px; cursor:pointer; font-size:1.22rem;
+}
+.photo-reaction__choices button:hover,.photo-reaction__choices button[aria-pressed="true"] { background:#7852a3; border-color:#c9b3e8; }
+.photo-reaction button:focus-visible,#soundtrackPlay:focus-visible { outline:2px solid #ac8651; outline-offset:2px; }
+
+.photo-reaction--video { visibility:hidden; }

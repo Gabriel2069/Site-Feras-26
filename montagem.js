@@ -3,56 +3,48 @@
 const memorialAudio = (() => {
   const control = document.querySelector("#soundButton");
   const AudioEngine = window.AudioContext || window.webkitAudioContext;
-  const soundtrack = document.querySelector("#soundtrack");
+  const trackButton = document.querySelector("#soundtrackPlay");
+  const trackStatus = document.querySelector("#soundtrackStatus");
   const localTrack = window.ferasPreview?.soundtrack;
-  const music = localTrack ? new Audio(localTrack) : null;
-  let iframe;
+  const music = new Audio(localTrack || window.ferasPreview?.soundtrackPreview || "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ac/a2/55/aca255c7-590d-f0e3-095d-d596b1f3224e/mzaf_5055552058754859050.plus.aac.p.m4a");
+  music.preload = "none";
+  music.loop = Boolean(localTrack);
+  music.volume = .24;
   let context;
   let master;
   let noise;
   let muted = false;
   let featured = false;
-  let soundtrackWanted = Boolean(music);
-  if (music) { music.loop = true; music.volume = .18; music.preload = "none"; }
+  let soundtrackWanted = Boolean(localTrack);
 
   function updateMusic() {
-    if (music) {
-      if (muted || featured || !soundtrackWanted) music.pause();
-      else music.play().catch(() => {});
+    if (muted || featured || !soundtrackWanted) {
+      music.pause();
+      return;
     }
-    if (iframe) {
-      for (const [func, args] of [[muted ? "mute" : "unMute",[]], ["setVolume",[22]], [muted || featured ? "pauseVideo" : "playVideo",[]]]) {
-        iframe.contentWindow?.postMessage(JSON.stringify({event:"command",func,args}), "https://www.youtube-nocookie.com");
-      }
-    }
+    music.play().catch(error => {
+      if (error.name === "AbortError") return;
+      soundtrackWanted = false;
+      trackStatus.textContent = "A prévia não carregou. Tente de novo ou abra a faixa inteira.";
+    });
   }
-  soundtrack.addEventListener("toggle", () => {
-    if (!soundtrack.open) return;
-    soundtrackWanted = true;
-    if (!music && !iframe) {
-      const url = new URL("https://www.youtube-nocookie.com/embed/1cEy4UyYHI0");
-      url.searchParams.set("enablejsapi","1");
-      url.searchParams.set("autoplay",muted || featured ? "0" : "1");
-      url.searchParams.set("playsinline","1");
-      if (location.origin !== "null") url.searchParams.set("origin",location.origin);
-      iframe = document.createElement("iframe");
-      iframe.title = "Outro, M83 · player oficial";
-      iframe.allow = "autoplay; encrypted-media";
-      iframe.referrerPolicy = "strict-origin-when-cross-origin";
-      iframe.src = url.href;
-      iframe.addEventListener("load", () => {
-        iframe.contentWindow?.postMessage(JSON.stringify({event:"listening"}), "https://www.youtube-nocookie.com");
-        updateMusic();
-      });
-      soundtrack.querySelector(".soundtrack__player").append(iframe);
-    }
+  for (const event of ["play", "pause", "ended"]) {
+    music.addEventListener(event, () => {
+      const playing = !music.paused && !music.ended;
+      trackButton.textContent = playing ? "Pausar trilha" : "Tocar prévia";
+      trackButton.setAttribute("aria-pressed", String(playing));
+      if (playing) trackStatus.textContent = "Tocando Outro · M83";
+      if (event === "ended") {
+        soundtrackWanted = false;
+        trackStatus.textContent = "Fim da prévia. A versão integral está no canal do M83.";
+      }
+    });
+  }
+  trackButton.addEventListener("click", () => {
+    soundtrackWanted = !soundtrackWanted;
+    if (soundtrackWanted && muted) control.click();
+    if (soundtrackWanted && featured) trackStatus.textContent = "A trilha volta depois da cena do baile.";
     updateMusic();
-  });
-  addEventListener("message", event => {
-    if (event.origin !== "https://www.youtube-nocookie.com" || event.source !== iframe?.contentWindow) return;
-    try {
-      if (JSON.parse(event.data).event === "onReady") updateMusic();
-    } catch {}
   });
   function unlock() {
     if (!AudioEngine || muted) return;
@@ -65,7 +57,7 @@ const memorialAudio = (() => {
       for (let i = 0; i < samples.length; i++) samples[i] = Math.random() * 2 - 1;
     }
     if (context.state !== "running") context.resume().catch(() => {});
-    if (music && soundtrackWanted && music.paused) updateMusic();
+    if (localTrack && soundtrackWanted && music.paused) updateMusic();
   }
   control.addEventListener("click", () => {
     muted = !muted;

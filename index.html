@@ -121,8 +121,9 @@
   </section>
   <details class="soundtrack" id="soundtrack">
     <summary>Trilha do memorial · Outro, M83</summary>
-    <div class="soundtrack__player"></div>
-    <a href="https://www.youtube.com/watch?v=1cEy4UyYHI0" target="_blank" rel="noopener">Ouvir no canal do M83 ↗</a>
+    <button type="button" id="soundtrackPlay" aria-pressed="false">Tocar prévia</button>
+    <p id="soundtrackStatus" role="status">Prévia de 30 segundos. A versão integral está no canal do M83.</p>
+    <a href="https://music.apple.com/us/song/1674219107" target="_blank" rel="noopener">Prévia do Apple Music ↗</a> · <a href="https://www.youtube.com/watch?v=1cEy4UyYHI0" target="_blank" rel="noopener">Ouvir a faixa inteira ↗</a>
   </details>
 
   <section class="year-timeline" id="acontecimentos" aria-labelledby="yearTitle">
@@ -586,6 +587,11 @@
           <button type="button" id="photoPrev" aria-label="Registro anterior">← <span>Anterior</span></button>
           <p id="photoPosition" aria-live="polite"></p>
           <button type="button" id="photoNext" aria-label="Próximo registro"><span>Próxima</span> →</button>
+        </div>
+        <div class="photo-reaction" id="photoReaction" hidden>
+          <button type="button" id="reactionToggle" aria-expanded="false" aria-controls="reactionChoices">♡ Reagir</button>
+          <div id="reactionChoices" class="photo-reaction__choices" role="group" aria-label="Escolher reação" hidden></div>
+          <span id="reactionStatus" class="film__sr" role="status"></span>
         </div>
         <div class="chapter-modal__empty" id="chapterEmpty">As fotos desse capítulo ainda estão a caminho.</div>
       </div>

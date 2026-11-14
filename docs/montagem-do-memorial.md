@@ -102,4 +102,12 @@ O pacote privado mantém as miniaturas no HTML e lê as fotos maiores da pasta `
 
 O visor do livro mantém a altura ao alternar retratos, paisagens e vídeos. Use as setas, o teclado ou deslize sobre a foto. Em outubro, o avanço também acompanha a rolagem vertical quando a composição cabe na tela. Nas telas mais baixas, a faixa usa o gesto horizontal nativo.
 
-A cartela e os efeitos de transição vêm com som habilitado. O navegador libera a reprodução após a primeira interação. O ícone no topo silencia o memorial. O paredão começa quando entra em cena e então toca o trecho na prévia privada. A trilha geral, “Outro”, tem player oficial online e aceita uma faixa local por `window.ferasPreview.soundtrack`, quando fornecida.
+A cartela e os efeitos de transição vêm com som habilitado. O navegador libera a reprodução após a primeira interação. O ícone no topo silencia o memorial. O paredão começa quando entra em cena e então toca o trecho na prévia privada. A trilha geral é “Outro”, do M83.
+
+### Reações por foto
+
+O menu do álbum oferece seis reações. Cada foto tem uma só reação, identificada pelo caminho estável da mídia. A escolha mais recente substitui a anterior, inclusive quando a foto aparece em dois álbuns. O HTML avulso salva no navegador. Para compartilhar entre visitantes, execute também `supabase/feras_photo_reactions.sql` no projeto dedicado e use a mesma configuração `window.ferasMemorias`. A tabela precisa estar exposta na Data API. O álbum lê a última reação compartilhada ao abrir a foto ou retornar a ela.
+
+### Trilha
+
+O botão da trilha usa o áudio da prévia oficial de 30 segundos em um player nativo, com link para a faixa completa. A prévia é incorporada ao HTML avulso. No site, o player pode carregar a prévia pelo endereço da Apple. Para configurar uma gravação completa que você possa utilizar, defina `window.ferasPreview.soundtrack` com o arquivo de áudio. A trilha pausa durante a cena sonora do baile e respeita o botão de som no topo.
