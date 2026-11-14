@@ -58,7 +58,7 @@
           <i class="tile-arc"></i><i class="tile-dots"></i><i class="tile-triangles"></i><i class="tile-rays"></i>
           <i class="tile-triangles"></i><i class="tile-arc"></i><i class="tile-rays"></i><i class="tile-dots"></i>
         </div>
-        <div class="film__photograph" aria-hidden="true"><img data-shot="patio" alt=""></div>
+        <div class="film__photograph" aria-hidden="true"><img data-shot="turma-abertura" alt=""></div>
         <div class="film__ink film__ink--blue" aria-hidden="true"></div>
         <div class="film__ink film__ink--green" aria-hidden="true"></div>
         <div class="film__tile film__tile--ledge" aria-hidden="true"><img data-shot="patio-detalhe" alt=""></div>
@@ -68,7 +68,7 @@
           <p class="film__title"><span>Depois</span><i>do sinal</i></p>
         </div>
         <img class="film__mark" src="assets/marca-garra-escura.webp" alt="Feras Agostiniano 2026, com a garra atrás">
-        <span class="film__caption" data-shot-label="patio">Colégio Agostiniano</span>
+        <span class="film__caption">Os Feras reunidos</span>
       </div>
       <div class="film__layer film__reel" data-layer="reel">
         <div class="film__reel-ground" aria-hidden="true"></div>
@@ -477,7 +477,6 @@
       <div class="memory-people__spread">
         <div class="staff-portrait">
           <div class="timeline-photos staff-gallery" data-event-frames="funcionarios" data-reveal></div>
-          <p class="staff-portrait__caption">Pra quem fez a escola acontecer todos os dias.</p>
           <button class="memory-link" type="button" data-open-event="funcionarios" hidden>Ver fotos dos funcionários <span aria-hidden="true">↗</span></button>
         </div>
         <div class="memory-people__notes">
@@ -531,12 +530,19 @@
     </div>
   </section>
 </main>
-<footer class="footer"><span>FERAS 26 · AGOSTINIANO</span><span>MEMORIAL EM CONSTRUÇÃO</span><a href="#inicio">VOLTAR ↑</a></footer>
+<footer class="footer"><span>FERAS 26 · AGOSTINIANO</span><span class="footer__credit">Com carinho, <strong>por Gabriel Tadeu</strong></span><a href="#inicio">VOLTAR ↑</a></footer>
 <dialog class="chapter-modal" id="chapterDialog" aria-labelledby="chapterTitle">
   <div class="chapter-modal__top"><span id="chapterCode">FERAS 26 / ACERVO</span><button type="button" id="chapterClose" aria-label="Fechar capítulo">FECHAR ✕</button></div>
   <div class="chapter-modal__body">
-    <div class="chapter-modal__heading"><span class="eyebrow" id="chapterCategory"></span><h2 id="chapterTitle"></h2><p id="chapterText"></p></div>
-    <div class="chapter-modal__media" id="chapterMedia"></div>
+    <div class="chapter-modal__book">
+      <div class="chapter-modal__heading">
+        <div class="chapter-modal__tiles feras-tiles" aria-hidden="true"><i class="tile-arc"></i><i class="tile-dots"></i><i class="tile-triangles"></i><i class="tile-rays"></i></div>
+        <span class="eyebrow" id="chapterCategory"></span>
+        <h2 id="chapterTitle"></h2>
+        <p id="chapterText"></p>
+      </div>
+      <div class="chapter-modal__media" id="chapterMedia"></div>
+    </div>
     <div class="chapter-modal__controls" id="chapterControls" hidden>
       <button type="button" id="photoPrev" aria-label="Registro anterior">← <span>Anterior</span></button>
       <p id="photoPosition" aria-live="polite"></p>

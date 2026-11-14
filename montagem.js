@@ -127,7 +127,7 @@
     if (!opening.hidden) {
       const push = section(p, .15, .42);
       opening.style.clipPath = enter < 1 ? torn(enter, "up") : "none";
-      openingPhoto.style.transform = `translate3d(${(push - .5) * 9}%,${(push - .5) * 6}%,0) scale(${1.08 + push * .19})`;
+      openingPhoto.style.transform = `translate3d(${(push - .5) * 2.2}%,${(push - .5) * 1.5}%,0) scale(${1 + push * .055})`;
       shapes.style.transform = `translate3d(${(push - .5) * -5}%,${(push - .5) * 4}%,0) rotate(${push * 9 - 4}deg)`;
       title(openingWords, p, .195, .278);
       openingMark.style.opacity = section(p, .277, .346);
@@ -184,7 +184,7 @@
 
   function draw(time) {
     frame = 0;
-    if (motion.matches) return;
+    if (motion.matches || film.classList.contains("is-writing")) return;
     const target = between(scrollY, start, start + travel);
     if (target === current) return;
     const elapsed = Math.min(45, time - lastTime || 16);
@@ -224,6 +224,58 @@
   window.addEventListener("resize", measure, { passive: true });
   motion.addEventListener("change", configure);
   configure();
+
+  // Match the pauses and block cursor from Aryana's cartela.
+  if (!motion.matches && (!location.hash || location.hash === "#inicio") && scrollY < 2) {
+    const slateText = layers.slate.querySelector(".film__slate-text");
+    const originals = [...slateText.children].map(line => line.textContent);
+    const typing = document.createElement("span");
+    typing.className = "film__typing";
+    typing.setAttribute("aria-hidden", "true");
+    const lines = originals.map((original, index) => {
+      const line = document.createElement("span");
+      line.className = "film__type-line";
+      line.dataset.active = String(index === 0);
+      typing.append(line);
+      return line;
+    });
+    slateText.append(typing);
+    const timing = [[640,1150],[1840,3040],[3530,4440]];
+    const locked = [...document.querySelectorAll(".skip, #masthead, #navigation, main > section:not(.film), body > .footer")];
+    const changed = locked.filter(node => !node.inert);
+    for (const node of changed) node.inert = true;
+    film.classList.add("is-writing");
+    document.documentElement.classList.add("film-writing");
+    const started = performance.now();
+    let animation;
+    function unlock() {
+      cancelAnimationFrame(animation);
+      film.classList.remove("is-writing");
+      document.documentElement.classList.remove("film-writing");
+      typing.remove();
+      for (const node of changed) node.inert = false;
+      motion.removeEventListener("change", motionChanged);
+      window.removeEventListener("hashchange", unlock);
+      queue();
+    }
+    function motionChanged() { if (motion.matches) unlock(); }
+    function paint(now) {
+      const elapsed = now - started;
+      if (elapsed >= 5160) { unlock(); return; }
+      const currentLine = timing.findLastIndex(([from]) => elapsed >= from);
+      lines.forEach((line, i) => {
+        const [from, to] = timing[i];
+        const ratio = between(elapsed, from, to);
+        const displayed = originals[i].slice(0, Math.floor(originals[i].length * ratio));
+        if (line.textContent !== displayed) line.textContent = displayed;
+        line.dataset.active = String(currentLine === i);
+      });
+      animation = requestAnimationFrame(paint);
+    }
+    window.addEventListener("hashchange", unlock, {once:true});
+    motion.addEventListener("change", motionChanged);
+    animation = requestAnimationFrame(paint);
+  }
 })();
 
 (() => {

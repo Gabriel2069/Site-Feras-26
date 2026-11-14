@@ -307,6 +307,10 @@ function showMedia(index, keepThumbVisible = true) {
   figure.append(element);
   if (media.legenda) figure.append(text("figcaption", media.legenda));
   mediaView.replaceChildren(figure);
+  if (!reduced.matches) {
+    figure.animate([{opacity:.15, transform:"translateX(7px) rotate(.55deg)"},{opacity:1,transform:"none"}],
+      {duration:240,easing:"cubic-bezier(.2,.75,.3,1)"});
+  }
   mediaPosition.textContent = (index + 1) + " / " + entries.length;
   $("#photoPrev").setAttribute("aria-disabled", String(index === 0));
   $("#photoNext").setAttribute("aria-disabled", String(index === entries.length - 1));
@@ -355,6 +359,7 @@ function openChapter(item, selectedMedia, trigger) {
     });
   }
   modal.showModal();
+  modal.scrollTop = 0;
   if (entries.length) showMedia(Math.max(0, entries.findIndex(entry => entry.media === selectedMedia)), entries.length > 1);
 }
 
@@ -433,6 +438,10 @@ async function loadContent(){
     for (const image of document.querySelectorAll(".film [data-shot]")) {
       const source = filePath(data.planos?.[image.dataset.shot]);
       if (source && !("previewShot" in image.dataset)) image.src = source;
+      if (!image.hasAttribute("src") && image.dataset.shot === "turma-abertura") {
+        const fallback = filePath(data.planos?.patio);
+        if (fallback) image.src = fallback;
+      }
     }
     for (const image of $$("[data-timeline-plan]")) {
       const source = filePath(data.planos?.[image.dataset.timelinePlan]);

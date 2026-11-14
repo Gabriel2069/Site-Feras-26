@@ -59,6 +59,7 @@ try {
  const motion = await browser.newPage({ viewport:{width:1440,height:900}, reducedMotion:"no-preference" });
  await motion.goto("http://127.0.0.1:4173/",{waitUntil:"domcontentloaded"});
  await motion.locator(".october-controls").waitFor();
+ await motion.locator(".film__enter").waitFor({timeout:10000});
  const filmTravel = await motion.locator(".film").evaluate(el => el.offsetHeight - el.querySelector(".film__stage").offsetHeight);
  for (const [position, layer] of [[0.36, "opening"], [0.66, "reel"], [0.95, "collective"], [0.02, "slate"]]) {
    await motion.evaluate(top => scrollTo({top, behavior: "instant"}), filmTravel * position);

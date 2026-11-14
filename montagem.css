@@ -848,7 +848,6 @@ body.preview-media .people__visual, body.preview-media .small__filmstrip { opaci
   transform:rotate(-1.2deg);
   box-shadow:0 10px 28px #09060a80;
 }
-.staff-portrait__caption { margin:.85em 0 .2em; font:700 .79rem var(--film-mono); }
 @media (max-width:740px){
   .timeline-era { grid-template-columns:1fr; row-gap:1.2rem; }
   .timeline-story--brand,.timeline-story--lean { grid-template-columns:1fr; }
@@ -1528,4 +1527,142 @@ body.preview-media .people__visual, body.preview-media .small__filmstrip { opaci
 @media (prefers-reduced-motion:no-preference) and (hover:hover) {
   .staff-gallery figure { transition:transform .25s cubic-bezier(.2,.75,.25,1); }
   .staff-gallery figure:hover { transform:translateY(-5px) rotate(-1deg); }
+}
+
+/* Cartela da retrospectiva. As linhas originais reservam o espaço na composição. */
+.film__slate-text { width:min(72%, 42rem); font-size:clamp(.88rem,1.64vw,1.75rem); line-height:2.05; letter-spacing:.09em; }
+.film__slate {
+  background:radial-gradient(ellipse at 29% 73%,#2b1d1270,transparent 34%),#090809;
+}
+.film-writing { overflow:hidden; overscroll-behavior:none; touch-action:none; }
+.film.is-writing .film__enter { visibility:hidden; }
+.film.is-writing .film__slate-text > span:not(.film__typing) { color:transparent; }
+.film__slate-text .film__typing { position:absolute; inset:0; pointer-events:none; }
+.film__type-line { min-height:2.05em; }
+.film__type-line[data-active="true"]::after {
+  content:""; display:inline-block; width:.53em; height:.88em;
+  margin-left:.13em; vertical-align:-.09em; background:currentColor;
+  animation:film-type-caret .64s steps(1,end) infinite;
+}
+@keyframes film-type-caret { 72% { opacity:0; } }
+
+/* The opening crop includes the entire audience, including the side rows. */
+.film__photograph {
+  inset:13% 2% 15% 40%;
+  clip-path:polygon(0 10%,15% 4%,52% 0,96% 5%,100% 29%,98% 93%,74% 100%,32% 97%,3% 90%);
+  background:#e1d7c6;
+}
+.film__photograph img { object-fit:contain; object-position:center; }
+.film__opening .film__tile--school { top:7%; right:3%; width:14%; height:15%; }
+.film__opening .film__tile--ledge { bottom:8%; left:40%; width:15%; height:12%; }
+.footer__credit {
+  align-self:center;
+  color:#f0db9e;
+  font:600 clamp(1rem,2vw,1.55rem)/1.2 "Caveat",cursive;
+  letter-spacing:0;
+}
+.footer__credit strong { color:#fff1ce; font-weight:700; }
+.memory-notebook,.memory-people,.year-timeline {
+  background-image:
+    radial-gradient(ellipse at 86% 17%,#59508f28,transparent 26%),
+    radial-gradient(ellipse at 7% 69%,#276c6422,transparent 26%),
+    repeating-linear-gradient(121deg,#e9daff05 0 1px,transparent 1px 7px);
+}
+.finale {
+  background-image:radial-gradient(ellipse at 79% 44%,#42326d45,transparent 40%),repeating-linear-gradient(121deg,#eed3ff04 0 1px,transparent 1px 8px);
+}
+
+/* Album aberto: capa de tecido, miolo de papel, dobra e cantoneiras. */
+.chapter-modal {
+  width:min(1180px,calc(100% - 20px));
+  border:1px solid #67647c;
+  border-radius:9px;
+  background:#201b32;
+  color:#f8edda;
+  scrollbar-color:#b6a2d2 #2e253e;
+}
+.chapter-modal::backdrop { background:#0b0c16e8; }
+.chapter-modal__top {
+  position:sticky;
+  z-index:4;
+  padding:.45rem clamp(12px,3vw,30px);
+  background:#231d35;
+  color:#e7def4;
+}
+.chapter-modal__top button { min-height:44px; border-radius:3px; color:#fff8e5; }
+.chapter-modal__body { padding:clamp(8px,2vw,23px); }
+.chapter-modal__book {
+  --paper:#f1e6cd;
+  position:relative;
+  display:grid;
+  grid-template-columns:minmax(0,.67fr) minmax(0,1.33fr);
+  border-radius:3px 7px 7px 3px;
+  border:1px solid #c4a992;
+  background:var(--paper);
+  color:#241c36;
+  box-shadow:0 3px #c7b695,0 5px #2e2038,0 7px #c7b695,0 9px #211a2c,0 16px 30px #1008179f;
+}
+.chapter-modal__book::after {
+  content:""; position:absolute; inset:0; pointer-events:none; opacity:.18;
+  background:url("assets/grao.webp") 0 0 / 185px; mix-blend-mode:multiply;
+}
+.chapter-modal__heading {
+  position:relative;
+  align-content:center;
+  min-height:clamp(270px,40vw,505px);
+  padding:clamp(22px,5vw,66px) clamp(19px,3vw,39px);
+  border-right:1px solid #ac927b;
+  background:radial-gradient(ellipse at 0 85%,#a6c8bd88,transparent 50%),linear-gradient(90deg,transparent 84%,#99786644);
+}
+.chapter-modal__heading .eyebrow { color:#4d3983; }
+.chapter-modal__heading p { position:relative; font:500 clamp(1.12rem,2.4vw,1.6rem)/1.22 var(--film-serif); }
+.chapter-modal__heading h2 { position:relative; font-size:clamp(2.4rem,6vw,5rem); }
+.chapter-modal__tiles {
+  position:absolute; width:clamp(58px,8.5vw,105px); top:9%; right:10%; grid-template-columns:repeat(2,1fr);
+  opacity:.6; transform:rotate(8deg); pointer-events:none;
+}
+.chapter-modal__media {
+  position:relative;
+  display:grid;
+  align-content:center;
+  padding:clamp(14px,3.2vw,40px);
+  justify-items:center;
+  grid-template-columns:minmax(0,1fr);
+  background:radial-gradient(ellipse at 100% 100%,#b8a5ce62,transparent 48%),linear-gradient(90deg,#9d815744,transparent 8%);
+}
+.chapter-modal__media figure {
+  --corner:linear-gradient(135deg,#618c82 0 49%,transparent 51%);
+  position:relative;
+  z-index:1;
+  background:#fffaf0;
+  width:fit-content; max-width:100%;
+  padding:clamp(6px,1vw,13px) clamp(6px,1vw,13px) 6px;
+  border:1px solid #c3ac95;
+  box-shadow:0 4px 10px #4d354440;
+}
+.chapter-modal__media figure::before,.chapter-modal__media figure::after {
+  content:"";position:absolute;z-index:1;width:21px;height:21px;pointer-events:none;background:var(--corner);
+}
+.chapter-modal__media figure::before { left:-2px;top:-2px; }
+.chapter-modal__media figure::after { right:-2px;bottom:-2px;transform:rotate(180deg); }
+.chapter-modal__media img,.chapter-modal__media video { width:auto; max-width:100%; height:auto; max-height:min(55svh,455px); object-fit:contain; margin-inline:auto; }
+.chapter-modal__media figcaption { color:#352749; padding:.45em .35em .22em; font:700 clamp(1rem,2vw,1.25rem)/1.2 "Caveat",cursive; }
+.chapter-modal__controls { margin:1.25rem auto .5rem; }
+.chapter-modal__controls button { background:#3e355f; border-color:#8f7fa4; }
+.chapter-modal__thumb { background:#f5e7c7; border-color:#8b7e9b; border-radius:2px; }
+.chapter-modal__thumb[aria-current="true"] { border-color:#6de0c4; outline:1px solid #6de0c4; }
+.chapter-modal__empty { margin-top:1rem; }
+@media(max-width:850px) {
+  .film__photograph { inset:28% -3% 12% 0; }
+  .film__opening .film__tile--school { top:30%;width:20%;height:12%; }
+  .film__opening .film__tile--ledge { bottom:16%;left:9%;width:24%;height:12%; }
+}
+@media(max-width:670px) {
+  .film__slate-text { width:81%; }
+  .chapter-modal__book { grid-template-columns:minmax(0,1fr); }
+  .chapter-modal__heading { min-height:0; padding:1.25rem 4rem 1.15rem 1rem; border-right:0; border-bottom:1px solid #bba087; background:radial-gradient(ellipse at 0 100%,#abc8b996,transparent 59%); }
+  .chapter-modal__heading h2 { font-size:clamp(1.9rem,9vw,3.3rem); }
+  .chapter-modal__heading p { font-size:1.05rem; }
+  .chapter-modal__tiles { right:9px; top:12px; }
+  .chapter-modal__media img,.chapter-modal__media video { max-height:min(47svh,370px); }
 }
