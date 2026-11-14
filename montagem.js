@@ -6,7 +6,7 @@ const memorialAudio = (() => {
   const trackButton = document.querySelector("#soundtrackPlay");
   const trackStatus = document.querySelector("#soundtrackStatus");
   const localTrack = window.ferasPreview?.soundtrack;
-  const music = new Audio(localTrack || window.ferasPreview?.soundtrackPreview || "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ac/a2/55/aca255c7-590d-f0e3-095d-d596b1f3224e/mzaf_5055552058754859050.plus.aac.p.m4a");
+  const music = new Audio(localTrack || window.ferasPreview?.soundtrackPreview || "./media/audio/outro-previa.mp3");
   music.preload = "none";
   music.loop = Boolean(localTrack);
   music.volume = localTrack ? .35 : .24;
