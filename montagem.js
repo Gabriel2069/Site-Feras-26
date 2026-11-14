@@ -627,7 +627,6 @@ function watchHorizontalSwipe(surface, changePage, accepts = () => true) {
     if (resume) memorialAudio.feature(false);
   }
   function play() {
-    autoSeen = true;
     scene.classList.remove("baile--firing");
     if (!audio) {
       label.textContent = "Repetir a cena";
@@ -659,6 +658,7 @@ function watchHorizontalSwipe(surface, changePage, accepts = () => true) {
     });
   }
   function fire() {
+    autoSeen = true;
     memorialAudio.feature(true);
     reset({resume:false});
     scene.classList.add("baile--firing");
@@ -686,9 +686,9 @@ function watchHorizontalSwipe(surface, changePage, accepts = () => true) {
     if (audio) audio.muted = memorialAudio.muted;
   });
   new IntersectionObserver(entries => {
-    for (const {isIntersecting} of entries) {
-      if (isIntersecting && !autoSeen) fire();
-      else if (!isIntersecting) reset();
-    }
+    if (!autoSeen && entries.some(entry => entry.isIntersecting)) fire();
   }, {threshold:.54}).observe(art);
+  new IntersectionObserver(entries => {
+    if (entries.some(entry => !entry.isIntersecting)) reset();
+  }).observe(scene);
 })();
