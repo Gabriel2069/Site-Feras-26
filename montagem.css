@@ -2260,3 +2260,26 @@ body.cinema-on #masthead .nav__sound { position:absolute; top:14px; right:clamp(
 @media (prefers-reduced-motion:reduce) {
   .baile--playing .paredao__stack i { animation:none; }
 }
+
+.ui-arrow {
+  display:inline-block;
+  width:1.15em;
+  height:1.15em;
+  vertical-align:-.21em;
+  flex:none;
+}
+.october-arrows .ui-arrow { vertical-align:middle; }
+.photo-developing,
+.photo-unavailable {
+  color:transparent;
+  background:radial-gradient(ellipse at 34% 28%,#d6c59847,transparent 63%),
+    repeating-linear-gradient(129deg,#7d69750c 0 2px,transparent 2px 5px),#54445b;
+}
+@media(prefers-reduced-motion:no-preference) {
+  .photo-developed { animation:foto-revelando .62s cubic-bezier(.22,.65,.3,1); }
+}
+@keyframes foto-revelando {
+  0% { opacity:.16; filter:brightness(1.65) saturate(.3); clip-path:inset(5% 14% round 3px); }
+  57% { opacity:.88; filter:brightness(1.13) saturate(.78); }
+  100% { opacity:1; clip-path:inset(0); }
+}

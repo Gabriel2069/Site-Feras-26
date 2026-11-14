@@ -234,6 +234,16 @@ body{
 .mini-game button{min-height:44px;padding:.45rem .9rem;border:1px solid #8acbba;border-radius:4px;background:#234762;color:white;cursor:pointer;font:800 1rem/1 'Barlow Condensed',Arial,sans-serif}
 .mini-game button:focus-visible{outline:2px solid #cdf1d6;outline-offset:2px}
 .polaroid{width:min(88vw,740px,calc((100dvh - 178px) * .83))}
+
+.ui-arrow { width:1.15em;height:1.15em;vertical-align:-.21em; }
+@media(prefers-reduced-motion:no-preference) {
+  #imagem.visible { animation:polaroid-develop .62s cubic-bezier(.22,.65,.3,1); }
+}
+@keyframes polaroid-develop {
+  from { opacity:.18;filter:brightness(1.6) saturate(.3);clip-path:inset(5% 14% round 3px); }
+  60% { opacity:.85;filter:brightness(1.12) saturate(.8); }
+  to { opacity:1;clip-path:inset(0); }
+}
 </style>
 <script src="./content/public-config.js"></script>
 </head>
@@ -267,8 +277,8 @@ body{
 </main>
 <div class="mini-game" hidden><button type="button" id="guessMode" aria-pressed="false">Tentar adivinhar</button><button type="button" id="revealName" hidden>Revelar nome</button></div>
 <nav class="mini-controls" aria-label="Navegar pelas polaroids" hidden>
-  <button type="button" id="miniPrev"><span aria-hidden="true">←</span> Anterior</button>
-  <button type="button" id="miniNext">Próxima <span aria-hidden="true">→</span></button>
+  <button type="button" id="miniPrev"><span aria-hidden="true"><svg class="ui-arrow" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5m6 6-6-6 6-6"/></svg></span> Anterior</button>
+  <button type="button" id="miniNext">Próxima <span aria-hidden="true"><svg class="ui-arrow" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></button>
 </nav>
 
 <script>
@@ -340,7 +350,8 @@ function show() {
   loading.style.display = "flex";
   loading.textContent = "REVELANDO MEMÓRIA…";
   picture.classList.remove("visible");
-  picture.onload = () => {
+  picture.onload = async () => {
+    try { await picture.decode(); } catch {}
     if (photos[index] !== photo) return;
     picture.classList.add("visible");
     loading.style.display = "none";
