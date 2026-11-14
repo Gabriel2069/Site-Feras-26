@@ -1,5 +1,27 @@
 "use strict";
 
+// A horizontal gesture changes the page. Vertical gestures remain native.
+function watchHorizontalSwipe(surface, changePage, accepts = () => true) {
+  let start;
+  surface.addEventListener("pointerdown", event => {
+    start = undefined;
+    if (!event.isPrimary || event.button !== 0 || !accepts(event) ||
+        event.target.closest("button, a, video, input, select")) return;
+    start = { id: event.pointerId, x: event.clientX, y: event.clientY };
+  });
+  surface.addEventListener("pointerup", event => {
+    if (start?.id !== event.pointerId) return;
+    const dx = event.clientX - start.x;
+    const dy = event.clientY - start.y;
+    start = undefined;
+    if (Math.abs(dx) > 42 && Math.abs(dx) > Math.abs(dy) * 1.35) changePage(dx < 0 ? 1 : -1);
+  });
+  surface.addEventListener("pointercancel", () => { start = undefined; });
+  surface.addEventListener("dragstart", event => {
+    if (start && event.target.closest("img")) event.preventDefault();
+  });
+}
+
 (() => {
   const film = document.querySelector(".film");
   const layers = Object.fromEntries(
@@ -127,7 +149,7 @@
     if (!opening.hidden) {
       const push = section(p, .15, .42);
       opening.style.clipPath = enter < 1 ? torn(enter, "up") : "none";
-      openingPhoto.style.transform = `translate3d(${(push - .5) * 9}%,${(push - .5) * 6}%,0) scale(${1.08 + push * .19})`;
+      openingPhoto.style.transform = `translate3d(${(push - .5) * 2.2}%,${(push - .5) * 1.5}%,0) scale(${1 + push * .055})`;
       shapes.style.transform = `translate3d(${(push - .5) * -5}%,${(push - .5) * 4}%,0) rotate(${push * 9 - 4}deg)`;
       title(openingWords, p, .195, .278);
       openingMark.style.opacity = section(p, .277, .346);
@@ -184,7 +206,7 @@
 
   function draw(time) {
     frame = 0;
-    if (motion.matches) return;
+    if (motion.matches || film.classList.contains("is-writing")) return;
     const target = between(scrollY, start, start + travel);
     if (target === current) return;
     const elapsed = Math.min(45, time - lastTime || 16);
@@ -224,6 +246,107 @@
   window.addEventListener("resize", measure, { passive: true });
   motion.addEventListener("change", configure);
   configure();
+
+  // Match the pauses and block cursor from Aryana's cartela.
+  if (!motion.matches && (!location.hash || location.hash === "#inicio") && scrollY < 2) {
+    const slateText = layers.slate.querySelector(".film__slate-text");
+    const originals = [...slateText.children].map(line => line.textContent);
+    const typing = document.createElement("span");
+    typing.className = "film__typing";
+    typing.setAttribute("aria-hidden", "true");
+    const lines = originals.map((original, index) => {
+      const line = document.createElement("span");
+      line.className = "film__type-line";
+      line.dataset.active = String(index === 0);
+      typing.append(line);
+      return line;
+    });
+    slateText.append(typing);
+    const timing = [[640,1150],[1840,3040],[3530,4440]];
+    const menuButton = document.querySelector("#menuButton");
+    const navWasDisabled = menuButton.disabled;
+    menuButton.disabled = true;
+    const locked = [...document.querySelectorAll(".skip, main > section:not(.film), body > .footer")];
+    const changed = locked.filter(node => !node.inert);
+    for (const node of changed) node.inert = true;
+    film.classList.add("is-writing");
+    document.documentElement.classList.add("film-writing");
+    const sound = layers.slate.querySelector(".film__typing-sound");
+    const Audio = window.AudioContext || window.webkitAudioContext;
+    let audio, sample;
+    let soundOn = false;
+    if (Audio) sound.hidden = false;
+    sound.addEventListener("click", () => {
+      soundOn = !soundOn;
+      if (soundOn) {
+        audio ??= new Audio();
+        audio.resume().catch(() => {
+          soundOn = false;
+          sound.setAttribute("aria-pressed", "false");
+          sound.lastElementChild.textContent = "Ouvir a digitação";
+        });
+        if (!sample) {
+          sample = audio.createBuffer(1, Math.round(audio.sampleRate * .045), audio.sampleRate);
+          const data = sample.getChannelData(0);
+          for (let i = 0; i < data.length; i++) {
+            data[i] = (Math.random() * 2 - 1 + .6 * Math.sin(i * .23)) * Math.exp(-i / (data.length * .13));
+          }
+        }
+        // Start the cartela from the first key when choosing to hear it.
+        started = performance.now();
+        lines.forEach(line => { line.textContent = ""; });
+      }
+      sound.setAttribute("aria-pressed", String(soundOn));
+      sound.lastElementChild.textContent = soundOn ? "Silenciar digitação" : "Ouvir a digitação";
+    });
+    function typeClick() {
+      if (!soundOn || audio.state !== "running") return;
+      const strike = audio.createBufferSource();
+      const tone = audio.createBiquadFilter();
+      const level = audio.createGain();
+      strike.buffer = sample;
+      tone.type = "lowpass";
+      tone.frequency.value = 1850 + Math.random() * 750;
+      level.gain.value = .10;
+      strike.connect(tone).connect(level).connect(audio.destination);
+      strike.start();
+    }
+    let started = performance.now();
+    let animation;
+    function unlock() {
+      cancelAnimationFrame(animation);
+      film.classList.remove("is-writing");
+      document.documentElement.classList.remove("film-writing");
+      typing.remove();
+      if (document.activeElement === sound) layers.slate.querySelector(".film__enter").focus({preventScroll:true});
+      sound.hidden = true;
+      for (const node of changed) node.inert = false;
+      menuButton.disabled = navWasDisabled;
+      motion.removeEventListener("change", motionChanged);
+      window.removeEventListener("hashchange", unlock);
+      queue();
+    }
+    function motionChanged() { if (motion.matches) unlock(); }
+    function paint(now) {
+      const elapsed = now - started;
+      if (elapsed >= 5160) { unlock(); return; }
+      const currentLine = timing.findLastIndex(([from]) => elapsed >= from);
+      lines.forEach((line, i) => {
+        const [from, to] = timing[i];
+        const ratio = between(elapsed, from, to);
+        const displayed = originals[i].slice(0, Math.floor(originals[i].length * ratio));
+        if (line.textContent !== displayed) {
+          if (/\S/.test(displayed.slice(line.textContent.length))) typeClick();
+          line.textContent = displayed;
+        }
+        line.dataset.active = String(currentLine === i);
+      });
+      animation = requestAnimationFrame(paint);
+    }
+    window.addEventListener("hashchange", unlock, {once:true});
+    motion.addEventListener("change", motionChanged);
+    animation = requestAnimationFrame(paint);
+  }
 })();
 
 (() => {
@@ -237,7 +360,7 @@
   const steps = [...controls.querySelectorAll("[data-reel-step]")];
   const prev = controls.querySelector("[data-reel-prev]");
   const next = controls.querySelector("[data-reel-next]");
-  const desktop = matchMedia("(min-width: 900px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)");
+  const motion = matchMedia("(prefers-reduced-motion: no-preference)");
   let active = 0;
   let range = 0;
   let travel = 0;
@@ -278,7 +401,7 @@
     range = track.scrollWidth - track.clientWidth;
     const stageHeight = stage.offsetHeight;
     const top = parseFloat(getComputedStyle(reel).getPropertyValue("--reel-top"));
-    const directed = desktop.matches && range > 0 && stageHeight + top < innerHeight - 16;
+    const directed = motion.matches && range > 0 && stageHeight + top < innerHeight - 16;
     travel = Math.round(range * .62);
     reel.style.setProperty("--reel-stage-height", stageHeight + "px");
     reel.style.setProperty("--reel-travel", travel + "px");
@@ -289,7 +412,7 @@
   function go(index, immediate = false) {
     index = Math.max(0, Math.min(slides.length - 1, index));
     const target = Math.min(position(slides[index]), range);
-    const behavior = immediate || !desktop.matches ? "instant" : "smooth";
+    const behavior = immediate || !motion.matches ? "instant" : "smooth";
     if (reel.classList.contains("is-directed")) {
       window.scrollTo({ top: start() + travel * target / range, behavior });
     } else {
@@ -300,6 +423,8 @@
   steps.forEach((button, index) => button.addEventListener("click", () => go(index)));
   prev.addEventListener("click", () => go(active - 1));
   next.addEventListener("click", () => go(active + 1));
+  watchHorizontalSwipe(track, step => go(active + step),
+    event => event.pointerType === "mouse" || reel.classList.contains("is-directed"));
   track.addEventListener("keydown", event => {
     if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
     event.preventDefault();
@@ -312,9 +437,77 @@
   track.addEventListener("scroll", queueRender, { passive: true });
   window.addEventListener("scroll", queueRender, { passive: true });
   window.addEventListener("resize", measure, { passive: true });
-  desktop.addEventListener("change", measure);
+  motion.addEventListener("change", measure);
   controls.hidden = false;
   mark(0);
   new ResizeObserver(measure).observe(stage);
   measure();
+})();
+
+(() => {
+  const finale = document.querySelector(".finale");
+  const stage = finale.querySelector(".finale__stage");
+  const prints = [...stage.querySelectorAll(".finale__print")];
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+  for (const image of stage.querySelectorAll("[data-finale-shot]")) {
+    const src = window.ferasPreview?.shots?.[image.dataset.finaleShot];
+    if (src) image.src = src;
+  }
+
+  let frame = 0;
+  const clamp = n => Math.max(0, Math.min(1, n));
+  function render() {
+    frame = 0;
+    if (reduced.matches) return;
+    const bounds = finale.getBoundingClientRect();
+    if (bounds.bottom < 0 || bounds.top > innerHeight) return;
+    const travel = Math.max(1, finale.offsetHeight - stage.offsetHeight);
+    const progress = clamp((stage.offsetHeight * .4 - bounds.top) / (travel + stage.offsetHeight * .4));
+    stage.style.setProperty("--finale-progress", progress);
+    for (const [index, print] of prints.entries()) {
+      const arrive = clamp((progress - index * .085) / .45);
+      const eased = arrive * arrive * (3 - 2 * arrive);
+      print.style.setProperty("--print-arrival", eased);
+    }
+  }
+  function queue() {
+    if (!frame) frame = requestAnimationFrame(render);
+  }
+  function configure() {
+    finale.classList.toggle("finale--directed", !reduced.matches);
+    queue();
+  }
+  window.addEventListener("scroll", queue, {passive:true});
+  window.addEventListener("resize", queue, {passive:true});
+  reduced.addEventListener("change", configure);
+  stage.addEventListener("focusin", event => {
+    if (!reduced.matches && event.target.closest(".finale__restart")) {
+      const bounds = finale.getBoundingClientRect();
+      const end = finale.offsetHeight - stage.offsetHeight;
+      if (bounds.top + end > 16) window.scrollTo({top: scrollY + bounds.top + end, behavior:"instant"});
+    }
+  });
+  configure();
+})();
+
+(() => {
+  const button = document.querySelector("[data-baile-play]");
+  const source = window.ferasPreview?.baile;
+  if (!button || !source) return;
+  const audio = new Audio(source);
+  audio.preload = "none";
+  button.hidden = false;
+  const label = button.querySelector("span");
+  audio.addEventListener("play", () => {
+    button.setAttribute("aria-pressed", "true");
+    label.textContent = "Pausar trecho";
+  });
+  audio.addEventListener("pause", () => {
+    button.setAttribute("aria-pressed", "false");
+    label.textContent = "Ouvir trecho da retrospectiva";
+  });
+  button.addEventListener("click", () => {
+    if (audio.paused) audio.play().catch(() => { label.textContent = "Tentar tocar o trecho"; });
+    else audio.pause();
+  });
 })();

@@ -5,13 +5,13 @@
     {
       "id": "portao",
       "nome": "A GUARITA",
-      "descricao": "A catraca travou? Era esperar o tio ou tentar passar por baixo e levar esporro. Quem passou por ali sabe.",
+      "descricao": "A catraca travou? Era esperar o tio ou tentar passar por baixo e levar esporro. Só quem passou sabe.",
       "imagem": null
     },
     {
       "id": "patio",
       "nome": "O PÁTIO",
-      "descricao": "Antes de subir pra sala, a gente acabava se encontrando por aqui. Só de olhar as fotos já dá vontade de perguntar: lembra daquele dia?",
+      "descricao": "Todo recreio a gente acabava se encontrando por aqui. Só de olhar as fotos já dá vontade de perguntar: lembra daquele dia?",
       "imagem": null
     },
     {
