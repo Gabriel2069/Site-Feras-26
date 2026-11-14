@@ -228,6 +228,12 @@ body{
  .identidade{padding-left:15px}
 }
 @media(prefers-reduced-motion:reduce){.polaroid{transition:none}}
+
+.mini-game{display:flex;gap:.5rem;z-index:1}
+.mini-game[hidden],.mini-game button[hidden]{display:none}
+.mini-game button{min-height:44px;padding:.45rem .9rem;border:1px solid #8acbba;border-radius:4px;background:#234762;color:white;cursor:pointer;font:800 1rem/1 'Barlow Condensed',Arial,sans-serif}
+.mini-game button:focus-visible{outline:2px solid #cdf1d6;outline-offset:2px}
+.polaroid{width:min(88vw,740px,calc((100dvh - 178px) * .83))}
 </style>
 </head>
 
@@ -258,6 +264,7 @@ body{
     <span class="counter" id="counter" aria-live="polite"></span>
   </div>
 </main>
+<div class="mini-game" hidden><button type="button" id="guessMode" aria-pressed="false">Tentar adivinhar</button><button type="button" id="revealName" hidden>Revelar nome</button></div>
 <nav class="mini-controls" aria-label="Navegar pelas polaroids" hidden>
   <button type="button" id="miniPrev"><span aria-hidden="true">←</span> Anterior</button>
   <button type="button" id="miniNext">Próxima <span aria-hidden="true">→</span></button>
@@ -272,7 +279,42 @@ const nome = document.querySelector("#nome");
 const apelido = document.querySelector("#apelido");
 const counter = document.querySelector("#counter");
 const controls = document.querySelector(".mini-controls");
+const guessMode = document.querySelector("#guessMode");
+const revealName = document.querySelector("#revealName");
+const game = document.querySelector(".mini-game");
+let gallery = [];
 let photos = [];
+let guessing = false;
+
+function shuffle(entries) {
+  const order = [...entries];
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  return order;
+}
+
+function showAnswer() {
+  const photo = photos[index];
+  nome.textContent = photo.nome;
+  apelido.textContent = photo.apelido || "";
+  apelido.hidden = !photo.apelido;
+  picture.alt = "Foto de infância de " + photo.nome;
+  revealName.hidden = true;
+}
+guessMode.addEventListener("click", () => {
+  guessing = !guessing;
+  guessMode.setAttribute("aria-pressed", String(guessing));
+  guessMode.textContent = guessing ? "Voltar ao álbum" : "Tentar adivinhar";
+  photos = guessing ? shuffle(gallery) : gallery;
+  index = 0;
+  show();
+});
+revealName.addEventListener("click", () => {
+  showAnswer();
+  document.querySelector("#miniNext").focus();
+});
 let index = 0;
 let gesture = null;
 let touchedAt = 0;
@@ -283,9 +325,15 @@ function show() {
     loading.textContent = "AINDA NÃO TEMOS FOTOS";
     return;
   }
-  nome.textContent = photo.nome;
-  apelido.textContent = photo.apelido || "";
-  apelido.hidden = !photo.apelido;
+  if (guessing) {
+    nome.textContent = "Quem é esse Fera?";
+    apelido.textContent = "";
+    apelido.hidden = true;
+    picture.alt = "Foto de infância para adivinhar";
+    revealName.hidden = false;
+  } else {
+    showAnswer();
+  }
   counter.textContent = String(index + 1).padStart(2, "0") + " / " + String(photos.length).padStart(2, "0");
   card.classList.toggle("next", index % 2 === 1);
   loading.style.display = "flex";
@@ -303,7 +351,6 @@ function show() {
   picture.onerror = () => {
     if (photos[index] === photo) loading.textContent = "NÃO FOI POSSÍVEL ABRIR ESTA FOTO";
   };
-  picture.alt = "Foto de infância de " + photo.nome;
   picture.src = photo.src;
 }
 function move(direction) {
@@ -346,7 +393,9 @@ async function start() {
   try {
     const embedded = document.querySelector("#miniData");
     const rows = embedded ? JSON.parse(embedded.textContent) : await (await fetch("./content/mini-feras.json")).json();
-    photos = rows.filter(row => row.nome && (embedded ? /^data:image\/webp;base64,/.test(row.src) : /^\.\/media\/mini-feras\/[\w/-]+\.(webp|jpe?g|png)$/i.test(row.src)));
+    gallery = rows.filter(row => row.nome && (embedded ? /^data:image\/webp;base64,/.test(row.src) : /^\.\/media\/mini-feras\/[\w/-]+\.(webp|jpe?g|png)$/i.test(row.src)));
+    photos = gallery;
+    game.hidden = !photos.length;
     controls.hidden = photos.length < 2;
     show();
   } catch {
