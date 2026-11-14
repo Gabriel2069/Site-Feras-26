@@ -25,6 +25,11 @@
   <a href="#inicio" class="nav__logo" aria-label="Feras 26, voltar ao começo"><img src="assets/marca-garra-clara.webp" alt="FERAS 26"></a>
 
   <div class="nav__actions">
+    <button class="nav__sound" id="soundButton" type="button" aria-label="Silenciar todos os sons" aria-pressed="false" title="Silenciar todos os sons">
+      <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M11 5 6 9H3v6h3l5 4Z"/><path class="sound-waves" d="M15 9a4 4 0 0 1 0 6m3-9a8 8 0 0 1 0 12"/><path class="sound-off" d="m16 10 5 5m0-5-5 5"/>
+      </svg>
+    </button>
     <button class="nav__cinema" id="cinemaButton" type="button" aria-pressed="false"><span class="dot"></span><span id="cinemaLabel">MODO CINEMA</span></button>
     <button class="nav__menu" id="menuButton" type="button" aria-expanded="false" aria-controls="navigation">CAPÍTULOS <span class="menu-lines" aria-hidden="true"><i></i><i></i></span></button>
   </div>
@@ -49,7 +54,6 @@
     <div class="film__stage">
       <div class="film__layer film__slate" data-layer="slate">
         <p class="film__slate-text"><span>Goiânia, GO</span><span>Colégio Agostiniano</span><span>3º ano · Turma 2026</span></p>
-        <button class="film__typing-sound" type="button" aria-pressed="false" hidden>♫ <span>Ouvir a digitação</span></button>
         <a class="film__enter" href="#primeira-cena">Entrar no memorial <span aria-hidden="true">↓</span></a>
       </div>
       <div class="film__layer film__opening" data-layer="opening">
@@ -115,6 +119,11 @@
       <div class="film__grain" aria-hidden="true"></div>
     </div>
   </section>
+  <details class="soundtrack" id="soundtrack">
+    <summary>Trilha do memorial · Outro, M83</summary>
+    <div class="soundtrack__player"></div>
+    <a href="https://www.youtube.com/watch?v=1cEy4UyYHI0" target="_blank" rel="noopener">Ouvir no canal do M83 ↗</a>
+  </details>
 
   <section class="year-timeline" id="acontecimentos" aria-labelledby="yearTitle">
     <div class="section-wrap" id="antes">
@@ -422,9 +431,15 @@
                 <h4>E quando tocar “Metralhadora”...</h4>
                 <p>A Ary escolheu a música do Baile e ainda fez um vídeo lindo pra isso. Quando “Metralhadora” tocar no baile, a gente vai lembrar que sempre fomos gigantes. E, se metade da turma tiver meio minuto adiantado, vai ser quase só mais um ensaio de sexta.</p>
                 <div class="baile-audio">
-                  <button class="memory-link" type="button" data-baile-play aria-pressed="false" hidden>▶ <span>Ouvir trecho da retrospectiva</span></button>
-                  <a class="memory-link" href="https://www.youtube.com/watch?v=YzCoZGsod0c" target="_blank" rel="noopener">“Metralhadora” · Clipe oficial <span aria-hidden="true">↗</span></a>
+                  <button class="memory-link baile-play" type="button" data-baile-play aria-pressed="false"><i aria-hidden="true"></i><span>Soltar o paredão</span></button>
+                  <a class="baile-clip" href="https://www.youtube.com/watch?v=YzCoZGsod0c" target="_blank" rel="noopener">Clipe oficial ↗</a>
                 </div>
+              </div>
+              <div class="paredao" aria-hidden="true">
+                <div class="paredao__beam"></div>
+                <div class="paredao__stack"><i></i><i></i><i></i><i></i></div>
+                <div class="paredao__label">Feras <strong>no baile</strong></div>
+                <div class="paredao__papers"><i></i><i></i><i></i></div>
               </div>
             </article>
           </div>
@@ -553,6 +568,7 @@
     </div>
   </section>
 </main>
+
 <footer class="footer"><span>FERAS 26 · AGOSTINIANO</span><span class="footer__credit">Com carinho, <strong>por Gabriel Tadeu</strong></span><a href="#inicio">VOLTAR ↑</a></footer>
 <dialog class="chapter-modal" id="chapterDialog" aria-labelledby="chapterTitle">
   <div class="chapter-modal__body">

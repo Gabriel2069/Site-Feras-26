@@ -102,4 +102,4 @@ O pacote privado mantém as miniaturas no HTML e lê as fotos maiores da pasta `
 
 O visor do livro mantém a altura ao alternar retratos, paisagens e vídeos. Use as setas, o teclado ou deslize sobre a foto. Em outubro, o avanço também acompanha a rolagem vertical quando a composição cabe na tela. Nas telas mais baixas, a faixa usa o gesto horizontal nativo.
 
-A cartela oferece som de teclas sob demanda e repete a digitação desde a primeira letra ao ativá-lo. A prévia privada inclui o trecho do vídeo da Ary e o álbum das aprovações. A música geral da página aguarda a escolha da faixa.
+A cartela e os efeitos de transição vêm com som habilitado. O navegador libera a reprodução após a primeira interação. O ícone no topo silencia o memorial. O paredão começa quando entra em cena e então toca o trecho na prévia privada. A trilha geral, “Outro”, tem player oficial online e aceita uma faixa local por `window.ferasPreview.soundtrack`, quando fornecida.

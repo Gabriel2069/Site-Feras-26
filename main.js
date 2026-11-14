@@ -66,6 +66,25 @@ function observe(root = document) {
 }
 observe();
 
+const photoReveal = new IntersectionObserver(entries => {
+  let visible = 0;
+  for (const {target, isIntersecting} of entries) {
+    if (!isIntersecting) continue;
+    photoReveal.unobserve(target);
+    const delay = Math.min(visible++, 5) * 44;
+    target.style.setProperty("--reveal-delay", `${delay}ms`);
+    target.classList.add("photo-reveal--visible");
+  }
+}, {threshold:.14});
+function revealPhotos(pictures) {
+  if (reduced.matches) return;
+  for (const [index, picture] of pictures.entries()) {
+    picture.style.setProperty("--photo-side", index % 2 ? "1" : "-1");
+    picture.classList.add("photo-reveal");
+    photoReveal.observe(picture);
+  }
+}
+
 function setMenu(open, shouldFocus = true) {
   navigation.classList.toggle("is-open",open);
   navigation.inert = !open;
@@ -219,6 +238,7 @@ function selectAlbum(filter) {
       }
     }
   }
+  [...mosaic.children].forEach(photo => photoReveal.unobserve(photo));
   mosaic.replaceChildren();
   mosaic.dataset.view = filter === "todos" ? "all" : "album";
   const albumName = filter === "todos" ? "Todos os álbuns" : selected[0].titulo;
@@ -259,7 +279,9 @@ function appendArchivePage(moveFocus = false) {
     button.addEventListener("click", () => openChapter(event, media, button));
     fragment.append(button);
   }
+  const newPictures = [...fragment.children];
   mosaic.append(fragment);
+  revealPhotos(newPictures);
   albumOffset = end;
   archiveMore.hidden = albumOffset === albumEntries.length;
   if (moveFocus) mosaic.children[start]?.focus();
@@ -330,6 +352,7 @@ function showMedia(index, keepThumbVisible = true) {
   if (!reduced.matches && previous && direction) {
     figure.style.transformOrigin = direction > 0 ? "left center" : "right center";
     turnAlbumPage(figure, direction);
+    memorialAudio.effect("page");
   }
   mediaPosition.textContent = (index + 1) + " / " + entries.length;
   $("#photoPrev").setAttribute("aria-disabled", String(index === 0));
@@ -415,7 +438,9 @@ async function fetchJson(path){
 }
 function showTimelinePhoto(image, source) {
   image.src = source;
-  image.closest("figure").hidden = false;
+  const frame = image.closest("figure");
+  frame.hidden = false;
+  if (!frame.closest(".october-track")) revealPhotos([frame]);
 }
 
 async function loadContent(){
@@ -455,6 +480,7 @@ async function loadContent(){
         figure.append(image);
         if (event.id !== "funcionarios" && media.legenda) figure.append(text("figcaption", media.legenda));
         grid.append(figure);
+        revealPhotos([figure]);
       }
     }
     setupFilters(currentEvents);
@@ -543,6 +569,7 @@ try {
 } catch {}
 
 function renderMemories() {
+  [...memoryWall.children].forEach(card => photoReveal.unobserve(card));
   memoryWall.replaceChildren();
   for (const row of [...sharedMemories, ...memories]) {
     const card = text("article", "", "memory-wall__card");
@@ -551,6 +578,7 @@ function renderMemories() {
     memoryWall.append(card);
   }
   memoryWall.hidden = !memoryWall.childElementCount;
+  revealPhotos([...memoryWall.children]);
 }
 renderMemories();
 
