@@ -9,7 +9,7 @@
       "simbolo": "01",
       "categoria": "TROTE",
       "resumo": "",
-      "texto": "O nosso primeiro trote foi o Túnel do Tempo. O pátio juntou tanta gente fantasiada que vale abrir as fotos de grupo e olhar rosto por rosto.",
+      "texto": "O nosso primeiro trote foi o Túnel do Tempo. Foi um encontro de tantos períodos que vale abrir as fotos de grupo e olhar rosto por rosto.",
       "estado": "em_preparacao",
       "midias": []
     },
@@ -31,7 +31,7 @@
       "simbolo": "03",
       "categoria": "TROTE",
       "resumo": "",
-      "texto": "No dia de Coisas que Só Tem no Brasil, vale olhar as fantasias com calma pra pegar as referências. Até a lousa serviu de fundo pras fotos.",
+      "texto": "Vale olhar as fantasias com calma para pegar as referências. Cada nova olhada voce repara num detalhe que não tinha percebido.",
       "estado": "em_preparacao",
       "midias": []
     },
@@ -41,7 +41,7 @@
       "simbolo": "✳",
       "categoria": "ACONTECIMENTO",
       "resumo": "",
-      "texto": "No Recreaço, a camisa dos Feras já aparecia por todo lado. Aqui ela tá nas fotos que a turma tirou no pátio.",
+      "texto": "No Recreaço, a camisa dos Feras tava por todo lado. Aqui ela tá nas fotos que vão do palco a gente descendo até o chão",
       "estado": "em_preparacao",
       "midias": []
     },
@@ -51,7 +51,7 @@
       "simbolo": "↗",
       "categoria": "ACONTECIMENTO",
       "resumo": "",
-      "texto": "Tem foto em grupo, tem gente que aparece sozinha e tem até um cachorro no álbum do Day-Off.",
+      "texto": "Tem foto em grupo, em dupla, na piscina, com os professores… Só entra no álbum do Day-Off e seja feliz.",
       "estado": "em_preparacao",
       "midias": []
     },
@@ -61,14 +61,14 @@
       "simbolo": "✷",
       "categoria": "ACONTECIMENTO",
       "resumo": "",
-      "texto": "Nas fotos da Festa Junina, a gente vê a roupa e a pose. Quem ensaiou de sexta também lembra dos cavalinhos, dos passinhos do Michael J. e da falta de ritmo. Deu tudo na nossa última dança.",
+      "texto": "Nas fotos da Festa Junina a gente vê cada dupla. Demos uma apresentação completa na nossa última dança.",
       "estado": "em_preparacao",
       "midias": []
     },
     {
       "id": "aula-da-saudade",
-      "titulo": "Aula da Saudade",
-      "subtitulo": "Pizzada",
+      "titulo": "Aula da Saudade e Pizzada",
+      "subtitulo": "",
       "categoria": "ACONTECIMENTO",
       "resumo": "",
       "texto": "Da Aula da Saudade à pizzada, o que ficou no álbum foi a turma junta. Uns em pé, outros agachados, todo mundo se apertando pra caber na foto.",
@@ -91,20 +91,20 @@
     },
     {
       "id": "convite-poly",
-      "titulo": "Convite à Poly",
+      "titulo": "Convite da Poly",
       "subtitulo": "Madrinha da turma",
       "categoria": "ACERVO",
       "estado": "em_preparacao",
-      "texto": "Teve “Poly já”, teve “Vote certo” e teve o 46. Os cartazes guardaram o jeito que a turma achou de pedir pra Poly ser nossa madrinha.",
+      "texto": "Teve “Poly já”, teve “Vote certo”, “46” e por aí vai. Um álbum que guarda todo o processo eleitoral para pedir a Poly como nossa madrinha.",
       "midias": []
     },
     {
       "id": "feira-ciencias",
-      "titulo": "Feira de Ciências",
-      "subtitulo": "Feira do Ensino Médio",
+      "titulo": "Feira do Ensino Médio",
+      "subtitulo": "",
       "categoria": "ACERVO",
       "estado": "em_preparacao",
-      "texto": "Da Fonte de Heron à cabine de fotos, o álbum guardou um pouco do que a gente apresentou e do que aconteceu pelo caminho.",
+      "texto": "Da Fonte de Heron à cabine de fotos, o álbum guardou um pouco do que a gente vivenciou e do que aconteceu pelo caminho.",
       "midias": []
     },
     {
@@ -131,7 +131,7 @@
       "subtitulo": "Preparação",
       "categoria": "ACERVO",
       "estado": "em_preparacao",
-      "texto": "A Maratona UFG foi um daqueles dias em que a turma se juntou pra se preparar. Os registros guardaram o encontro e os bastidores.",
+      "texto": "A Maratona UFG foi um daqueles dias em que a turma se juntou para se preparar. Os registros guardaram o encontro e os bastidores.",
       "midias": []
     },
     {
@@ -150,6 +150,20 @@
       "categoria": "ACERVO",
       "estado": "em_preparacao",
       "texto": "",
+      "midias": []
+    },
+    {
+      "id": "ultimo-dia",
+      "titulo": "Último dia de aula",
+      "categoria": "ACERVO",
+      "texto": "O último dia de aula dos Feras.",
+      "midias": []
+    },
+    {
+      "id": "funcionarios",
+      "titulo": "Funcionários",
+      "categoria": "ACERVO",
+      "texto": "Quem fez a escola acontecer todos os dias.",
       "midias": []
     }
   ]

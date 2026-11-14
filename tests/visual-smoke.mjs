@@ -70,7 +70,7 @@ try {
  const eras = await motion.locator(".timeline-era").evaluateAll(items => items.map(item => item.id));
  assert.deepEqual(eras, ["jica-2025", "inicio-2026", "primeiro-semestre", "volta-das-ferias", "memorias-sem-data", "outubro", "despedida"]);
  assert.equal(await motion.locator("#inicio-2026 #mini-feras").count(), 1);
- assert.equal(await motion.locator("#staffPhotoPending").isVisible(), true);
+ assert.equal(await motion.locator("#pessoas .staff-gallery").count(), 1);
  await motion.locator(".timeline-index a[href='#outubro']").click();
  await motion.waitForFunction(() => Math.abs(document.querySelector("#outubro").getBoundingClientRect().top) < 150);
  await motion.screenshot({path:"visual-snapshots/desktop-timeline.png"});

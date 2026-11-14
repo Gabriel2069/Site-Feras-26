@@ -73,3 +73,9 @@ A animação acompanha o mesmo progresso nos dois sentidos de rolagem. Os quatro
 ## Revisão de fotos, legendas e leitura
 
 A seleção da linha do tempo usa o caminho de cada foto no álbum. Isso mantém a legenda ligada à imagem quando o catálogo muda de ordem. As legendas das fotos selecionadas aparecem também no visor. Os botões de álbum dizem quais fotos abrem. Os textos do JICA, da camisa, da Junina, da despedida e das aprovações retomam o relato da turma com frases mais curtas.
+
+## Mural, revisão editorial e seleção
+
+O mural guarda lembranças no navegador por padrão. Para compartilhar entre dispositivos, execute `supabase/feras_memorias.sql` no projeto dedicado e defina `window.ferasMemorias = {url: "https://SEU_PROJETO.supabase.co", key: "sb_publishable_..."}` antes de `main.js`. A tabela precisa estar exposta pela Data API. A chave deve ser publicável. As submissões começam pendentes e somente as aprovadas aparecem no mural. A aprovação pode ser feita na tabela por quem administra o projeto. Os relatos locais continuam no navegador e não são enviados automaticamente.
+
+A montagem de outubro encerra no Day-Off, após o terceiro trote. A ordem do álbum geral alterna eventos e intercala séries de câmera. Os Mini Feras mantêm o álbum em ordem de nome, com um modo de adivinhação embaralhado. As fotos e nomes do Drive privado são incorporados à prévia. Os manifestos públicos permanecem preparados para receber mídias liberadas.

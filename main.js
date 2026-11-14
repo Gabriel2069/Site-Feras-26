@@ -142,6 +142,52 @@ const archiveMore = $("#archiveMore");
 let albumEntries = [];
 let albumOffset = 0;
 
+function mixedOrder(entries) {
+  const groups = new Map();
+  for (const entry of entries) {
+    const key = entry.event.id;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(entry);
+  }
+  // Separate neighbouring camera bursts before alternating albums.
+  for (const group of groups.values()) {
+    const separated = new Map();
+    for (const entry of group) {
+      const series = entry.media.serie || entry.media.src;
+      if (!separated.has(series)) separated.set(series, []);
+      separated.get(series).push(entry);
+    }
+    const buckets = [...separated.values()];
+    for (const bucket of buckets) {
+      for (let i = bucket.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [bucket[i], bucket[j]] = [bucket[j], bucket[i]];
+      }
+    }
+    buckets.sort((a, b) => b.length - a.length);
+    group.length = 0;
+    let active = buckets;
+    while (active.length) {
+      for (const bucket of active) group.push(bucket.pop());
+      active = active.filter(bucket => bucket.length);
+    }
+  }
+  const order = [...groups.entries()];
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  const remaining = new Map(order);
+  const ordered = [];
+  while (remaining.size) {
+    for (const [key, group] of remaining) {
+      ordered.push(group.shift());
+      if (!group.length) remaining.delete(key);
+    }
+  }
+  return ordered;
+}
+
 function selectAlbum(filter) {
   const selected = currentEvents.filter(event => filter === "todos" || event.id === filter);
   const available = selected.flatMap(event =>
@@ -164,7 +210,7 @@ function selectAlbum(filter) {
   mosaic.dataset.view = filter === "todos" ? "all" : "album";
   const albumName = filter === "todos" ? "Todos os álbuns" : selected[0].titulo;
   archiveNote.textContent = albumName + " · " + available.length + (available.length === 1 ? " registro" : " registros");
-  albumEntries = available;
+  albumEntries = mixedOrder(available);
   albumOffset = 0;
   appendArchivePage();
   if (!reduced.matches) {
@@ -184,7 +230,7 @@ function appendArchivePage(moveFocus = false) {
     button.type = "button";
     const caption = text("span", media.legenda || event.titulo, "mosaic__caption");
     const src = filePath(media.src);
-    if (isVideo(src)) {
+    if (isVideo(media.src)) {
       button.classList.add("mosaic__photo--video");
       button.append(text("strong", "▶", "mosaic__play"));
       button.setAttribute("aria-label", "Ver vídeo: " + (media.alt || event.titulo));
@@ -244,7 +290,7 @@ function showMedia(index, keepThumbVisible = true) {
   if (index < 0 || index >= entries.length) return;
   viewer.index = index;
   const { media, src } = entries[index];
-  const video = isVideo(src);
+  const video = isVideo(media.src);
   const element = document.createElement(video ? "video" : "img");
   if (video) {
     element.controls = true;
@@ -295,7 +341,7 @@ function openChapter(item, selectedMedia, trigger) {
       const button = text("button", "", "chapter-modal__thumb");
       button.type = "button";
       button.setAttribute("aria-label", media.alt || "Registro " + (index + 1));
-      if (isVideo(src)) {
+      if (isVideo(media.src)) {
         button.textContent = "▶";
       } else {
         const image = document.createElement("img");
@@ -363,6 +409,20 @@ async function loadContent(){
       button.hidden = false;
       button.addEventListener("click", () => openChapter(event, null, button));
     }
+    for (const grid of $$("[data-event-frames]")) {
+      const event = currentEvents.find(item => item.id === grid.dataset.eventFrames);
+      for (const media of (event?.midias ?? []).filter(media => media.destaque && !isVideo(media.src))) {
+        const source = filePath(media.src);
+        if (!source) continue;
+        const figure = document.createElement("figure");
+        const image = document.createElement("img");
+        image.src = source;
+        image.alt = media.alt || event.titulo;
+        image.loading = "lazy";
+        figure.append(image, text("figcaption", media.legenda || event.titulo));
+        grid.append(figure);
+      }
+    }
     setupFilters(currentEvents);
   }else{
     archiveNote.textContent = "O álbum está indisponível agora.";
@@ -377,15 +437,6 @@ async function loadContent(){
     for (const image of $$("[data-timeline-plan]")) {
       const source = filePath(data.planos?.[image.dataset.timelinePlan]);
       if (source && !isVideo(source)) showTimelinePhoto(image, source);
-    }
-    const staffSource = filePath(data.planos?.["foto-funcionarios"]);
-    if (staffSource && !isVideo(staffSource)) {
-      const image = $("#staffPhoto");
-      image.addEventListener("load", () => {
-        image.hidden = false;
-        $("#staffPhotoPending").hidden = true;
-      }, {once: true});
-      image.src = staffSource;
     }
     currentScenes={locais:Array.isArray(data.locais)?data.locais:[],recortes:Array.isArray(data.recortes)?data.recortes:[]};
   }else{console.warn("Cenas complementares indisponíveis:",scenesResult.reason);}
@@ -435,27 +486,79 @@ for (const link of $$("[data-memory-kind]")) {
     memoryText.focus({ preventScroll: true });
   });
 }
-memoryForm.addEventListener("submit", event => {
+const memoryWall = $("#memoryWall");
+const storageKey = "feras26:memory-wall:v1";
+const config = window.ferasMemorias;
+const remote = /^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/.test(config?.url || "")
+  && /^sb_publishable_[a-zA-Z0-9_-]+$/.test(config?.key || "")
+  ? new URL("/rest/v1/feras_memorias", config.url) : null;
+const kinds = new Set([...memoryKind.options].map(option => option.value));
+let memories = [];
+let sharedMemories = [];
+try {
+  const saved = JSON.parse(localStorage.getItem(storageKey) || "[]");
+  if (Array.isArray(saved)) memories = saved.filter(row => row && typeof row.message === "string");
+} catch {}
+
+function renderMemories() {
+  memoryWall.replaceChildren();
+  for (const row of [...sharedMemories, ...memories]) {
+    const card = text("article", "", "memory-wall__card");
+    card.append(text("h3", row.kind), text("p", row.message));
+    if (row.author) card.append(text("footer", row.author));
+    memoryWall.append(card);
+  }
+  memoryWall.hidden = !memoryWall.childElementCount;
+}
+renderMemories();
+
+if (remote) {
+  $("#memoryPrivacy").textContent = "A lembrança passa por revisão antes de aparecer para a turma.";
+  const feed = new URL(remote);
+  feed.search = "select=kind,message,author&order=created_at.desc&limit=100";
+  fetch(feed, {headers:{apikey:config.key}})
+    .then(response => {
+      if (!response.ok) throw Error("Mural indisponível");
+      return response.json();
+    })
+    .then(rows => { sharedMemories = rows; renderMemories(); })
+    .catch(() => { memoryStatus.textContent = "O mural compartilhado está indisponível agora."; });
+}
+
+memoryForm.addEventListener("submit", async event => {
   event.preventDefault();
   const message = memoryText.value.trim();
   if (!message) {
-    memoryText.setCustomValidity("Escreve uma lembrança antes de baixar.");
+    memoryText.setCustomValidity("Escreve uma lembrança antes de guardar.");
     memoryText.reportValidity();
     return;
   }
-  const author = $("#memoryName").value.trim();
-  const lines = ["Feras 26 · Caderno de memórias", memoryKind.value, "", message];
-  if (author) lines.push("", author);
-  const content = new Blob([lines.join("\n") + "\n"], { type: "text/plain;charset=utf-8" });
-  const url = URL.createObjectURL(content);
-  const download = document.createElement("a");
-  download.href = url;
-  download.download = "Lembranca_Feras_26.txt";
-  document.body.append(download);
-  download.click();
-  download.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-  memoryStatus.textContent = "Sua lembrança foi preparada. Se quiser, ainda dá pra editar o texto e baixar outra versão.";
+  const row = {kind: memoryKind.value, message, author: $("#memoryName").value.trim()};
+  if (!kinds.has(row.kind)) return;
+  const submit = memoryForm.querySelector("button[type=submit]");
+  submit.disabled = true;
+  try {
+    if (remote) {
+      const response = await fetch(remote, {
+        method:"POST",
+        headers:{apikey:config.key,"Content-Type":"application/json",Prefer:"return=minimal"},
+        body:JSON.stringify(row)
+      });
+      if (!response.ok) throw Error("Falha ao enviar");
+      memoryStatus.textContent = "Lembrança enviada para revisão.";
+    } else {
+      const next = [row, ...memories];
+      localStorage.setItem(storageKey, JSON.stringify(next));
+      memories = next;
+      renderMemories();
+      memoryStatus.textContent = "Lembrança guardada neste navegador.";
+    }
+    memoryForm.reset();
+  } catch {
+    memoryStatus.textContent = "Não consegui guardar agora. Seu texto continua aqui.";
+  } finally {
+    submit.disabled = false;
+  }
 });
 
 loadContent();

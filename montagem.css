@@ -848,17 +848,7 @@ body.preview-media .people__visual, body.preview-media .small__filmstrip { opaci
   transform:rotate(-1.2deg);
   box-shadow:0 10px 28px #09060a80;
 }
-.staff-portrait__frame {
-  display:grid;
-  place-items:center;
-  aspect-ratio:1.38;
-  background:#2e2637;
-  color:#efe2ce;
-}
-.staff-portrait__frame img { width:100%; height:100%; object-fit:contain; }
-.staff-portrait__frame [hidden] { display:none; }
-.staff-portrait__frame span { font:700 .82rem var(--film-mono); }
-.staff-portrait figcaption { padding:.8em .15em .2em; font:700 .79rem var(--film-mono); }
+.staff-portrait__caption { margin:.85em 0 .2em; font:700 .79rem var(--film-mono); }
 @media (max-width:740px){
   .timeline-era { grid-template-columns:1fr; row-gap:1.2rem; }
   .timeline-story--brand,.timeline-story--lean { grid-template-columns:1fr; }
@@ -1504,4 +1494,38 @@ body.preview-media .people__visual, body.preview-media .small__filmstrip { opaci
     transition:transform .2s cubic-bezier(.2,.8,.3,1);
   }
   .memory-link:hover > span,.film__to-archive:hover > span { transform:translateX(2px) rotate(-8deg); }
+}
+
+.memory-wall { grid-column:1/-1; display:grid; gap:1rem; grid-template-columns:repeat(auto-fit,minmax(min(100%,255px),1fr)); margin:1.4rem 0 0; }
+.memory-wall[hidden] { display:none; }
+.memory-wall__card { color:#18203f; background:#f6eedb; border-top:5px solid #66bcae; padding:1rem 1.2rem; overflow-wrap:anywhere; }
+.memory-wall__card h3 { margin:0 0 .45rem; font:700 .82rem var(--film-mono); }
+.memory-wall__card p { margin:0; white-space:pre-wrap; }
+.memory-wall__card footer { margin-top:.7rem; color:#4e4b68; font-style:italic; }
+#despedida { position:relative; isolation:isolate; }
+#despedida::before,#despedida::after,.memory-people__spread::before {
+  content:""; display:block; position:absolute; z-index:-1; pointer-events:none;
+  border-radius:49% 61% 58% 38% / 43% 46% 62% 56%;
+}
+#despedida::before { inset:5% 25% auto 0; height:37%; background:radial-gradient(ellipse at 30% 35%,#393265b0,transparent 68%); transform:rotate(-9deg); }
+#despedida::after { inset:auto 0 5% 17%; height:41%; background:radial-gradient(ellipse at 74% 66%,#23564dd6,transparent 68%); transform:rotate(6deg); }
+#despedida .timeline-era__head h3 { color:#f8e9c9; }
+#aula-saudade .timeline-photos { padding:clamp(.45rem,2vw,1.6rem); background:#a98a6540; }
+#ultimo-dia .timeline-photos figure:first-child img { object-position:center 42%; }
+.memory-people__spread { isolation:isolate; position:relative; }
+.memory-people__spread::before { width:55%; height:83%; right:0; top:7%; background:#3a347552; transform:rotate(-7deg); }
+.staff-portrait .memory-link { margin-top:.5rem; color:#21223f; }
+.staff-gallery { grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr)); }
+.staff-gallery:not(:has(figure)) { display:none; }
+.staff-gallery img { height:auto; aspect-ratio:4/5; object-fit:contain; background:#e6ddd1; }
+.finale__logo { position:relative; filter:drop-shadow(0 9px 25px #131331); }
+
+
+@media (prefers-reduced-motion:no-preference) {
+  .staff-gallery[data-reveal], #ultimo-dia [data-reveal] { transition:opacity .6s ease,transform .6s cubic-bezier(.2,.75,.25,1); }
+  .staff-gallery[data-reveal]:not(.is-visible), #ultimo-dia [data-reveal]:not(.is-visible) { opacity:0; transform:translateY(14px); }
+}
+@media (prefers-reduced-motion:no-preference) and (hover:hover) {
+  .staff-gallery figure { transition:transform .25s cubic-bezier(.2,.75,.25,1); }
+  .staff-gallery figure:hover { transform:translateY(-5px) rotate(-1deg); }
 }
