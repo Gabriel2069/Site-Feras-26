@@ -5,7 +5,7 @@ const memorialAudio = (() => {
   const AudioEngine = window.AudioContext || window.webkitAudioContext;
   const trackButton = document.querySelector("#soundtrackPlay");
   const trackStatus = document.querySelector("#soundtrackStatus");
-  const localTrack = window.ferasPreview?.soundtrack;
+  const localTrack = window.ferasPreview?.soundtrack || window.ferasHosted?.soundtrack;
   const music = new Audio(localTrack || window.ferasPreview?.soundtrackPreview || "./media/audio/outro-previa.mp3");
   music.preload = "none";
   music.loop = Boolean(localTrack);
@@ -134,7 +134,7 @@ function watchHorizontalSwipe(surface, changePage, accepts = () => true) {
   const layers = Object.fromEntries(
     [...film.querySelectorAll("[data-layer]")].map(layer => [layer.dataset.layer, layer])
   );
-  const shot = window.ferasPreview?.shots ?? {};
+  const shot = window.ferasPreview?.shots ?? window.ferasHosted?.shots ?? {};
   const graphics = {
     "trote-1": "assets/kit-trote-i.webp",
     "trote-2": "assets/kit-trote-ii.webp",
@@ -151,7 +151,7 @@ function watchHorizontalSwipe(surface, changePage, accepts = () => true) {
     if (src) image.src = src;
     if (shot[key]) image.dataset.previewShot = "";
   }
-  if (window.ferasPreview) document.body.classList.add("preview-media");
+  if (window.ferasPreview || window.ferasHosted) document.body.classList.add("preview-media");
 
   const motion = matchMedia("(prefers-reduced-motion: reduce)");
   const opening = layers.opening;
@@ -562,7 +562,7 @@ function watchHorizontalSwipe(surface, changePage, accepts = () => true) {
   const prints = [...stage.querySelectorAll(".finale__print")];
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   for (const image of stage.querySelectorAll("[data-finale-shot]")) {
-    const src = window.ferasPreview?.shots?.[image.dataset.finaleShot];
+    const src = (window.ferasPreview?.shots ?? window.ferasHosted?.shots)?.[image.dataset.finaleShot];
     if (src) image.src = src;
   }
 
@@ -607,7 +607,7 @@ function watchHorizontalSwipe(surface, changePage, accepts = () => true) {
   const art = scene.querySelector(".paredao");
   const button = scene.querySelector("[data-baile-play]");
   const label = button.querySelector("span");
-  const source = window.ferasPreview?.baile;
+  const source = window.ferasPreview?.baile || window.ferasHosted?.baile;
   const audio = source ? new Audio(source) : null;
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   let timer;

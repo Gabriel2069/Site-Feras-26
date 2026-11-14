@@ -102,7 +102,7 @@ O pacote privado mantém as miniaturas no HTML e lê as fotos maiores da pasta `
 
 O visor do livro mantém a altura ao alternar retratos, paisagens e vídeos. Use as setas, o teclado ou deslize sobre a foto. Em outubro, o avanço também acompanha a rolagem vertical quando a composição cabe na tela. Nas telas mais baixas, a faixa usa o gesto horizontal nativo.
 
-A cartela usa um clique curto sincronizado com cada tecla. As demais transições de abertura são silenciosas. A música pode começar depois da primeira interação. O ícone no topo silencia o memorial. O paredão começa quando entra em cena e então toca o trecho na prévia privada. A trilha geral é “Outro”, do M83.
+A cartela usa um clique curto sincronizado com cada tecla. As demais transições de abertura são silenciosas. A música pode começar depois da primeira interação. O ícone no topo silencia o memorial. O paredão começa quando entra em cena e então toca o trecho de “Metralhadora”. A trilha geral é “Outro”, do M83.
 
 ### Reações por foto
 
@@ -110,4 +110,4 @@ O menu do álbum oferece seis reações. Cada foto tem uma só reação, identif
 
 ### Trilha
 
-A edição privada incorpora a gravação inteira fornecida para a trilha, a partir da introdução calma. A versão pública tem a opção de prévia e um link para a faixa completa. Para configurar uma gravação completa que você possa utilizar, defina `window.ferasPreview.soundtrack` com o arquivo de áudio. A trilha pausa durante a cena sonora do baile e respeita o botão de som no topo.
+A edição privada incorpora a gravação inteira fornecida para a trilha, a partir da introdução calma. O site usa a mesma trilha e as mesmas mídias de exibição do HTML avulso, publicadas no Supabase Storage. A versão do acervo está em `window.ferasHosted`, em `content/public-config.js`. Para atualizar arquivos em cache, publique o próximo conjunto sob um novo prefixo e atualize essa configuração. A trilha pausa durante a cena sonora do baile, retoma do ponto em que parou e respeita o botão de som no topo.

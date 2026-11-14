@@ -22,9 +22,9 @@ let previousFocus = null;
 
 function filePath(src) {
   if (typeof src !== "string") return null;
-  // Publicação de mídia é deliberada e local. IDs e tokens privados do Drive não entram aqui.
   if (Object.hasOwn(window.ferasPreview?.images ?? {}, src)) return window.ferasPreview.images[src];
-  return /^\.\/media\/[a-zA-Z0-9/_-]+\.(jpg|jpeg|png|webp|avif|mp4|webm)$/i.test(src) ? src : null;
+  if (!/^\.\/media\/[a-zA-Z0-9/_-]+\.(jpg|jpeg|png|webp|avif|mp4|webm)$/i.test(src)) return null;
+  return window.ferasHosted?.base ? window.ferasHosted.base + src.slice(2) : src;
 }
 function isVideo(src) { return /\.(mp4|webm)$/i.test(src); }
 function text(tag, value, cls) {
@@ -447,10 +447,12 @@ function showMedia(index, keepThumbVisible = true) {
   const detail = !video && /^\.\/media\/[a-zA-Z0-9/_-]+\.webp$/i.test(media.src)
     ? window.ferasPreview?.detail?.[media.src] || (window.ferasPreview?.hasLocalDetails
       ? media.src.replace("./media/", "./fotos/") : null) : null;
-  if (detail) {
+  const hostedDetail = window.ferasHosted?.details.includes(media.src.slice(8))
+    ? window.ferasHosted.base + "detail/" + media.src.slice(8) : null;
+  if (detail || hostedDetail) {
     element.addEventListener("error", () => { element.src = src; }, {once:true});
   }
-  element.src = detail || src;
+  element.src = detail || hostedDetail || src;
   $("video", mediaView)?.pause();
   const figure = document.createElement("figure");
   figure.append(element);
@@ -547,7 +549,8 @@ modal.addEventListener("close",()=>{
 
 async function fetchJson(path){
   if (Object.hasOwn(window.ferasPreview?.content ?? {}, path)) return window.ferasPreview.content[path];
-  const r=await fetch(path,{cache:"no-cache"});
+  const url = window.ferasHosted?.base ? new URL(path, window.ferasHosted.base) : path;
+  const r=await fetch(url);
   if(!r.ok)throw Error("Não foi possível abrir "+path+": HTTP "+r.status);
   return await r.json();
 }
