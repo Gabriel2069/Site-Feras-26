@@ -92,11 +92,18 @@ function updateCinema(active) {
 }
 cinemaButton.addEventListener("click",async()=>{
   if (cinemaMode) {
-    if(document.fullscreenElement && document.exitFullscreen)try{await document.exitFullscreen();}catch{}
     updateCinema(false);
-  } else {
-    updateCinema(true);
-    if(document.documentElement.requestFullscreen)try{await document.documentElement.requestFullscreen();}catch{}
+    if (document.fullscreenElement && document.exitFullscreen) {
+      try { await document.exitFullscreen(); } catch {}
+    }
+    return;
+  }
+  updateCinema(true);
+  if (document.documentElement.requestFullscreen) {
+    try {
+      await document.documentElement.requestFullscreen();
+      if (!cinemaMode && document.fullscreenElement) await document.exitFullscreen();
+    } catch {}
   }
 });
 document.addEventListener("fullscreenchange",()=>{
@@ -189,7 +196,7 @@ function mixedOrder(entries) {
 }
 
 function selectAlbum(filter) {
-  const selected = currentEvents.filter(event => filter === "todos" || event.id === filter);
+  const selected = currentEvents.filter(event => event.id !== "funcionarios" && (filter === "todos" || event.id === filter));
   const available = selected.flatMap(event =>
     (event.midias || []).filter(media => filePath(media.src)).map(media => ({ media, event }))
   );
@@ -254,7 +261,7 @@ function appendArchivePage(moveFocus = false) {
 archiveMore.addEventListener("click", () => appendArchivePage(true));
 
 function setupFilters(events) {
-  const available = events.filter(event => (event.midias || []).some(media => filePath(media.src)));
+  const available = events.filter(event => event.id !== "funcionarios" && (event.midias || []).some(media => filePath(media.src)));
   archiveFilters.replaceChildren();
   if (!available.length) return;
   const options = [{ id: "todos", titulo: "Todos" }, ...available];
@@ -266,17 +273,6 @@ function setupFilters(events) {
     archiveFilters.append(button);
   }
   selectAlbum("todos");
-}
-
-for (const link of document.querySelectorAll("[data-archive-album]")) {
-  link.addEventListener("click", event => {
-    if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
-    event.preventDefault();
-    selectAlbum(link.dataset.archiveAlbum);
-    if (location.hash !== link.hash) history.pushState(null, "", link.hash);
-    $("#mosaico").scrollIntoView({ behavior: "instant" });
-    $("#archiveTitle").focus({ preventScroll: true });
-  });
 }
 
 const mediaView = $("#chapterMedia");
@@ -305,7 +301,7 @@ function showMedia(index, keepThumbVisible = true) {
   $("video", mediaView)?.pause();
   const figure = document.createElement("figure");
   figure.append(element);
-  if (media.legenda) figure.append(text("figcaption", media.legenda));
+  if (media.legenda && item.id !== "funcionarios") figure.append(text("figcaption", media.legenda));
   mediaView.replaceChildren(figure);
   if (!reduced.matches) {
     figure.animate([{opacity:.15, transform:"translateX(7px) rotate(.55deg)"},{opacity:1,transform:"none"}],
@@ -329,6 +325,7 @@ function showMedia(index, keepThumbVisible = true) {
 
 function openChapter(item, selectedMedia, trigger) {
   previousFocus = trigger;
+  modal.dataset.album = item.id;
   const entries = (item.midias || []).map(media => ({ media, src: filePath(media.src) })).filter(entry => entry.src);
   viewer = { item, entries, index: 0 };
   $("#chapterCode").textContent = item.categoria || "Acervo";
@@ -359,6 +356,7 @@ function openChapter(item, selectedMedia, trigger) {
     });
   }
   modal.showModal();
+  $("#chapterClose").focus({preventScroll:true});
   modal.scrollTop = 0;
   if (entries.length) showMedia(Math.max(0, entries.findIndex(entry => entry.media === selectedMedia)), entries.length > 1);
 }
@@ -412,7 +410,11 @@ async function loadContent(){
       const event = currentEvents.find(item => item.id === button.dataset.openEvent);
       if (!event?.midias?.some(media => filePath(media.src))) continue;
       button.hidden = false;
-      button.addEventListener("click", () => openChapter(event, null, button));
+      button.addEventListener("click", click => {
+        if (click.altKey || click.ctrlKey || click.metaKey || click.shiftKey) return;
+        click.preventDefault();
+        openChapter(event, null, button);
+      });
     }
     for (const grid of $$("[data-event-frames]")) {
       const event = currentEvents.find(item => item.id === grid.dataset.eventFrames);
@@ -424,7 +426,8 @@ async function loadContent(){
         image.src = source;
         image.alt = media.alt || event.titulo;
         image.loading = "lazy";
-        figure.append(image, text("figcaption", media.legenda || event.titulo));
+        figure.append(image);
+        if (event.id !== "funcionarios" && media.legenda) figure.append(text("figcaption", media.legenda));
         grid.append(figure);
       }
     }

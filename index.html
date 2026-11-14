@@ -101,7 +101,7 @@
           <div><img data-shot="saudade-3" alt=""></div>
           <div><img data-shot="saudade-4" alt=""></div>
         </div>
-        <a class="film__to-archive" href="#mosaico" data-archive-album="aula-da-saudade">Ver fotos da Aula da Saudade <span aria-hidden="true">↓</span></a>
+        <a class="film__to-archive" href="#mosaico" data-open-event="aula-da-saudade">Ver fotos da Aula da Saudade <span aria-hidden="true">↓</span></a>
       </div>
       <div class="film__splice" aria-hidden="true" hidden>
         <div class="film__splice-paper"></div>
@@ -190,7 +190,7 @@
             <article class="timeline-story timeline-story--wide" id="junina">
               <div class="timeline-copy">
                 <h4>Do calendário à última dança</h4>
-                <p>No começo do ano, riscar mais um dia no calendário era uma vitória. Aí chegou o Dia das Mães e caiu mais um castelinho de que era o último na escola. De repente, já tinha coisa que a gente queria que demorasse um pouquinho mais.</p>
+                <p>No começo do ano, riscar mais um dia no calendário era uma vitória. Aí chegou o Dia das Mães e caiu mais um castelinho quando a gente percebeu que aquele era o último na escola. De repente, já tinha coisa que a gente queria que demorasse um pouquinho mais.</p>
                 <p>Nas sextas de ensaio, tinha gente caindo do cavalinho e tinha o passinho do Michael J. Acho que tem gente até hoje esperando a deixa do ritmo. Na hora da quadrilha, dançamos juntos mesmo assim. Hoje, se desse pra voltar pra uma sexta daquelas, acho que até cair do cavalinho de novo valia.</p>
                 <button class="memory-link" type="button" data-open-event="festa-junina" hidden>Ver fotos da Festa Junina <span aria-hidden="true">↗</span></button>
               </div>
@@ -210,7 +210,7 @@
             <h3>De volta no embalo</h3>
           </header>
           <div class="timeline-era__stories">
-            <p class="timeline-interlude">Depois das férias, foi ladeira abaixo (no sentido não negativo). Veio o gap anual do Manteigão, e a gente caiu atirando: não íamos ferir a honra de os resultados se manterem bem acima das médias. Quando o cansaço apertou, ainda tinha Fera em plantão na semana do feriado. Outros dias os que iam nos representar no Agos Mundi e vivenciar o material artístico nas exposições com a escola. Com tanta coisa acontecendo, dava sempre para perguntar na sexta como tinha sido a semana de alguém e ouvir uma história com o mesmo cenário mas completamente diferente da sua.</p>
+            <p class="timeline-interlude">Depois das férias, foi ladeira abaixo (no sentido não negativo). Veio o gap anual do Manteigão, e a gente caiu atirando pra manter os resultados bem acima das médias. Quando o cansaço apertou, ainda tinha Fera no plantão em semana de feriado. Teve quem fosse representar a turma no Agos Mundi e quem saísse pra ver as exposições com a escola. Na sexta, dava pra perguntar como tinha sido a semana de alguém e ouvir uma história completamente diferente da sua, mesmo estudando no mesmo lugar.</p>
             <article class="timeline-story" id="olimpiadas">
               <div class="timeline-copy">
                 <h4>O Time Olímpico em ano de terceirão</h4>
@@ -332,7 +332,7 @@
                   <div class="timeline-photos">
                     <figure hidden><img data-timeline-album="trote-3" data-timeline-src="./media/trote-3/acervo-0005.webp" alt="Turma fantasiada reunida diante da lousa" loading="lazy" decoding="async"><figcaption>Que injustiça não viver isso de novo</figcaption>
                     </figure>
-                    <figure hidden><img data-timeline-album="trote-3" data-timeline-src="./media/trote-3/foto-02.webp" alt="Grupo fantasiado posa ao ar livre" loading="lazy" decoding="async"><figcaption>É o elenco da próxima novela das 9 ?</figcaption>
+                    <figure hidden><img data-timeline-album="trote-3" data-timeline-src="./media/trote-3/foto-02.webp" alt="Grupo fantasiado posa ao ar livre" loading="lazy" decoding="async"><figcaption>É o elenco da próxima novela das 9?</figcaption>
                     </figure>
                   </div>
                 </article>
@@ -532,24 +532,27 @@
 </main>
 <footer class="footer"><span>FERAS 26 · AGOSTINIANO</span><span class="footer__credit">Com carinho, <strong>por Gabriel Tadeu</strong></span><a href="#inicio">VOLTAR ↑</a></footer>
 <dialog class="chapter-modal" id="chapterDialog" aria-labelledby="chapterTitle">
-  <div class="chapter-modal__top"><span id="chapterCode">FERAS 26 / ACERVO</span><button type="button" id="chapterClose" aria-label="Fechar capítulo">FECHAR ✕</button></div>
   <div class="chapter-modal__body">
     <div class="chapter-modal__book">
       <div class="chapter-modal__heading">
-        <div class="chapter-modal__tiles feras-tiles" aria-hidden="true"><i class="tile-arc"></i><i class="tile-dots"></i><i class="tile-triangles"></i><i class="tile-rays"></i></div>
-        <span class="eyebrow" id="chapterCategory"></span>
+        <p class="chapter-modal__code" id="chapterCode"></p>
         <h2 id="chapterTitle"></h2>
+        <p class="chapter-modal__category" id="chapterCategory"></p>
         <p id="chapterText"></p>
+        <div class="chapter-modal__tiles feras-tiles" aria-hidden="true"><i class="tile-arc"></i><i class="tile-dots"></i><i class="tile-triangles"></i><i class="tile-rays"></i></div>
       </div>
-      <div class="chapter-modal__media" id="chapterMedia"></div>
-    </div>
-    <div class="chapter-modal__controls" id="chapterControls" hidden>
-      <button type="button" id="photoPrev" aria-label="Registro anterior">← <span>Anterior</span></button>
-      <p id="photoPosition" aria-live="polite"></p>
-      <button type="button" id="photoNext" aria-label="Próximo registro"><span>Próxima</span> →</button>
+      <div class="chapter-modal__right">
+        <div class="chapter-modal__media" id="chapterMedia"></div>
+        <div class="chapter-modal__controls" id="chapterControls" hidden>
+          <button type="button" id="photoPrev" aria-label="Registro anterior">← <span>Anterior</span></button>
+          <p id="photoPosition" aria-live="polite"></p>
+          <button type="button" id="photoNext" aria-label="Próximo registro"><span>Próxima</span> →</button>
+        </div>
+        <div class="chapter-modal__empty" id="chapterEmpty">As fotos desse capítulo ainda estão a caminho.</div>
+      </div>
     </div>
     <div class="chapter-modal__strip" id="chapterStrip" role="group" aria-label="Escolher registro"></div>
-    <div class="chapter-modal__empty" id="chapterEmpty">As fotos desse capítulo ainda estão a caminho.</div>
+    <button type="button" id="chapterClose" class="chapter-modal__close" aria-label="Fechar álbum">Fechar ×</button>
   </div>
 </dialog>
 <dialog id="miniDialog" class="mini-dialog" aria-label="Mini Feras">

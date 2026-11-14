@@ -85,3 +85,9 @@ A montagem de outubro encerra no Day-Off, após o terceiro trote. A ordem do ál
 A cartela da abertura segue o ritmo do vídeo da Aryana, com três linhas digitadas e cursor em bloco. A rolagem é liberada ao final. A preferência por movimento reduzido e a abertura de links para capítulos mostram a página sem espera. O plano `turma-abertura` recebe a foto coletiva selecionada para a abertura. A prévia privada usa o registro mais cheio entre as fotos coletivas comparadas.
 
 O visor usa a composição de um álbum aberto, com miolo de papel, cantoneiras, elementos do mosaico e miniaturas. A foto preserva sua proporção. O visor mantém navegação por teclado e volta ao ponto em que foi aberto.
+
+## Restauro da cartela, acabamento e nitidez
+
+A cartela recupera a tipografia, as dimensões e o fundo anteriores à digitação. O Modo Cinema continua acessível durante a entrada. Botões de fotos, incluindo o da Aula da Saudade na abertura, usam o mesmo álbum de capa dura. Os retratos dos funcionários aparecem somente em Agradecimentos, sem legendas visíveis.
+
+A prévia usa cópias leves no acervo geral. A abertura e os destaques editoriais usam cópias de maior resolução preparadas a partir dos originais do Drive. O código e o catálogo públicos continuam separados dessas mídias privadas.

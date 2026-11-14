@@ -241,7 +241,10 @@
     });
     slateText.append(typing);
     const timing = [[640,1150],[1840,3040],[3530,4440]];
-    const locked = [...document.querySelectorAll(".skip, #masthead, #navigation, main > section:not(.film), body > .footer")];
+    const menuButton = document.querySelector("#menuButton");
+    const navWasDisabled = menuButton.disabled;
+    menuButton.disabled = true;
+    const locked = [...document.querySelectorAll(".skip, main > section:not(.film), body > .footer")];
     const changed = locked.filter(node => !node.inert);
     for (const node of changed) node.inert = true;
     film.classList.add("is-writing");
@@ -254,6 +257,7 @@
       document.documentElement.classList.remove("film-writing");
       typing.remove();
       for (const node of changed) node.inert = false;
+      menuButton.disabled = navWasDisabled;
       motion.removeEventListener("change", motionChanged);
       window.removeEventListener("hashchange", unlock);
       queue();
