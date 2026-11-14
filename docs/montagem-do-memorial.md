@@ -97,3 +97,9 @@ A prévia usa cópias leves no acervo geral. A abertura e os destaques editoriai
 Os capítulos têm composições próprias para o corredor, a visita, a Junina, as olimpíadas, a Feira, a campanha da Poly, a maratona e a despedida. Os mosaicos acompanham a paleta de cada seção. No visor, a página gira na direção da navegação e respeita a preferência por movimento reduzido.
 
 O pacote privado mantém as miniaturas no HTML e lê as fotos maiores da pasta `fotos/` quando o visitante abre cada registro. A prévia de arquivo único mantém o mesmo design e incorpora uma seleção de fotos maiores. A pasta não faz parte do GitHub, e o site público segue usando os caminhos de mídia liberados para publicação.
+
+### Interações do álbum e da cartela
+
+O visor do livro mantém a altura ao alternar retratos, paisagens e vídeos. Use as setas, o teclado ou deslize sobre a foto. Em outubro, o avanço também acompanha a rolagem vertical quando a composição cabe na tela. Nas telas mais baixas, a faixa usa o gesto horizontal nativo.
+
+A cartela oferece som de teclas sob demanda e repete a digitação desde a primeira letra ao ativá-lo. A prévia privada inclui o trecho do vídeo da Ary e o álbum das aprovações. A música geral da página aguarda a escolha da faixa.

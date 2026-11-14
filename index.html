@@ -49,6 +49,7 @@
     <div class="film__stage">
       <div class="film__layer film__slate" data-layer="slate">
         <p class="film__slate-text"><span>Goiânia, GO</span><span>Colégio Agostiniano</span><span>3º ano · Turma 2026</span></p>
+        <button class="film__typing-sound" type="button" aria-pressed="false" hidden>♫ <span>Ouvir a digitação</span></button>
         <a class="film__enter" href="#primeira-cena">Entrar no memorial <span aria-hidden="true">↓</span></a>
       </div>
       <div class="film__layer film__opening" data-layer="opening">
@@ -413,12 +414,17 @@
               <div class="timeline-copy">
                 <h4>Os nomes começaram a sair</h4>
                 <p>Numa das nossas contagens, já dava cerca de 110 aprovações. Depois de abrir tanto resultado de simulado, pensa na alegria de abrir uma lista e achar o nome de quem sentava do seu lado. E quando era o seu? Aí a gente não sabia se pulava ou se fugia da farinha.</p>
+                <button class="memory-link" type="button" data-open-event="aprovacoes" hidden>Abrir álbum das aprovações <span aria-hidden="true">↗</span></button>
               </div>
             </article>
             <article class="timeline-story" id="musica-do-baile">
               <div class="timeline-copy">
                 <h4>E quando tocar “Metralhadora”...</h4>
                 <p>A Ary escolheu a música do Baile e ainda fez um vídeo lindo pra isso. Quando “Metralhadora” tocar no baile, a gente vai lembrar que sempre fomos gigantes. E, se metade da turma tiver meio minuto adiantado, vai ser quase só mais um ensaio de sexta.</p>
+                <div class="baile-audio">
+                  <button class="memory-link" type="button" data-baile-play aria-pressed="false" hidden>▶ <span>Ouvir trecho da retrospectiva</span></button>
+                  <a class="memory-link" href="https://www.youtube.com/watch?v=YzCoZGsod0c" target="_blank" rel="noopener">“Metralhadora” · Clipe oficial <span aria-hidden="true">↗</span></a>
+                </div>
               </div>
             </article>
           </div>
@@ -540,7 +546,7 @@
 
       <div class="finale__content">
         <img src="assets/marca-garra-clara.webp" alt="FERAS 26, Agostiniano 2026" class="finale__logo">
-        <h2 id="finalTitle"><span>Até a próxima,</span> <em>Feras.</em></h2>
+        <h2 id="finalTitle"><span>Até a próxima,</span> <em class="finale__word" aria-label="Feras."><span aria-hidden="true">F</span><span aria-hidden="true">e</span><span aria-hidden="true">r</span><span aria-hidden="true">a</span><span aria-hidden="true">s</span><span aria-hidden="true">.</span></em></h2>
         <p>Quando bater saudade, volta. Pode ser pela Guarita, pelo pátio ou por uma foto em que você quase nem aparece.</p>
         <a class="finale__restart" href="#inicio">Voltar ao começo <span aria-hidden="true">↑</span></a>
       </div>

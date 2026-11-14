@@ -165,6 +165,13 @@
       "categoria": "ACERVO",
       "texto": "Quem fez a escola acontecer todos os dias.",
       "midias": []
+    },
+    {
+      "id": "aprovacoes",
+      "titulo": "Aprovações",
+      "categoria": "ACERVO",
+      "texto": "Os nomes saíram nas listas. A notícia correu pela turma. A gente guardou as fotos.",
+      "midias": []
     }
   ]
 }

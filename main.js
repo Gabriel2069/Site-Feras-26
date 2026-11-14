@@ -197,9 +197,15 @@ function mixedOrder(entries) {
 
 function selectAlbum(filter) {
   const selected = currentEvents.filter(event => event.id !== "funcionarios" && (filter === "todos" || event.id === filter));
-  const available = selected.flatMap(event =>
+  const matches = selected.flatMap(event =>
     (event.midias || []).filter(media => filePath(media.src)).map(media => ({ media, event }))
   );
+  const seen = new Set();
+  const available = matches.filter(({ media }) => {
+    if (seen.has(media.src)) return false;
+    seen.add(media.src);
+    return true;
+  });
   if (!available.length) return;
   for (const button of archiveFilters.querySelectorAll("button")) {
     const active = button.dataset.filter === filter;
@@ -319,6 +325,7 @@ function showMedia(index, keepThumbVisible = true) {
   const figure = document.createElement("figure");
   figure.append(element);
   if (media.legenda && item.id !== "funcionarios") figure.append(text("figcaption", media.legenda));
+  mediaView.classList.toggle("chapter-modal__media--video", video);
   mediaView.replaceChildren(figure);
   if (!reduced.matches && previous && direction) {
     figure.style.transformOrigin = direction > 0 ? "left center" : "right center";
@@ -378,6 +385,7 @@ function openChapter(item, selectedMedia, trigger) {
   if (entries.length) showMedia(Math.max(0, entries.findIndex(entry => entry.media === selectedMedia)), entries.length > 1);
 }
 
+watchHorizontalSwipe(mediaView, step => showMedia(viewer.index + step));
 $("#photoPrev").addEventListener("click", () => showMedia(viewer.index - 1));
 $("#photoNext").addEventListener("click", () => showMedia(viewer.index + 1));
 modal.addEventListener("keydown", event => {
@@ -390,6 +398,7 @@ modal.addEventListener("keydown", event => {
 function closeChapter(){if(modal.open)modal.close();}
 $("#chapterClose").addEventListener("click",closeChapter);
 modal.addEventListener("click",event=>{
+  if (event.target !== modal) return;
   const r=modal.getBoundingClientRect();
   if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)closeChapter();
 });
