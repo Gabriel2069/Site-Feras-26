@@ -1771,3 +1771,150 @@ body.preview-media .people__visual, body.preview-media .small__filmstrip { opaci
   .timeline-era:not(#despedida)::after { opacity:.45; }
   body.film-in-slate #cinemaButton { display:flex; }
 }
+
+/* Final editorial spreads */
+@media (max-width:700px) {
+  #masthead #cinemaButton {
+    display:flex;
+    min-height:42px;
+    padding-inline:.65rem;
+  }
+}
+@media (max-width:365px) {
+  #masthead #cinemaButton .dot { display:none; }
+  #masthead .nav__actions { gap:5px; }
+}
+.timeline-era__head { position:relative; }
+.timeline-era__stamp {
+  display:inline-block;
+  padding:.35em .62em;
+  background:#191629;
+  border-inline-start:3px solid var(--era-ink);
+}
+#inicio-2026 .timeline-era__stories { border-left:0; padding:0; }
+#inicio-2026 .timeline-story::before,
+#primeiro-semestre .timeline-story::before,
+#volta-das-ferias .timeline-story::before,
+#memorias-sem-data .timeline-story::before { display:none; }
+#andar-e-camisa {
+  isolation:isolate;
+  padding:clamp(20px,3.3vw,48px);
+  background:linear-gradient(135deg,#24314aee,#202336ed 70%,#2a4450d4);
+  border-block:1px solid #8aa9be50;
+}
+#andar-e-camisa::after {
+  content:""; position:absolute; inset:0; pointer-events:none; z-index:-1;
+  background:radial-gradient(#a3d2ca61 1px,transparent 1.7px) 0 0 / 10px 10px;
+  mask:radial-gradient(ellipse at 95% 65%,black,transparent 60%);
+}
+#andar-e-camisa figure { border-block-end:4px solid #7e9fa8; }
+#visita-ufg {
+  isolation:isolate;
+  padding:clamp(17px,3.1vw,43px);
+  border-block-start:1px dashed #b6ac9b90;
+}
+#visita-ufg .timeline-photos::after {
+  content:""; position:absolute; z-index:-1; pointer-events:none; inset:-4% -2% -2% 27%;
+  border-radius:41% 56% 39% 62%;
+  background:radial-gradient(ellipse at 50% 60%,#3c7f7ba0,transparent 72%);
+}
+#visita-ufg figure:nth-child(2) { background:#d8e2ca; }
+#junina { box-shadow:0 6px #986a5a80,0 10px #1d1829; }
+#junina .timeline-copy h4 { color:#392040; }
+#volta-das-ferias .timeline-era__stories { border:0; padding:0; }
+#volta-das-ferias .timeline-interlude {
+  padding:clamp(16px,3vw,33px);
+  border-color:#96b890;
+  background:linear-gradient(116deg,#263a37,#202d33);
+}
+#olimpiadas .timeline-photos figure {
+  background:#d8e5d9;
+  border-block-end:4px solid #779a81;
+}
+#feira { padding:clamp(16px,2.8vw,40px); background:linear-gradient(140deg,#263934,#192829 75%); }
+#feira .timeline-photos { background:#577867; box-shadow:3px 5px #172620; }
+#poly-madrinha { box-shadow:5px 7px #5d527c8a; }
+#maratona {
+  border-top:1px dashed #8c9bd49e;
+  padding:clamp(15px,3vw,33px) 0 0;
+}
+#maratona .timeline-photos { gap:clamp(10px,2.25vw,30px); }
+#maratona .timeline-photos figure { transform:rotate(-2deg); }
+#maratona .timeline-photos figure:nth-child(2) { background:#d5d9eb; transform:rotate(3deg) translateY(9%); }
+#outubro .october-controls {
+  padding:.8rem;
+  border-block:1px solid #8376a7;
+  background:linear-gradient(110deg,#272039,#292a44 70%,#253139);
+}
+#despedida .timeline-era__head { padding-block-end:1.8rem; }
+#despedida .timeline-era__head::after {
+  content:""; position:absolute; inset:auto 0 0; height:2px;
+  background:linear-gradient(90deg,#d9b983,transparent);
+}
+#aprovacoes,#musica-do-baile { padding:clamp(12px,2vw,24px); border-block-start:1px solid #9e846a8c; }
+#aprovacoes { background:linear-gradient(100deg,#483a31,#2d262d); }
+#musica-do-baile { background:linear-gradient(100deg,#353554,#292535); }
+#caminho,#pessoas,#entre { position:relative; isolation:isolate; }
+:is(#caminho,#pessoas,#entre)::after {
+  content:""; position:absolute; inset:5% 4% 9%; z-index:-1; pointer-events:none;
+  border-radius:42% 62% 37% 49% / 43% 35% 59% 54%;
+  background:radial-gradient(ellipse at 22% 66%,var(--scene-color),transparent 65%);
+}
+#caminho { --scene-color:#2d66545e; }
+#pessoas { --scene-color:#64588857; }
+#entre { --scene-color:#364b7763; }
+#pessoas .staff-portrait { border:1px solid #dacbbf; }
+#entre .memory-note { box-shadow:6px 9px #1012228a; }
+#entre .memory-wall__card { box-shadow:3px 4px #1012228a; }
+.chapter-modal__media { perspective:1250px; }
+.chapter-modal__media figure { backface-visibility:hidden; }
+.chapter-modal__right { min-height:clamp(320px,42vw,560px); }
+.chapter-modal__media img { max-height:min(53svh,490px); }
+@media(min-width:960px) {
+  #primeiro-semestre,#volta-das-ferias,#memorias-sem-data { grid-template-columns:1fr; row-gap:clamp(24px,4vw,52px); }
+  #primeiro-semestre .timeline-era__stories,#memorias-sem-data .timeline-era__stories { border:0; padding:0; }
+  #primeiro-semestre .timeline-era__stories { grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr); align-items:start; }
+  #primeiro-semestre #visita-ufg { margin-top:clamp(10px,8vw,112px); }
+  #volta-das-ferias .timeline-era__stories { grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr); align-items:start; }
+  #volta-das-ferias .timeline-interlude { grid-column:1/-1; max-width:78ch; }
+  #memorias-sem-data .timeline-era__stories { grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr); align-items:start; }
+  #memorias-sem-data #maratona { margin-top:clamp(24px,5.6vw,85px); }
+}
+@media(max-width:665px) {
+  .chapter-modal__right { min-height:0; }
+  .chapter-modal__media img { max-height:min(43svh,410px); }
+}
+
+.era-paper-strip {
+  position:relative;
+  grid-template-columns:repeat(3,1fr);
+  width:clamp(72px,12vw,170px);
+  margin-top:clamp(13px,2.5vw,32px);
+  transform:rotate(-3deg);
+  box-shadow:3px 3px #0c12278c;
+  clip-path:polygon(0 4%,16% 0,41% 4%,62% 0,86% 5%,100% 0,99% 96%,72% 100%,41% 95%,16% 100%,0 96%);
+}
+#primeiro-semestre .era-paper-strip { transform:rotate(3deg); }
+#volta-das-ferias .era-paper-strip { transform:rotate(-5deg); }
+#memorias-sem-data .era-paper-strip { transform:rotate(5deg); }
+#despedida .era-paper-strip { opacity:.7; transform:rotate(-4deg); }
+#primeiro-semestre .timeline-era__head,
+#volta-das-ferias .timeline-era__head,
+#memorias-sem-data .timeline-era__head { width:fit-content; }
+#volta-das-ferias .timeline-interlude { box-shadow:5px 5px #1017217c; }
+#ultimo-dia .timeline-photos figure:first-child img { object-position:50% 32%; }
+#caminho .passage__aside { position:relative; isolation:isolate; }
+#caminho .passage__aside::before {
+  content:""; position:absolute; z-index:-1; inset:5% 4% -8% -4%; border-radius:64% 37% 62% 38%;
+  background:radial-gradient(ellipse at 62% 49%,#30615c90,transparent 71%);
+}
+@media(min-width:960px) {
+  #visita-ufg .timeline-photos,#olimpiadas .timeline-photos { margin-block-start:1.25rem; }
+  #visita-ufg .timeline-photos { grid-template-columns:1fr .9fr; }
+  #olimpiadas .timeline-photos figure:first-child { transform:rotate(-2deg); }
+  #olimpiadas .timeline-photos figure:nth-child(2) { transform:rotate(2.5deg) translateY(7%); }
+}
+@media(max-width:740px) {
+  .era-paper-strip { width:78px; margin-top:.85rem; }
+  #andar-e-camisa { padding-inline:16px; }
+}

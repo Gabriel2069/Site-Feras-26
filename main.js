@@ -281,9 +281,20 @@ const mediaControls = $("#chapterControls");
 const mediaPosition = $("#photoPosition");
 let viewer = { item: null, entries: [], index: 0 };
 
+function turnAlbumPage(sheet, direction) {
+  const turn = sheet.animate([
+    {transform:`rotateY(${direction * -64}deg)`, filter:"brightness(.78)", offset:0},
+    {transform:`rotateY(${direction * -22}deg)`, filter:"brightness(.92)", offset:.44},
+    {transform:"rotateY(0deg)", filter:"brightness(1)", offset:1}
+  ], {duration:420, easing:"cubic-bezier(.22,.68,.25,1)"});
+  turn.onfinish = () => { sheet.style.transformOrigin = ""; };
+}
+
 function showMedia(index, keepThumbVisible = true) {
   const { entries, item } = viewer;
   if (index < 0 || index >= entries.length) return;
+  const previous = mediaView.querySelector("figure");
+  const direction = Math.sign(index - viewer.index);
   viewer.index = index;
   const { media, src } = entries[index];
   const video = isVideo(media.src);
@@ -297,15 +308,21 @@ function showMedia(index, keepThumbVisible = true) {
     element.alt = media.alt || item.titulo;
     element.decoding = "async";
   }
-  element.src = src;
+  const detail = !video && /^\.\/media\/[a-zA-Z0-9/_-]+\.webp$/i.test(media.src)
+    ? window.ferasPreview?.detail?.[media.src] || (window.ferasPreview?.hasLocalDetails
+      ? media.src.replace("./media/", "./fotos/") : null) : null;
+  if (detail) {
+    element.addEventListener("error", () => { element.src = src; }, {once:true});
+  }
+  element.src = detail || src;
   $("video", mediaView)?.pause();
   const figure = document.createElement("figure");
   figure.append(element);
   if (media.legenda && item.id !== "funcionarios") figure.append(text("figcaption", media.legenda));
   mediaView.replaceChildren(figure);
-  if (!reduced.matches) {
-    figure.animate([{opacity:.15, transform:"translateX(7px) rotate(.55deg)"},{opacity:1,transform:"none"}],
-      {duration:240,easing:"cubic-bezier(.2,.75,.3,1)"});
+  if (!reduced.matches && previous && direction) {
+    figure.style.transformOrigin = direction > 0 ? "left center" : "right center";
+    turnAlbumPage(figure, direction);
   }
   mediaPosition.textContent = (index + 1) + " / " + entries.length;
   $("#photoPrev").setAttribute("aria-disabled", String(index === 0));

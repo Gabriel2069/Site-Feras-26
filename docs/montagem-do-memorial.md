@@ -91,3 +91,9 @@ O visor usa a composição de um álbum aberto, com miolo de papel, cantoneiras,
 A cartela recupera a tipografia, as dimensões e o fundo anteriores à digitação. O Modo Cinema continua acessível durante a entrada. Botões de fotos, incluindo o da Aula da Saudade na abertura, usam o mesmo álbum de capa dura. Os retratos dos funcionários aparecem somente em Agradecimentos, sem legendas visíveis.
 
 A prévia usa cópias leves no acervo geral. A abertura e os destaques editoriais usam cópias de maior resolução preparadas a partir dos originais do Drive. O código e o catálogo públicos continuam separados dessas mídias privadas.
+
+## Composições e resolução da edição de prévia
+
+Os capítulos têm composições próprias para o corredor, a visita, a Junina, as olimpíadas, a Feira, a campanha da Poly, a maratona e a despedida. Os mosaicos acompanham a paleta de cada seção. No visor, a página gira na direção da navegação e respeita a preferência por movimento reduzido.
+
+O pacote privado mantém as miniaturas no HTML e lê as fotos maiores da pasta `fotos/` quando o visitante abre cada registro. A prévia de arquivo único mantém o mesmo design e incorpora uma seleção de fotos maiores. A pasta não faz parte do GitHub, e o site público segue usando os caminhos de mídia liberados para publicação.
