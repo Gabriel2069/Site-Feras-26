@@ -235,6 +235,7 @@ body{
 .mini-game button:focus-visible{outline:2px solid #cdf1d6;outline-offset:2px}
 .polaroid{width:min(88vw,740px,calc((100dvh - 178px) * .83))}
 </style>
+<script src="./content/public-config.js"></script>
 </head>
 
 <body>
@@ -392,8 +393,11 @@ document.addEventListener("keydown", event => {
 async function start() {
   try {
     const embedded = document.querySelector("#miniData");
-    const rows = embedded ? JSON.parse(embedded.textContent) : await (await fetch("./content/mini-feras.json")).json();
+    const base = window.ferasHosted?.base;
+    const manifest = base ? new URL("content/mini-feras.json", base) : "./content/mini-feras.json";
+    const rows = embedded ? JSON.parse(embedded.textContent) : await (await fetch(manifest)).json();
     gallery = rows.filter(row => row.nome && (embedded ? /^data:image\/webp;base64,/.test(row.src) : /^\.\/media\/mini-feras\/[\w/-]+\.(webp|jpe?g|png)$/i.test(row.src)));
+    if (base && !embedded) gallery = gallery.map(row => ({...row, src:new URL(row.src,base).href}));
     photos = gallery;
     game.hidden = !photos.length;
     controls.hidden = photos.length < 2;
