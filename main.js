@@ -295,7 +295,10 @@ archiveMore.addEventListener("click", () => appendArchivePage(true));
 function setupFilters(events) {
   const available = events.filter(event => event.id !== "funcionarios" && (event.midias || []).some(media => filePath(media.src)));
   archiveFilters.replaceChildren();
-  if (!available.length) return;
+  if (!available.length) {
+    archiveNote.textContent = "O álbum online ainda não tem fotos publicadas.";
+    return;
+  }
   const options = [{ id: "todos", titulo: "Todos" }, ...available];
   for (const { id, titulo } of options) {
     const button = text("button", titulo);
