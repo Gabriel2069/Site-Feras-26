@@ -1,5 +1,108 @@
 "use strict";
 
+const memorialAudio = (() => {
+  const control = document.querySelector("#soundButton");
+  const AudioEngine = window.AudioContext || window.webkitAudioContext;
+  const trackButton = document.querySelector("#soundtrackPlay");
+  const trackStatus = document.querySelector("#soundtrackStatus");
+  const localTrack = window.ferasPreview?.soundtrack;
+  const music = new Audio(localTrack || window.ferasPreview?.soundtrackPreview || "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ac/a2/55/aca255c7-590d-f0e3-095d-d596b1f3224e/mzaf_5055552058754859050.plus.aac.p.m4a");
+  music.preload = "none";
+  music.loop = Boolean(localTrack);
+  music.volume = localTrack ? .35 : .24;
+  let context;
+  let master;
+  let noise;
+  let muted = false;
+  let featured = false;
+  let soundtrackWanted = Boolean(localTrack);
+  if (localTrack) {
+    trackButton.textContent = "Tocar trilha";
+    trackStatus.textContent = "A trilha acompanha o memorial a partir da primeira interação.";
+  }
+
+  function updateMusic() {
+    if (muted || featured || !soundtrackWanted) {
+      music.pause();
+      return;
+    }
+    music.play().catch(error => {
+      if (error.name === "AbortError" || error.name === "NotAllowedError") return;
+      soundtrackWanted = false;
+      trackStatus.textContent = "A trilha não começou. Use o botão para tocar.";
+    });
+  }
+  for (const event of ["play", "pause", "ended"]) {
+    music.addEventListener(event, () => {
+      const playing = !music.paused && !music.ended;
+      trackButton.textContent = playing ? "Pausar trilha" : localTrack ? "Tocar trilha" : "Tocar prévia";
+      trackButton.setAttribute("aria-pressed", String(playing));
+      if (playing) trackStatus.textContent = "Tocando Outro · M83";
+      if (event === "ended") {
+        soundtrackWanted = false;
+        trackStatus.textContent = "Fim da prévia. A versão integral está no canal do M83.";
+      }
+    });
+  }
+  trackButton.addEventListener("click", () => {
+    soundtrackWanted = music.paused && (!featured || !soundtrackWanted);
+    if (soundtrackWanted && muted) control.click();
+    if (soundtrackWanted && featured) trackStatus.textContent = "A trilha volta depois da cena do baile.";
+    updateMusic();
+  });
+  function unlock() {
+    if (!AudioEngine || muted) return;
+    if (!context) {
+      context = new AudioEngine();
+      master = context.createGain();
+      master.connect(context.destination);
+      noise = context.createBuffer(1, Math.round(context.sampleRate * .4), context.sampleRate);
+      const samples = noise.getChannelData(0);
+      for (let i = 0; i < samples.length; i++) samples[i] = Math.random() * 2 - 1;
+    }
+    if (context.state !== "running") context.resume().catch(() => {});
+    if (localTrack && soundtrackWanted && music.paused) updateMusic();
+  }
+  control.addEventListener("click", () => {
+    muted = !muted;
+    control.setAttribute("aria-pressed", String(muted));
+    control.title = muted ? "Ativar sons" : "Silenciar todos os sons";
+    control.setAttribute("aria-label", control.title);
+    if (master) master.gain.value = muted ? 0 : 1;
+    if (!muted) unlock();
+    updateMusic();
+    document.dispatchEvent(new Event("memorial-sound-change"));
+  });
+  for (const event of ["pointerdown","touchend","keydown"]) {
+    addEventListener(event, input => {
+      if (!input.target.closest?.("#soundButton, #soundtrackPlay")) unlock();
+    }, {passive:true});
+  }
+  return {
+    get muted() { return muted; },
+    feature(active) { featured = active; updateMusic(); },
+    effect(name, delay = 0) {
+      if (muted || context?.state !== "running") return;
+      const settings = {
+        key:[.032,2150,.10], page:[.17,1220,.065], beat:[.29,140,.50],
+      };
+      const [duration, frequency, level] = settings[name];
+      const start = context.currentTime + delay;
+      const source = context.createBufferSource();
+      const filter = context.createBiquadFilter();
+      const envelope = context.createGain();
+      source.buffer = noise;
+      filter.type = "lowpass";
+      filter.frequency.value = frequency * (.9 + Math.random() * .2);
+      envelope.gain.setValueAtTime(level, start);
+      envelope.gain.exponentialRampToValueAtTime(.001, start + duration);
+      source.connect(filter).connect(envelope).connect(master);
+      source.start(start,0,duration);
+    }
+  };
+})();
+
+
 // A horizontal gesture changes the page. Vertical gestures remain native.
 function watchHorizontalSwipe(surface, changePage, accepts = () => true) {
   let start;
@@ -271,46 +374,6 @@ function watchHorizontalSwipe(surface, changePage, accepts = () => true) {
     for (const node of changed) node.inert = true;
     film.classList.add("is-writing");
     document.documentElement.classList.add("film-writing");
-    const sound = layers.slate.querySelector(".film__typing-sound");
-    const Audio = window.AudioContext || window.webkitAudioContext;
-    let audio, sample;
-    let soundOn = false;
-    if (Audio) sound.hidden = false;
-    sound.addEventListener("click", () => {
-      soundOn = !soundOn;
-      if (soundOn) {
-        audio ??= new Audio();
-        audio.resume().catch(() => {
-          soundOn = false;
-          sound.setAttribute("aria-pressed", "false");
-          sound.lastElementChild.textContent = "Ouvir a digitação";
-        });
-        if (!sample) {
-          sample = audio.createBuffer(1, Math.round(audio.sampleRate * .045), audio.sampleRate);
-          const data = sample.getChannelData(0);
-          for (let i = 0; i < data.length; i++) {
-            data[i] = (Math.random() * 2 - 1 + .6 * Math.sin(i * .23)) * Math.exp(-i / (data.length * .13));
-          }
-        }
-        // Start the cartela from the first key when choosing to hear it.
-        started = performance.now();
-        lines.forEach(line => { line.textContent = ""; });
-      }
-      sound.setAttribute("aria-pressed", String(soundOn));
-      sound.lastElementChild.textContent = soundOn ? "Silenciar digitação" : "Ouvir a digitação";
-    });
-    function typeClick() {
-      if (!soundOn || audio.state !== "running") return;
-      const strike = audio.createBufferSource();
-      const tone = audio.createBiquadFilter();
-      const level = audio.createGain();
-      strike.buffer = sample;
-      tone.type = "lowpass";
-      tone.frequency.value = 1850 + Math.random() * 750;
-      level.gain.value = .10;
-      strike.connect(tone).connect(level).connect(audio.destination);
-      strike.start();
-    }
     let started = performance.now();
     let animation;
     function unlock() {
@@ -318,8 +381,6 @@ function watchHorizontalSwipe(surface, changePage, accepts = () => true) {
       film.classList.remove("is-writing");
       document.documentElement.classList.remove("film-writing");
       typing.remove();
-      if (document.activeElement === sound) layers.slate.querySelector(".film__enter").focus({preventScroll:true});
-      sound.hidden = true;
       for (const node of changed) node.inert = false;
       menuButton.disabled = navWasDisabled;
       motion.removeEventListener("change", motionChanged);
@@ -336,7 +397,7 @@ function watchHorizontalSwipe(surface, changePage, accepts = () => true) {
         const ratio = between(elapsed, from, to);
         const displayed = originals[i].slice(0, Math.floor(originals[i].length * ratio));
         if (line.textContent !== displayed) {
-          if (/\S/.test(displayed.slice(line.textContent.length))) typeClick();
+          if (/\S/.test(displayed.slice(line.textContent.length))) memorialAudio.effect("key");
           line.textContent = displayed;
         }
         line.dataset.active = String(currentLine === i);
@@ -423,8 +484,55 @@ function watchHorizontalSwipe(surface, changePage, accepts = () => true) {
   steps.forEach((button, index) => button.addEventListener("click", () => go(index)));
   prev.addEventListener("click", () => go(active - 1));
   next.addEventListener("click", () => go(active + 1));
-  watchHorizontalSwipe(track, step => go(active + step),
-    event => event.pointerType === "mouse" || reel.classList.contains("is-directed"));
+  let drag;
+  let preventClick = false;
+  track.addEventListener("pointerdown", event => {
+    if (!event.isPrimary || event.button !== 0 || event.target.closest("video, input")) return;
+    if (event.pointerType !== "mouse" && !reel.classList.contains("is-directed")) return;
+    drag = {id:event.pointerId, x:event.clientX, y:event.clientY, left:track.scrollLeft, active:false};
+    preventClick = false;
+  });
+  track.addEventListener("pointermove", event => {
+    if (drag?.id !== event.pointerId) return;
+    const dx = event.clientX - drag.x;
+    const dy = event.clientY - drag.y;
+    if (!drag.active) {
+      if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)) { drag = undefined; return; }
+      if (Math.abs(dx) < 8) return;
+      track.setPointerCapture(event.pointerId);
+      track.classList.add("is-dragging");
+      drag.active = preventClick = true;
+    }
+    const left = Math.min(range, Math.max(0, drag.left - dx));
+    if (reel.classList.contains("is-directed")) {
+      window.scrollTo({top:start() + travel * left / range, behavior:"instant"});
+    }
+    track.scrollLeft = left;
+  });
+  function settleDrag(event) {
+    if (drag?.id !== event.pointerId) return;
+    if (drag.active) {
+      const left = track.scrollLeft;
+      const dx = event.clientX - drag.x;
+      const nearest = (positionValue) => slides.reduce((best, slide, index) =>
+        Math.abs(position(slide) - positionValue) < Math.abs(position(slides[best]) - positionValue) ? index : best, 0);
+      const from = nearest(drag.left);
+      const to = nearest(left);
+      go(from === to && Math.abs(dx) > 28 ? from - Math.sign(dx) : to);
+    }
+    drag = undefined;
+    track.classList.remove("is-dragging");
+  }
+  track.addEventListener("pointerup", settleDrag);
+  track.addEventListener("pointercancel", settleDrag);
+  track.addEventListener("dragstart", event => { if (drag) event.preventDefault(); });
+  track.addEventListener("click", event => {
+    if (preventClick && event.detail) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      preventClick = false;
+    }
+  }, true);
   track.addEventListener("keydown", event => {
     if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
     event.preventDefault();
@@ -491,23 +599,81 @@ function watchHorizontalSwipe(surface, changePage, accepts = () => true) {
 })();
 
 (() => {
-  const button = document.querySelector("[data-baile-play]");
-  const source = window.ferasPreview?.baile;
-  if (!button || !source) return;
-  const audio = new Audio(source);
-  audio.preload = "none";
-  button.hidden = false;
+  const scene = document.querySelector("#musica-do-baile");
+  const art = scene.querySelector(".paredao");
+  const button = scene.querySelector("[data-baile-play]");
   const label = button.querySelector("span");
-  audio.addEventListener("play", () => {
-    button.setAttribute("aria-pressed", "true");
-    label.textContent = "Pausar trecho";
-  });
-  audio.addEventListener("pause", () => {
-    button.setAttribute("aria-pressed", "false");
-    label.textContent = "Ouvir trecho da retrospectiva";
-  });
+  const source = window.ferasPreview?.baile;
+  const audio = source ? new Audio(source) : null;
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+  let timer;
+  let autoSeen = false;
+  let waitingForSound = false;
+  if (audio) audio.preload = "none";
+
+  function reset() {
+    clearTimeout(timer);
+    if (audio) audio.pause();
+    waitingForSound = false;
+    scene.classList.remove("baile--firing", "baile--playing");
+    button.setAttribute("aria-pressed","false");
+    label.textContent = "Soltar o paredão";
+    memorialAudio.feature(false);
+  }
+  function play() {
+    autoSeen = true;
+    scene.classList.remove("baile--firing");
+    if (!audio) {
+      label.textContent = "Repetir a cena";
+      button.setAttribute("aria-pressed","false");
+      memorialAudio.feature(false);
+      return;
+    }
+    if (memorialAudio.muted) {
+      waitingForSound = true;
+      label.textContent = "Repetir a cena";
+      button.setAttribute("aria-pressed","false");
+      memorialAudio.feature(false);
+      return;
+    }
+    audio.currentTime = 0;
+    audio.play().then(() => {
+      waitingForSound = false;
+      scene.classList.add("baile--playing");
+      button.setAttribute("aria-pressed","true");
+      label.textContent = "Pausar música";
+    }).catch(() => {
+      waitingForSound = true;
+      button.setAttribute("aria-pressed","false");
+      label.textContent = "Tocar música";
+      memorialAudio.feature(false);
+    });
+  }
+  function fire() {
+    reset();
+    memorialAudio.feature(true);
+    scene.classList.add("baile--firing");
+    button.setAttribute("aria-pressed","true");
+    label.textContent = "Parar a cena";
+    if (!reduced.matches) {
+      [.16,.46,.65,1.04].forEach(delay => memorialAudio.effect("beat",delay));
+    }
+    timer = setTimeout(play, reduced.matches ? 0 : 1540);
+  }
   button.addEventListener("click", () => {
-    if (audio.paused) audio.play().catch(() => { label.textContent = "Tentar tocar o trecho"; });
-    else audio.pause();
+    autoSeen = true;
+    if (scene.classList.contains("baile--firing") || (audio && !audio.paused)) reset();
+    else if (waitingForSound && !memorialAudio.muted) { memorialAudio.feature(true); play(); }
+    else fire();
   });
+  audio?.addEventListener("ended",reset);
+  document.addEventListener("memorial-sound-change", () => {
+    if (audio) audio.muted = memorialAudio.muted;
+  });
+  new IntersectionObserver(entries => {
+    for (const {isIntersecting} of entries) {
+      if (isIntersecting && !autoSeen) fire();
+      else if (!isIntersecting) reset();
+    }
+  }, {threshold:.54}).observe(art);
 })();

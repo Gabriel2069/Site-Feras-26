@@ -66,6 +66,25 @@ function observe(root = document) {
 }
 observe();
 
+const photoReveal = new IntersectionObserver(entries => {
+  let visible = 0;
+  for (const {target, isIntersecting} of entries) {
+    if (!isIntersecting) continue;
+    photoReveal.unobserve(target);
+    const delay = Math.min(visible++, 5) * 44;
+    target.style.setProperty("--reveal-delay", `${delay}ms`);
+    target.classList.add("photo-reveal--visible");
+  }
+}, {threshold:.14});
+function revealPhotos(pictures) {
+  if (reduced.matches) return;
+  for (const [index, picture] of pictures.entries()) {
+    picture.style.setProperty("--photo-side", index % 2 ? "1" : "-1");
+    picture.classList.add("photo-reveal");
+    photoReveal.observe(picture);
+  }
+}
+
 function setMenu(open, shouldFocus = true) {
   navigation.classList.toggle("is-open",open);
   navigation.inert = !open;
@@ -126,6 +145,12 @@ function switchLocation(id) {
   });
   $("#locationName").textContent=loc.nome;
   $("#locationDescription").textContent=loc.descricao || "";
+  const caption = $("#locationDescription").parentElement;
+  if (!reduced.matches && corridor.dataset.place !== id) {
+    caption.getAnimations().forEach(animation => animation.cancel());
+    caption.animate([{opacity:.5,translate:"0 8px"},{opacity:1,translate:"0 0"}],
+      {duration:280,easing:"cubic-bezier(.2,.75,.25,1)"});
+  }
   corridor.dataset.place=id;
   const surface=$("#locationImage");
   const src=filePath(loc.imagem);
@@ -198,7 +223,7 @@ function mixedOrder(entries) {
 function selectAlbum(filter) {
   const selected = currentEvents.filter(event => event.id !== "funcionarios" && (filter === "todos" || event.id === filter));
   const matches = selected.flatMap(event =>
-    (event.midias || []).filter(media => filePath(media.src)).map(media => ({ media, event }))
+    (event.midias || []).filter(media => filePath(media.src) && !(filter === "todos" && media.soNoAlbum)).map(media => ({ media, event }))
   );
   const seen = new Set();
   const available = matches.filter(({ media }) => {
@@ -219,6 +244,7 @@ function selectAlbum(filter) {
       }
     }
   }
+  [...mosaic.children].forEach(photo => photoReveal.unobserve(photo));
   mosaic.replaceChildren();
   mosaic.dataset.view = filter === "todos" ? "all" : "album";
   const albumName = filter === "todos" ? "Todos os álbuns" : selected[0].titulo;
@@ -241,7 +267,6 @@ function appendArchivePage(moveFocus = false) {
   for (const { media, event } of albumEntries.slice(start, end)) {
     const button = text("button", "", "mosaic__photo");
     button.type = "button";
-    const caption = text("span", media.legenda || event.titulo, "mosaic__caption");
     const src = filePath(media.src);
     if (isVideo(media.src)) {
       button.classList.add("mosaic__photo--video");
@@ -255,11 +280,12 @@ function appendArchivePage(moveFocus = false) {
       image.decoding = "async";
       button.append(image);
     }
-    button.append(caption);
     button.addEventListener("click", () => openChapter(event, media, button));
     fragment.append(button);
   }
+  const newPictures = [...fragment.children];
   mosaic.append(fragment);
+  revealPhotos(newPictures);
   albumOffset = end;
   archiveMore.hidden = albumOffset === albumEntries.length;
   if (moveFocus) mosaic.children[start]?.focus();
@@ -287,18 +313,119 @@ const mediaControls = $("#chapterControls");
 const mediaPosition = $("#photoPosition");
 let viewer = { item: null, entries: [], index: 0 };
 
-function turnAlbumPage(sheet, direction) {
-  const turn = sheet.animate([
-    {transform:`rotateY(${direction * -64}deg)`, filter:"brightness(.78)", offset:0},
-    {transform:`rotateY(${direction * -22}deg)`, filter:"brightness(.92)", offset:.44},
-    {transform:"rotateY(0deg)", filter:"brightness(1)", offset:1}
-  ], {duration:420, easing:"cubic-bezier(.22,.68,.25,1)"});
-  turn.onfinish = () => { sheet.style.transformOrigin = ""; };
+function turnAlbumPage(previous, next, direction) {
+  previous.classList.add("chapter-modal__turning");
+  previous.inert = true;
+  previous.setAttribute("aria-hidden","true");
+  mediaView.append(previous);
+  previous.style.transformOrigin = next.style.transformOrigin = direction > 0 ? "left center" : "right center";
+  const outgoing = previous.animate([
+    { transform:"rotateY(0deg)", filter:"brightness(1)", opacity:1 },
+    { transform:`rotateY(${direction * -47}deg) skewY(${direction * -2}deg)`, filter:"brightness(.77)", opacity:1, offset:.52 },
+    { transform:`rotateY(${direction * -94}deg)`, filter:"brightness(.55)", opacity:0 }
+  ], {duration:520,easing:"cubic-bezier(.38,.02,.65,1)",fill:"forwards"});
+  outgoing.onfinish = () => previous.remove();
+  next.animate([
+    { opacity:.62, transform:`translateX(${direction * 12}px) scale(.97)`, filter:"brightness(.69)" },
+    { opacity:1, transform:"translateX(0) scale(1)", filter:"brightness(1)" }
+  ], {duration:520,easing:"cubic-bezier(.22,.74,.24,1)"});
 }
+
+const reactionPanel = $("#photoReaction");
+const reactionToggle = $("#reactionToggle");
+const reactionChoices = $("#reactionChoices");
+const reactionStatus = $("#reactionStatus");
+const reactionOptions = new Map([["❤️","Amei"],["😂","Dei risada"],["🥹","Deu saudade"],["🔥","Muito Fera"],["👏","Aplausos"],["💙","Carinho"]]);
+const reactionPrefix = "feras26:reaction:";
+const reactionUrl = () => remote && new URL("/rest/v1/feras_photo_reactions", remote);
+const reactionHeaders = () => ({apikey:config.key});
+const activePhoto = () => viewer.entries[viewer.index]?.media.src;
+const pendingReactions = new Set();
+let reactionRead = 0;
+
+function closeReactions() {
+  if (reactionChoices.contains(document.activeElement)) reactionToggle.focus({preventScroll:true});
+  reactionToggle.setAttribute("aria-expanded","false");
+  reactionChoices.hidden = true;
+}
+
+function displayReaction(emoji) {
+  reactionToggle.textContent = reactionOptions.has(emoji) ? emoji + " Reação" : "♡ Reagir";
+  reactionToggle.setAttribute("aria-label", reactionOptions.has(emoji) ? "Trocar reação: " + reactionOptions.get(emoji) : "Reagir à foto");
+  for (const button of reactionChoices.children) button.setAttribute("aria-pressed", String(button.textContent === emoji));
+}
+
+function localReaction(key, emoji) {
+  try {
+    if (emoji !== undefined) localStorage.setItem(reactionPrefix + key, emoji);
+    return localStorage.getItem(reactionPrefix + key);
+  } catch { return null; }
+}
+
+async function loadReaction(key) {
+  const read = ++reactionRead;
+  displayReaction(localReaction(key));
+  const url = reactionUrl();
+  if (!url || pendingReactions.has(key)) return;
+  url.search = new URLSearchParams({photo_path:"eq." + key, select:"emoji"});
+  try {
+    const response = await fetch(url,{headers:reactionHeaders(),cache:"no-store"});
+    if (!response.ok) throw Error();
+    const [row] = await response.json();
+    if (read === reactionRead && activePhoto() === key) {
+      localReaction(key, row?.emoji || "");
+      displayReaction(row?.emoji);
+    }
+  } catch {
+    if (read === reactionRead) reactionStatus.textContent = "Reação compartilhada indisponível.";
+  }
+}
+
+for (const [emoji, description] of reactionOptions) {
+  const button = text("button",emoji);
+  button.type = "button";
+  button.title = description;
+  button.setAttribute("aria-label",description);
+  reactionChoices.append(button);
+  button.addEventListener("click", async () => {
+    const key = activePhoto();
+    if (!key || pendingReactions.has(key)) return;
+    const url = reactionUrl();
+    ++reactionRead;
+    closeReactions();
+    if (url) {
+      pendingReactions.add(key);
+      try {
+        const response = await fetch(url, {method:"POST",
+          headers:{...reactionHeaders(),"Content-Type":"application/json",Prefer:"resolution=merge-duplicates,return=minimal"},
+          body:JSON.stringify({photo_path:key,emoji})});
+        if (!response.ok) throw Error();
+      } catch {
+        reactionStatus.textContent = "A reação ficou como estava. Tente novamente.";
+        return;
+      } finally { pendingReactions.delete(key); }
+    }
+    localReaction(key,emoji);
+    if (activePhoto() === key) {
+      displayReaction(emoji);
+      reactionStatus.textContent = description + (url ? " · Reação compartilhada salva." : " · Reação salva neste navegador.");
+    }
+  });
+}
+reactionToggle.addEventListener("click", () => {
+  if (!reactionChoices.hidden) { closeReactions(); return; }
+  reactionChoices.hidden = false;
+  reactionToggle.setAttribute("aria-expanded","true");
+  (reactionChoices.querySelector('[aria-pressed="true"]') || reactionChoices.firstElementChild).focus();
+});
+addEventListener("storage", event => {
+  if (modal.open && event.key === reactionPrefix + activePhoto() && !reactionPanel.classList.contains("photo-reaction--video")) displayReaction(event.newValue);
+});
 
 function showMedia(index, keepThumbVisible = true) {
   const { entries, item } = viewer;
   if (index < 0 || index >= entries.length) return;
+  mediaView.querySelector(".chapter-modal__turning")?.remove();
   const previous = mediaView.querySelector("figure");
   const direction = Math.sign(index - viewer.index);
   viewer.index = index;
@@ -324,13 +451,18 @@ function showMedia(index, keepThumbVisible = true) {
   $("video", mediaView)?.pause();
   const figure = document.createElement("figure");
   figure.append(element);
-  if (media.legenda && item.id !== "funcionarios") figure.append(text("figcaption", media.legenda));
   mediaView.classList.toggle("chapter-modal__media--video", video);
   mediaView.replaceChildren(figure);
   if (!reduced.matches && previous && direction) {
-    figure.style.transformOrigin = direction > 0 ? "left center" : "right center";
-    turnAlbumPage(figure, direction);
+    turnAlbumPage(previous, figure, direction);
+    memorialAudio.effect("page");
   }
+  reactionPanel.hidden = false;
+  reactionPanel.classList.toggle("photo-reaction--video",video);
+  reactionStatus.textContent = "";
+  closeReactions();
+  if (!video) loadReaction(media.src);
+  else ++reactionRead;
   mediaPosition.textContent = (index + 1) + " / " + entries.length;
   $("#photoPrev").setAttribute("aria-disabled", String(index === 0));
   $("#photoNext").setAttribute("aria-disabled", String(index === entries.length - 1));
@@ -357,6 +489,7 @@ function openChapter(item, selectedMedia, trigger) {
   $("#chapterTitle").textContent = item.titulo;
   $("#chapterText").textContent = item.texto || item.resumo || "";
   mediaView.replaceChildren();
+  reactionPanel.hidden = true;
   mediaStrip.replaceChildren();
   mediaControls.hidden = entries.length < 2;
   mediaStrip.hidden = entries.length < 2;
@@ -389,7 +522,8 @@ watchHorizontalSwipe(mediaView, step => showMedia(viewer.index + step));
 $("#photoPrev").addEventListener("click", () => showMedia(viewer.index - 1));
 $("#photoNext").addEventListener("click", () => showMedia(viewer.index + 1));
 modal.addEventListener("keydown", event => {
-  if (event.target.closest("video") || event.altKey || event.ctrlKey || event.metaKey) return;
+  if (event.key === "Escape" && !reactionChoices.hidden) { event.preventDefault(); closeReactions(); return; }
+  if (event.target.closest("video, #reactionChoices") || event.altKey || event.ctrlKey || event.metaKey) return;
   if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
   event.preventDefault();
   showMedia(viewer.index + (event.key === "ArrowRight" ? 1 : -1));
@@ -403,6 +537,7 @@ modal.addEventListener("click",event=>{
   if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)closeChapter();
 });
 modal.addEventListener("close",()=>{
+  closeReactions();
   $$("video",modal).forEach(v=>v.pause());
   if(previousFocus&&document.contains(previousFocus))previousFocus.focus({preventScroll:true});
 });
@@ -415,7 +550,9 @@ async function fetchJson(path){
 }
 function showTimelinePhoto(image, source) {
   image.src = source;
-  image.closest("figure").hidden = false;
+  const frame = image.closest("figure");
+  frame.hidden = false;
+  if (!frame.closest(".october-track")) revealPhotos([frame]);
 }
 
 async function loadContent(){
@@ -455,6 +592,7 @@ async function loadContent(){
         figure.append(image);
         if (event.id !== "funcionarios" && media.legenda) figure.append(text("figcaption", media.legenda));
         grid.append(figure);
+        revealPhotos([figure]);
       }
     }
     setupFilters(currentEvents);
@@ -543,6 +681,7 @@ try {
 } catch {}
 
 function renderMemories() {
+  [...memoryWall.children].forEach(card => photoReveal.unobserve(card));
   memoryWall.replaceChildren();
   for (const row of [...sharedMemories, ...memories]) {
     const card = text("article", "", "memory-wall__card");
@@ -551,6 +690,7 @@ function renderMemories() {
     memoryWall.append(card);
   }
   memoryWall.hidden = !memoryWall.childElementCount;
+  revealPhotos([...memoryWall.children]);
 }
 renderMemories();
 
