@@ -217,7 +217,7 @@ function mixedOrder(entries) {
 function selectAlbum(filter) {
   const selected = currentEvents.filter(event => event.id !== "funcionarios" && (filter === "todos" || event.id === filter));
   const matches = selected.flatMap(event =>
-    (event.midias || []).filter(media => filePath(media.src)).map(media => ({ media, event }))
+    (event.midias || []).filter(media => filePath(media.src) && !(filter === "todos" && media.soNoAlbum)).map(media => ({ media, event }))
   );
   const seen = new Set();
   const available = matches.filter(({ media }) => {
@@ -261,7 +261,6 @@ function appendArchivePage(moveFocus = false) {
   for (const { media, event } of albumEntries.slice(start, end)) {
     const button = text("button", "", "mosaic__photo");
     button.type = "button";
-    const caption = text("span", media.legenda || event.titulo, "mosaic__caption");
     const src = filePath(media.src);
     if (isVideo(media.src)) {
       button.classList.add("mosaic__photo--video");
@@ -275,7 +274,6 @@ function appendArchivePage(moveFocus = false) {
       image.decoding = "async";
       button.append(image);
     }
-    button.append(caption);
     button.addEventListener("click", () => openChapter(event, media, button));
     fragment.append(button);
   }
@@ -447,7 +445,6 @@ function showMedia(index, keepThumbVisible = true) {
   $("video", mediaView)?.pause();
   const figure = document.createElement("figure");
   figure.append(element);
-  if (media.legenda && item.id !== "funcionarios") figure.append(text("figcaption", media.legenda));
   mediaView.classList.toggle("chapter-modal__media--video", video);
   mediaView.replaceChildren(figure);
   if (!reduced.matches && previous && direction) {

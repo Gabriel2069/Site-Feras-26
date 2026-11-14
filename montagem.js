@@ -9,13 +9,17 @@ const memorialAudio = (() => {
   const music = new Audio(localTrack || window.ferasPreview?.soundtrackPreview || "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ac/a2/55/aca255c7-590d-f0e3-095d-d596b1f3224e/mzaf_5055552058754859050.plus.aac.p.m4a");
   music.preload = "none";
   music.loop = Boolean(localTrack);
-  music.volume = .24;
+  music.volume = localTrack ? .35 : .24;
   let context;
   let master;
   let noise;
   let muted = false;
   let featured = false;
   let soundtrackWanted = Boolean(localTrack);
+  if (localTrack) {
+    trackButton.textContent = "Tocar trilha";
+    trackStatus.textContent = "A trilha acompanha o memorial a partir da primeira interação.";
+  }
 
   function updateMusic() {
     if (muted || featured || !soundtrackWanted) {
@@ -23,15 +27,15 @@ const memorialAudio = (() => {
       return;
     }
     music.play().catch(error => {
-      if (error.name === "AbortError") return;
+      if (error.name === "AbortError" || error.name === "NotAllowedError") return;
       soundtrackWanted = false;
-      trackStatus.textContent = "A prévia não carregou. Tente de novo ou abra a faixa inteira.";
+      trackStatus.textContent = "A trilha não começou. Use o botão para tocar.";
     });
   }
   for (const event of ["play", "pause", "ended"]) {
     music.addEventListener(event, () => {
       const playing = !music.paused && !music.ended;
-      trackButton.textContent = playing ? "Pausar trilha" : "Tocar prévia";
+      trackButton.textContent = playing ? "Pausar trilha" : localTrack ? "Tocar trilha" : "Tocar prévia";
       trackButton.setAttribute("aria-pressed", String(playing));
       if (playing) trackStatus.textContent = "Tocando Outro · M83";
       if (event === "ended") {
@@ -41,7 +45,7 @@ const memorialAudio = (() => {
     });
   }
   trackButton.addEventListener("click", () => {
-    soundtrackWanted = !soundtrackWanted;
+    soundtrackWanted = music.paused && (!featured || !soundtrackWanted);
     if (soundtrackWanted && muted) control.click();
     if (soundtrackWanted && featured) trackStatus.textContent = "A trilha volta depois da cena do baile.";
     updateMusic();
@@ -80,7 +84,7 @@ const memorialAudio = (() => {
     effect(name, delay = 0) {
       if (muted || context?.state !== "running") return;
       const settings = {
-        key:[.037,2200,.11], paper:[.29,780,.075], page:[.17,1220,.065], beat:[.29,140,.50],
+        page:[.17,1220,.065], beat:[.29,140,.50],
       };
       const [duration, frequency, level] = settings[name];
       const start = context.currentTime + delay;
@@ -303,7 +307,6 @@ function watchHorizontalSwipe(surface, changePage, accepts = () => true) {
     }
   }
 
-  let lastCut = 0;
   function draw(time) {
     frame = 0;
     if (motion.matches || film.classList.contains("is-writing")) return;
@@ -314,9 +317,6 @@ function watchHorizontalSwipe(surface, changePage, accepts = () => true) {
     current += (target - current) * (1 - Math.exp(-elapsed / 46));
     if (Math.abs(target - current) < .001) current = target;
     compose(current);
-    const cut = current < .11 ? 0 : current < .41 ? 1 : current < .72 ? 2 : 3;
-    if (cut !== lastCut && Math.abs(target - current) < .16) memorialAudio.effect("paper");
-    lastCut = cut;
     if (current !== target) queue();
   }
   function queue() {
@@ -397,7 +397,6 @@ function watchHorizontalSwipe(surface, changePage, accepts = () => true) {
         const ratio = between(elapsed, from, to);
         const displayed = originals[i].slice(0, Math.floor(originals[i].length * ratio));
         if (line.textContent !== displayed) {
-          if (/\S/.test(displayed.slice(line.textContent.length))) memorialAudio.effect("key");
           line.textContent = displayed;
         }
         line.dataset.active = String(currentLine === i);
