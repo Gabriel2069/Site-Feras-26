@@ -145,6 +145,12 @@ function switchLocation(id) {
   });
   $("#locationName").textContent=loc.nome;
   $("#locationDescription").textContent=loc.descricao || "";
+  const caption = $("#locationDescription").parentElement;
+  if (!reduced.matches && corridor.dataset.place !== id) {
+    caption.getAnimations().forEach(animation => animation.cancel());
+    caption.animate([{opacity:.5,translate:"0 8px"},{opacity:1,translate:"0 0"}],
+      {duration:280,easing:"cubic-bezier(.2,.75,.25,1)"});
+  }
   corridor.dataset.place=id;
   const surface=$("#locationImage");
   const src=filePath(loc.imagem);

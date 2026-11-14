@@ -102,7 +102,7 @@ O pacote privado mantém as miniaturas no HTML e lê as fotos maiores da pasta `
 
 O visor do livro mantém a altura ao alternar retratos, paisagens e vídeos. Use as setas, o teclado ou deslize sobre a foto. Em outubro, o avanço também acompanha a rolagem vertical quando a composição cabe na tela. Nas telas mais baixas, a faixa usa o gesto horizontal nativo.
 
-A cartela e as transições de abertura são silenciosas. A música pode começar depois da primeira interação. O ícone no topo silencia o memorial. O paredão começa quando entra em cena e então toca o trecho na prévia privada. A trilha geral é “Outro”, do M83.
+A cartela usa um clique curto sincronizado com cada tecla. As demais transições de abertura são silenciosas. A música pode começar depois da primeira interação. O ícone no topo silencia o memorial. O paredão começa quando entra em cena e então toca o trecho na prévia privada. A trilha geral é “Outro”, do M83.
 
 ### Reações por foto
 

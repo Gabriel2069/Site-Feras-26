@@ -2244,3 +2244,19 @@ body.cinema-on #masthead .nav__sound { position:absolute; top:14px; right:clamp(
 .photo-reaction button:focus-visible,#soundtrackPlay:focus-visible { outline:2px solid #ac8651; outline-offset:2px; }
 
 .photo-reaction--video { visibility:hidden; }
+
+.corridor[data-place="capela"] .corridor__backdrop {
+  background:radial-gradient(ellipse at 64% 28%,#d9b57560,transparent 41%),linear-gradient(155deg,#15162c,#43324e,#1b243a);
+}
+.corridor[data-place="enfermaria"] .corridor__backdrop {
+  background:radial-gradient(ellipse at 30% 28%,#8fcbbc42,transparent 48%),linear-gradient(145deg,#183133,#223345,#202535);
+}
+.corridor[data-place="laboratorios"] .corridor__backdrop {
+  background:radial-gradient(ellipse at 70% 30%,#867dde63,transparent 42%),linear-gradient(145deg,#1d254e,#2a234c,#183943);
+}
+.corridor button[data-place]:focus-visible {
+  outline:2px solid #f4d692; outline-offset:2px;
+}
+@media (prefers-reduced-motion:reduce) {
+  .baile--playing .paredao__stack i { animation:none; }
+}

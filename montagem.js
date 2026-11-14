@@ -75,7 +75,7 @@ const memorialAudio = (() => {
   });
   for (const event of ["pointerdown","touchend","keydown"]) {
     addEventListener(event, input => {
-      if (!input.target.closest?.("#soundButton")) unlock();
+      if (!input.target.closest?.("#soundButton, #soundtrackPlay")) unlock();
     }, {passive:true});
   }
   return {
@@ -84,7 +84,7 @@ const memorialAudio = (() => {
     effect(name, delay = 0) {
       if (muted || context?.state !== "running") return;
       const settings = {
-        page:[.17,1220,.065], beat:[.29,140,.50],
+        key:[.032,2150,.10], page:[.17,1220,.065], beat:[.29,140,.50],
       };
       const [duration, frequency, level] = settings[name];
       const start = context.currentTime + delay;
@@ -397,6 +397,7 @@ function watchHorizontalSwipe(surface, changePage, accepts = () => true) {
         const ratio = between(elapsed, from, to);
         const displayed = originals[i].slice(0, Math.floor(originals[i].length * ratio));
         if (line.textContent !== displayed) {
+          if (/\S/.test(displayed.slice(line.textContent.length))) memorialAudio.effect("key");
           line.textContent = displayed;
         }
         line.dataset.active = String(currentLine === i);

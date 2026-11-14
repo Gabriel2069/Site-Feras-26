@@ -11,49 +11,67 @@
     {
       "id": "patio",
       "nome": "O PÁTIO",
-      "descricao": "Todo recreio a gente acabava se encontrando por aqui. Só de olhar as fotos já dá vontade de perguntar: lembra daquele dia?",
+      "descricao": "Todo recreio a gente acabava se encontrando por aqui. Só de olhar as fotos já dá vontade de soltar um “lembra daquele dia?”",
       "imagem": null
     },
     {
       "id": "salas",
       "nome": "AS SALAS",
-      "descricao": "No ano em que a gente ganhou o nosso andar, cada sala foi ficando com a cara de quem passava o dia ali.",
+      "descricao": "No ano em que a gente ganhou o nosso andar, cada sala foi ficando com a cara de quem passava o dia ali. Só os de verdade vão lembrar dos antigos formatos das salas.",
       "imagem": null
     },
     {
       "id": "coordenacao",
       "nome": "COORDENAÇÃO E ORIENTADORES",
-      "descricao": "No nosso caminho pela escola também ficavam as salas da coordenação e dos orientadores.",
+      "descricao": "Essas salas já presenciaram cada conversa. Conhecem, literalmente, todas as faces do riso.",
       "imagem": null
     },
     {
       "id": "quadras",
       "nome": "AS QUADRAS",
-      "descricao": "Essas quadras ainda devem saber quantos joelhos ralados e pés torcidos saíram daqui.",
+      "descricao": "Essas quadras ainda devem saber quantos joelhos ralados e pés torcidos saíram daqui. E claro, quantos jogadores foram formados aqui.",
       "imagem": null
+    },
+    {
+      "id": "capela",
+      "imagem": null,
+      "nome": "A CAPELA",
+      "descricao": "Essas paredes sabem do interior de muitas pessoas. Tenho certeza de que aquele sacrário está guardado no coração (muitas vezes inquieto) de muitos."
     },
     {
       "id": "auditorio",
       "nome": "O AUDITÓRIO",
-      "descricao": "No primeiro dia do ENEM, o aviso era encontrar a turma no pátio às 7h30. De lá, a gente ia pro aulão no auditório.",
+      "descricao": "Tantas palestras, apresentações, teatros… São tantas memórias que não cabem em palavras.",
       "imagem": null
     },
     {
       "id": "salao",
       "nome": "O SALÃO DE PALESTRAS",
-      "descricao": "Nos Sprints Finais, coube todo mundo aqui. A gente tava acostumado a assistir aula na própria sala. Dessa vez, foi a turma inteira junta.",
+      "descricao": "Nos Sprints Finais, coube todo mundo aqui. Nós estávamos acostumados a assistir aula na própria sala. Mas dessa vez, éramos todos Feras num mesmo lugar.",
       "imagem": null
+    },
+    {
+      "id": "enfermaria",
+      "imagem": null,
+      "nome": "A ENFERMARIA",
+      "descricao": "Só quem já precisou de verdade sabe do cuidado que tinha nesse lugar. Mas, na verdade, até os que só queriam fugir das aulas também sabiam."
+    },
+    {
+      "id": "laboratorios",
+      "imagem": null,
+      "nome": "OS LABORATÓRIOS",
+      "descricao": "Já cheiraram e misturaram cada coisa aqui. Mas mal se sabe quantos apaixonados por ciência eles influenciaram."
     },
     {
       "id": "recepcao",
       "nome": "A RECEPÇÃO",
-      "descricao": "",
+      "descricao": "Quem nunca implorou o 4º atraso pra tia não sabe o que é a bondade na terra.",
       "imagem": null
     },
     {
       "id": "estudos",
       "nome": "A SALA DE ESTUDOS",
-      "descricao": "",
+      "descricao": "Estudar com o Manteigão e o Carlinhos vigiando é meio infalível. Mas só meio, porque a outra metade é gente cabulando as aulas.",
       "imagem": null
     }
   ],
