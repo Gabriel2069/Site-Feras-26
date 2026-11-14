@@ -174,48 +174,53 @@ const archiveMore = $("#archiveMore");
 let albumEntries = [];
 let albumOffset = 0;
 
-function mixedOrder(entries) {
-  const groups = new Map();
-  for (const entry of entries) {
-    const key = entry.event.id;
-    if (!groups.has(key)) groups.set(key, []);
-    groups.get(key).push(entry);
+let relatedPhotos = new Map();
+
+function shufflePhotos(items) {
+  for (let i = items.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [items[i], items[j]] = [items[j], items[i]];
   }
-  // Separate neighbouring camera bursts before alternating albums.
-  for (const group of groups.values()) {
-    const separated = new Map();
-    for (const entry of group) {
-      const series = entry.media.serie || entry.media.src;
-      if (!separated.has(series)) separated.set(series, []);
-      separated.get(series).push(entry);
-    }
-    const buckets = [...separated.values()];
-    for (const bucket of buckets) {
-      for (let i = bucket.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [bucket[i], bucket[j]] = [bucket[j], bucket[i]];
+  return items;
+}
+
+function mixedOrder(entries) {
+  const pool = shufflePhotos(entries.map(entry => ({
+    ...entry,
+    scene: relatedPhotos.get(entry.media.src) ?? entry.media.src,
+    series: entry.media.serie || entry.media.src
+  })));
+  const seenScenes = new Set();
+  const recent = [];
+  const ordered = [];
+  while (pool.length) {
+    let bestIndex = 0;
+    let bestScore = Infinity;
+    const penalties = new Map();
+    for (const [distance, previous] of recent.entries()) {
+      const weight = (12 - distance) / 12;
+      for (const [key, cost] of [["scene:" + previous.scene, 30],
+        ["series:" + previous.series, 5], ["event:" + previous.event.id, 2]]) {
+        penalties.set(key, (penalties.get(key) ?? 0) + weight * cost);
       }
     }
-    buckets.sort((a, b) => b.length - a.length);
-    group.length = 0;
-    let active = buckets;
-    while (active.length) {
-      for (const bucket of active) group.push(bucket.pop());
-      active = active.filter(bucket => bucket.length);
+    for (let i = 0; i < pool.length; i++) {
+      const entry = pool[i];
+      const score = (seenScenes.has(entry.scene) ? 8 : 0) +
+        (penalties.get("scene:" + entry.scene) ?? 0) +
+        (penalties.get("series:" + entry.series) ?? 0) +
+        (penalties.get("event:" + entry.event.id) ?? 0);
+      if (score < bestScore) {
+        bestIndex = i;
+        bestScore = score;
+        if (score === 0) break;
+      }
     }
-  }
-  const order = [...groups.entries()];
-  for (let i = order.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [order[i], order[j]] = [order[j], order[i]];
-  }
-  const remaining = new Map(order);
-  const ordered = [];
-  while (remaining.size) {
-    for (const [key, group] of remaining) {
-      ordered.push(group.shift());
-      if (!group.length) remaining.delete(key);
-    }
+    const [entry] = pool.splice(bestIndex, 1);
+    ordered.push(entry);
+    seenScenes.add(entry.scene);
+    recent.unshift(entry);
+    if (recent.length > 12) recent.pop();
   }
   return ordered;
 }
@@ -274,10 +279,10 @@ function appendArchivePage(moveFocus = false) {
       button.setAttribute("aria-label", "Ver vídeo: " + (media.alt || event.titulo));
     } else {
       const image = document.createElement("img");
-      image.src = src;
       image.alt = media.alt || event.titulo;
       image.loading = "lazy";
       image.decoding = "async";
+      developPhoto(image, src);
       button.append(image);
     }
     button.addEventListener("click", () => openChapter(event, media, button));
@@ -452,7 +457,8 @@ function showMedia(index, keepThumbVisible = true) {
   if (detail || hostedDetail) {
     element.addEventListener("error", () => { element.src = src; }, {once:true});
   }
-  element.src = detail || hostedDetail || src;
+  if (video) element.src = src;
+  else developPhoto(element, detail || hostedDetail || src);
   $("video", mediaView)?.pause();
   const figure = document.createElement("figure");
   figure.append(element);
@@ -487,7 +493,11 @@ function showMedia(index, keepThumbVisible = true) {
 function openChapter(item, selectedMedia, trigger) {
   previousFocus = trigger;
   modal.dataset.album = item.id;
-  const entries = (item.midias || []).map(media => ({ media, src: filePath(media.src) })).filter(entry => entry.src);
+  const chapterMedia = item.midias || [];
+  const throughMosaic = trigger.classList.contains("mosaic__photo");
+  const filteredMedia = throughMosaic ? albumEntries.filter(entry => entry.event === item).map(entry => entry.media) : [];
+  const orderedMedia = [...new Set([...filteredMedia, ...chapterMedia])];
+  const entries = orderedMedia.map(media => ({media, src:filePath(media.src)})).filter(entry => entry.src);
   viewer = { item, entries, index: 0 };
   $("#chapterCode").textContent = item.categoria || "Acervo";
   $("#chapterCategory").textContent = item.subtitulo || "";
@@ -555,14 +565,20 @@ async function fetchJson(path){
   return await r.json();
 }
 function showTimelinePhoto(image, source) {
-  image.src = source;
+  developPhoto(image, source);
   const frame = image.closest("figure");
   frame.hidden = false;
   if (!frame.closest(".october-track")) revealPhotos([frame]);
 }
 
 async function loadContent(){
-  const [eventsResult,scenesResult]=await Promise.allSettled([fetchJson("./content/acervo.json"),fetchJson("./content/cenas.json")]);
+  const [eventsResult, scenesResult, relatedResult] = await Promise.allSettled([
+    fetchJson("./content/acervo.json"), fetchJson("./content/cenas.json"),
+    fetch("./content/fotos-semelhantes.json").then(response => response.ok ? response.json() : [])
+  ]);
+  if (relatedResult.status === "fulfilled" && Array.isArray(relatedResult.value)) {
+    relatedPhotos = new Map(relatedResult.value.flatMap((group, index) => group.map(src => [src, index])));
+  }
   if(eventsResult.status==="fulfilled"){
     const data=eventsResult.value;
     currentEvents=Array.isArray(data.eventos)?data.eventos:[];
@@ -592,9 +608,9 @@ async function loadContent(){
         if (!source) continue;
         const figure = document.createElement("figure");
         const image = document.createElement("img");
-        image.src = source;
         image.alt = media.alt || event.titulo;
         image.loading = "lazy";
+        developPhoto(image, source);
         figure.append(image);
         if (event.id !== "funcionarios" && media.legenda) figure.append(text("figcaption", media.legenda));
         grid.append(figure);
@@ -610,15 +626,15 @@ async function loadContent(){
     const data=scenesResult.value;
     for (const image of document.querySelectorAll(".film [data-shot]")) {
       const source = filePath(data.planos?.[image.dataset.shot]);
-      if (source && !("previewShot" in image.dataset)) image.src = source;
+      if (source && !("previewShot" in image.dataset)) developPhoto(image, source);
       if (!image.hasAttribute("src") && image.dataset.shot === "turma-abertura") {
         const fallback = filePath(data.planos?.patio);
-        if (fallback) image.src = fallback;
+        if (fallback) developPhoto(image, fallback);
       }
     }
     for (const image of $$("[data-finale-shot]")) {
       const source = filePath(data.planos?.[image.dataset.finaleShot]);
-      if (source && !image.hasAttribute("src")) image.src = source;
+      if (source && !image.hasAttribute("src")) developPhoto(image, source);
     }
     for (const image of $$("[data-timeline-plan]")) {
       const source = filePath(data.planos?.[image.dataset.timelinePlan]);

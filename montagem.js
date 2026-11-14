@@ -1,5 +1,30 @@
 "use strict";
 
+// Keep the paper in place while the browser fetches and decodes the image.
+function developPhoto(image, source) {
+  image.classList.remove("photo-developed", "photo-unavailable");
+  image.classList.add("photo-developing");
+  let settled = false;
+  const ready = async () => {
+    if (settled || !image.naturalWidth) return;
+    settled = true;
+    try { await image.decode(); } catch {}
+    image.classList.replace("photo-developing", "photo-developed");
+  };
+  image.addEventListener("load", ready, {once:true});
+  image.addEventListener("error", () => {
+    image.classList.replace("photo-developing", "photo-unavailable");
+    image.addEventListener("load", () => {
+      image.classList.remove("photo-unavailable");
+      image.classList.add("photo-developed");
+    }, {once:true});
+  }, {once:true});
+  image.src = source;
+  if (image.complete) ready();
+}
+
+
+
 const memorialAudio = (() => {
   const control = document.querySelector("#soundButton");
   const AudioEngine = window.AudioContext || window.webkitAudioContext;
@@ -148,7 +173,7 @@ function watchHorizontalSwipe(surface, changePage, accepts = () => true) {
   for (const image of film.querySelectorAll("[data-shot]")) {
     const key = image.dataset.shot;
     const src = shot[key] ?? graphics[key];
-    if (src) image.src = src;
+    if (src) developPhoto(image, src);
     if (shot[key]) image.dataset.previewShot = "";
   }
   if (window.ferasPreview || window.ferasHosted) document.body.classList.add("preview-media");
@@ -563,7 +588,7 @@ function watchHorizontalSwipe(surface, changePage, accepts = () => true) {
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   for (const image of stage.querySelectorAll("[data-finale-shot]")) {
     const src = (window.ferasPreview?.shots ?? window.ferasHosted?.shots)?.[image.dataset.finaleShot];
-    if (src) image.src = src;
+    if (src) developPhoto(image, src);
   }
 
   let frame = 0;
