@@ -1927,7 +1927,6 @@ body.preview-media .people__visual, body.preview-media .small__filmstrip { opaci
   overflow:clip;
   background:#10101b;
 }
-.finale--directed { min-height:169svh; overflow:visible; }
 .finale__stage {
   position:relative;
   display:grid;
@@ -1939,7 +1938,6 @@ body.preview-media .people__visual, body.preview-media .small__filmstrip { opaci
     radial-gradient(ellipse at 49% 50%,#22203b 0,transparent 65%),
     linear-gradient(145deg,#181a2b,#0d0d16 77%);
 }
-.finale--directed .finale__stage { position:sticky; top:0; }
 .finale__art,.finale__veil,.finale__contact { position:absolute; inset:0; pointer-events:none; }
 .finale__art { z-index:-1; }
 .finale__art::after {
@@ -2061,7 +2059,6 @@ body.preview-media .people__visual, body.preview-media .small__filmstrip { opaci
 .footer__credit { justify-self:center; text-align:center; }
 .footer > a { justify-self:end; }
 @media (max-width:740px) {
-  .finale--directed { min-height:155svh; }
   .finale__print--back { top:6%; left:0; }
   .finale__print--main { left:-6%; bottom:5%; }
   .finale__print--front { right:-5%; top:13%; }

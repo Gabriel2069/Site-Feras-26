@@ -592,14 +592,9 @@ function watchHorizontalSwipe(surface, changePage, accepts = () => true) {
   }
 
   let frame = 0;
+  let finished = false;
   const clamp = n => Math.max(0, Math.min(1, n));
-  function render() {
-    frame = 0;
-    if (reduced.matches) return;
-    const bounds = finale.getBoundingClientRect();
-    if (bounds.bottom < 0 || bounds.top > innerHeight) return;
-    const travel = Math.max(1, finale.offsetHeight - stage.offsetHeight);
-    const progress = clamp((stage.offsetHeight * .4 - bounds.top) / (travel + stage.offsetHeight * .4));
+  function render(progress) {
     stage.style.setProperty("--finale-progress", progress);
     for (const [index, print] of prints.entries()) {
       const arrive = clamp((progress - index * .085) / .45);
@@ -607,24 +602,30 @@ function watchHorizontalSwipe(surface, changePage, accepts = () => true) {
       print.style.setProperty("--print-arrival", eased);
     }
   }
-  function queue() {
-    if (!frame) frame = requestAnimationFrame(render);
+  function finish() {
+    finished = true;
+    cancelAnimationFrame(frame);
+    render(1);
   }
-  function configure() {
-    finale.classList.toggle("finale--directed", !reduced.matches);
-    queue();
-  }
-  window.addEventListener("scroll", queue, {passive:true});
-  window.addEventListener("resize", queue, {passive:true});
-  reduced.addEventListener("change", configure);
-  stage.addEventListener("focusin", event => {
-    if (!reduced.matches && event.target.closest(".finale__restart")) {
-      const bounds = finale.getBoundingClientRect();
-      const end = finale.offsetHeight - stage.offsetHeight;
-      if (bounds.top + end > 16) window.scrollTo({top: scrollY + bounds.top + end, behavior:"instant"});
+  const view = new IntersectionObserver(entries => {
+    if (finished || frame || !entries.some(entry => entry.isIntersecting)) return;
+    view.disconnect();
+    const started = performance.now();
+    function advance(now) {
+      const progress = clamp((now - started) / 2300);
+      render(progress);
+      if (progress === 1) finish();
+      else frame = requestAnimationFrame(advance);
     }
-  });
-  configure();
+    frame = requestAnimationFrame(advance);
+  }, {rootMargin:"0px 0px -24% 0px"});
+  if (reduced.matches) finish();
+  else {
+    render(0);
+    view.observe(finale);
+  }
+  reduced.addEventListener("change", () => { if (reduced.matches) finish(); });
+  stage.addEventListener("focusin", finish, {once:true});
 })();
 
 (() => {
