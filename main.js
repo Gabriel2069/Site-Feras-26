@@ -588,7 +588,8 @@ async function loadContent(){
       const source = filePath(photo?.src);
       if (!source || isVideo(photo.src)) continue;
       photo.alt = image.alt;
-      photo.legenda = image.closest("figure").querySelector("figcaption").textContent;
+      const caption = image.closest("figure").querySelector("figcaption");
+      if (caption) photo.legenda = caption.textContent;
       showTimelinePhoto(image, source);
     }
     for (const button of $$("[data-open-event]")) {
