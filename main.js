@@ -452,8 +452,9 @@ function showMedia(index, keepThumbVisible = true) {
   const detail = !video && /^\.\/media\/[a-zA-Z0-9/_-]+\.webp$/i.test(media.src)
     ? window.ferasPreview?.detail?.[media.src] || (window.ferasPreview?.hasLocalDetails
       ? media.src.replace("./media/", "./fotos/") : null) : null;
-  const hostedDetail = window.ferasHosted?.details.includes(media.src.slice(8))
-    ? window.ferasHosted.base + "detail/" + media.src.slice(8) : null;
+  const hasHostedDetail = media.hd === true || window.ferasHosted?.details?.includes(media.src.slice(8));
+  const hostedDetail = !video && window.ferasHosted?.base && hasHostedDetail
+    ? new URL("detail/" + media.src.slice(8), window.ferasHosted.base).href : null;
   if (detail || hostedDetail) {
     element.addEventListener("error", () => { element.src = src; }, {once:true});
   }
