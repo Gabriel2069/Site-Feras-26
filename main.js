@@ -570,8 +570,8 @@ modal.addEventListener("close",()=>{
 async function fetchJson(path){
   if (Object.hasOwn(window.ferasPreview?.content ?? {}, path)) return window.ferasPreview.content[path];
   const url = window.ferasHosted?.base ? new URL(path, window.ferasHosted.base) : path;
-  if (url instanceof URL && path === "./content/cenas.json") {
-    url.searchParams.set("v", "fotos-da-escola");
+  if (url instanceof URL && ["./content/acervo.json", "./content/cenas.json"].includes(path)) {
+    url.searchParams.set("v", "curadoria-turmas");
   }
   const r=await fetch(url);
   if(!r.ok)throw Error("Não foi possível abrir "+path+": HTTP "+r.status);
