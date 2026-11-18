@@ -483,9 +483,13 @@
           <button type="button" data-place="salao">SALÃO DE PALESTRAS</button>
           <button type="button" data-place="enfermaria">ENFERMARIA</button>
           <button type="button" data-place="laboratorios">LABORATÓRIOS</button>
+          <button type="button" data-place="laboratorio-bancadas">BANCADAS DO LABORATÓRIO</button>
+          <button type="button" data-place="biblioteca">BIBLIOTECA</button>
+          <button type="button" data-place="atendimento">ATENDIMENTO ESCOLAR</button>
           <button type="button" data-place="recepcao">RECEPÇÃO</button>
           <button type="button" data-place="estudos">SALA DE ESTUDOS</button>
         </div>
+        <a class="memory-link location-full" id="locationFull" target="_blank" rel="noopener" hidden>Abrir foto em alta</a>
 
       </div>
     </div>
@@ -509,10 +513,6 @@
     <div class="section-wrap">
       <h2 id="peopleTitle">A quem fez parte <em>do nosso ano.</em></h2>
       <div class="memory-people__spread">
-        <div class="staff-portrait">
-          <div class="timeline-photos staff-gallery" data-event-frames="funcionarios" data-reveal></div>
-          <button class="memory-link" type="button" data-open-event="funcionarios" hidden>Ver fotos dos funcionários <span aria-hidden="true"><svg class="ui-arrow" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18 18 6M9 6h9v9"/></svg></span></button>
-        </div>
         <div class="memory-people__notes">
           <article>
             <p class="eyebrow">Funcionários</p>
@@ -523,6 +523,7 @@
           </article>
         </div>
       </div>
+      <ul class="staff-mural" id="staffMural" aria-label="Mural dos funcionários" hidden></ul>
     </div>
   </section>
 
