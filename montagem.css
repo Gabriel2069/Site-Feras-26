@@ -1561,7 +1561,7 @@ body.preview-media .people__visual, body.preview-media .small__filmstrip { opaci
   /* The group photo is horizontal. Leave room for its animated zoom inside the paper border. */
   .film__photograph {
     inset:41% auto auto 50%;
-    width:min(calc(100% - 2 * var(--opening-gutter)),58svh);
+    width:min(calc(100% - 2 * var(--opening-gutter)),54svh);
     aspect-ratio:17/10;
     box-sizing:border-box;
     padding:clamp(10px,3vw,17px);
