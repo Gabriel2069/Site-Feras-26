@@ -10,16 +10,16 @@
 <title>FERAS 26 · Depois do Sinal</title>
 <link rel="icon" href="assets/marca-garra-clara.webp" type="image/webp">
 <link rel="preconnect" href="https://dvvpnxbcfajuoybfcslc.supabase.co" crossorigin>
-<link rel="preload" as="fetch" href="https://dvvpnxbcfajuoybfcslc.supabase.co/storage/v1/object/public/memorial-publico/r1/content/acervo.json?v=curadoria-turmas" crossorigin>
+<link rel="preload" as="fetch" href="https://dvvpnxbcfajuoybfcslc.supabase.co/storage/v1/object/public/memorial-publico/r1/content/acervo.json?v=revisao-do-acervo" crossorigin>
 <link rel="preload" as="image" href="https://dvvpnxbcfajuoybfcslc.supabase.co/storage/v1/object/public/memorial-publico/r1/cenas/turma-abertura.webp" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;1,500;1,600&family=DM+Sans:wght@400;500;600;700&family=Caveat:wght@600;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./styles.css">
-<link rel="stylesheet" href="./montagem.css?v=curadoria-turmas">
-<script src="./content/public-config.js?v=curadoria-turmas" defer></script>
+<link rel="stylesheet" href="./montagem.css?v=revisao-do-acervo">
+<script src="./content/public-config.js?v=revisao-do-acervo" defer></script>
 <script src="./montagem.js" defer></script>
-<script src="./main.js?v=curadoria-turmas" defer></script>
+<script src="./main.js?v=revisao-do-acervo" defer></script>
 </head>
 <body>
 <a class="skip" href="#caminho">Ir para os lugares da escola</a>
@@ -472,6 +472,11 @@
       </div>
       <div class="passage__aside">
 
+        <div class="location-photos" id="locationPhotos" role="group" aria-label="Fotos do lugar" hidden>
+          <span id="locationPhotoCount"></span>
+          <button type="button" id="locationNext">Próxima foto</button>
+          <button type="button" id="locationPlayback">Pausar</button>
+        </div>
         <div class="place-switch" role="group" aria-label="Escolher lugar">
           <button type="button" data-place="portao">GUARITA</button>
           <button type="button" data-place="patio" class="is-active">PÁTIO</button>
@@ -482,8 +487,7 @@
           <button type="button" data-place="auditorio">AUDITÓRIO</button>
           <button type="button" data-place="salao">SALÃO DE PALESTRAS</button>
           <button type="button" data-place="enfermaria">ENFERMARIA</button>
-          <button type="button" data-place="laboratorios">LABORATÓRIOS</button>
-          <button type="button" data-place="laboratorio-bancadas">BANCADAS DO LABORATÓRIO</button>
+          <button type="button" data-place="laboratorios">LABORATÓRIO</button>
           <button type="button" data-place="biblioteca">BIBLIOTECA</button>
           <button type="button" data-place="recepcao">RECEPÇÃO</button>
           <button type="button" data-place="estudos">SALA DE ESTUDOS</button>

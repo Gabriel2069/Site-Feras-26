@@ -2345,6 +2345,25 @@ body.cinema-on #masthead .nav__sound { position:absolute; top:14px; right:clamp(
 }
 .staff-mural__card--wide img { aspect-ratio:3/2; }
 .location-full { margin-top:1rem; }
+.location-photos {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:.45rem .65rem;
+  margin-block:0 .75rem;
+  font:600 .78rem "DM Sans",sans-serif;
+}
+.location-photos[hidden], .location-photos button[hidden] { display:none; }
+.location-photos button {
+  min-height:44px;
+  padding:.25rem .7rem;
+  border:1px solid #cddcb560;
+  border-radius:.3rem;
+  background:transparent;
+  color:inherit;
+  cursor:pointer;
+}
+.location-photos button:hover, .location-photos button:focus-visible { border-color:#cddcb5; }
 #corridor[data-place="biblioteca"] .corridor__image.has-image {
   background-size:contain;
   background-position:center;
