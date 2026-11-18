@@ -654,9 +654,12 @@ modal.addEventListener("close",()=>{
 
 async function fetchJson(path){
   if (Object.hasOwn(window.ferasPreview?.content ?? {}, path)) return window.ferasPreview.content[path];
-  const url = window.ferasHosted?.base ? new URL(path, window.ferasHosted.base) : path;
+  // Os lugares usam o catálogo versionado junto do site. As mídias seguem no Storage.
+  const url = path === "./content/cenas.json"
+    ? new URL(path, document.baseURI)
+    : window.ferasHosted?.base ? new URL(path, window.ferasHosted.base) : path;
   if (url instanceof URL && ["./content/acervo.json", "./content/cenas.json"].includes(path)) {
-    url.searchParams.set("v", "restaurante-copa");
+    url.searchParams.set("v", "copa-guarita");
   }
   const r=await fetch(url);
   if(!r.ok)throw Error("Não foi possível abrir "+path+": HTTP "+r.status);
