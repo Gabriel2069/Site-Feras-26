@@ -1304,7 +1304,11 @@ body.preview-media .people__visual, body.preview-media .small__filmstrip { opaci
 .film__collective .film__title { text-shadow:0 1px 15px #141633; }
 .film__grid { gap:clamp(5px,.9vw,17px); }
 .film__grid > div { border:clamp(3px,.45vw,9px) solid var(--feras-paper); }
-.film__grid img { filter:saturate(.97) contrast(1.03); }
+.film__grid img {
+  background:var(--feras-paper);
+  object-fit:contain;
+  filter:saturate(.97) contrast(1.03);
+}
 
 .film__splice {
   position:absolute;
@@ -1993,7 +1997,7 @@ body.preview-media .people__visual, body.preview-media .small__filmstrip { opaci
   position:absolute;
   width:var(--print-width);
   margin:0;
-  aspect-ratio:var(--print-ratio,4/5);
+  aspect-ratio:5/4;
   padding:clamp(4px,.65vw,10px);
   padding-bottom:clamp(10px,1.6vw,24px);
   background:#ded2b8;
@@ -2003,13 +2007,13 @@ body.preview-media .people__visual, body.preview-media .small__filmstrip { opaci
     rotate(calc(var(--tilt) + (1 - var(--print-arrival)) * var(--rotation)));
 }
 .finale__print:not(:has(img[src])) { display:none; }
-.finale__print img { display:block; width:100%; height:100%; object-fit:cover; object-position:50% 56%; }
+.finale__print img { display:block; width:100%; height:100%; object-fit:contain; }
 .finale__print--back {
   --print-width:clamp(120px,17vw,260px); --tilt:-12deg; --rotation:-23deg; --from-x:-33vw; --from-y:-12vh;
   top:12%; left:5%;
 }
 .finale__print--main {
-  --print-width:clamp(190px,29vw,440px); --print-ratio:5/4; --tilt:-7deg; --rotation:17deg; --from-x:-23vw; --from-y:25vh;
+  --print-width:clamp(190px,29vw,440px); --tilt:-7deg; --rotation:17deg; --from-x:-23vw; --from-y:25vh;
   bottom:9%; left:6%;
 }
 .finale__print--front {
