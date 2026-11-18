@@ -27,6 +27,10 @@ function filePath(src) {
   return window.ferasHosted?.base ? window.ferasHosted.base + src.slice(2) : src;
 }
 function isVideo(src) { return /\.(mp4|webm)$/i.test(src); }
+function fullPhotoPath(src, highResolution) {
+  if (highResolution !== true || !window.ferasHosted?.base || !filePath(src) || isVideo(src)) return null;
+  return new URL("detail/" + src.slice(8), window.ferasHosted.base).href;
+}
 function text(tag, value, cls) {
   const el = document.createElement(tag);
   if (cls) el.className = cls;
@@ -154,6 +158,11 @@ function switchLocation(id) {
   corridor.dataset.place=id;
   const surface=$("#locationImage");
   const src=filePath(loc.imagem);
+  const fullLink=$("#locationFull");
+  const full=fullPhotoPath(loc.imagem,loc.hd);
+  fullLink.hidden=!full;
+  if(full) fullLink.href=full;
+  else fullLink.removeAttribute("href");
   if(src && !isVideo(src)) {
     surface.style.backgroundImage="url('"+src+"')";
     surface.classList.add("has-image");
@@ -572,6 +581,32 @@ function showTimelinePhoto(image, source) {
   if (!frame.closest(".october-track")) revealPhotos([frame]);
 }
 
+function loadStaffMural(event) {
+  const mural = $("#staffMural");
+  const portraits = document.createDocumentFragment();
+  for (const [index, media] of (event?.midias ?? []).entries()) {
+    const source = filePath(media.src);
+    if (!source || isVideo(media.src)) continue;
+    const card = text("li", "", "staff-mural__card");
+    if (media.largura > media.altura) card.classList.add("staff-mural__card--wide");
+    const link = document.createElement("a");
+    link.href = fullPhotoPath(media.src, media.hd) ?? source;
+    link.target = "_blank";
+    link.rel = "noopener";
+    link.setAttribute("aria-label", "Abrir retrato " + (index + 1) + " do mural em nova aba");
+    const image = document.createElement("img");
+    image.alt = media.alt || "Retrato da equipe";
+    image.loading = "lazy";
+    image.decoding = "async";
+    image.src = source;
+    link.append(image);
+    card.append(link);
+    portraits.append(card);
+  }
+  mural.replaceChildren(portraits);
+  mural.hidden = mural.childElementCount === 0;
+}
+
 async function loadContent(){
   const [eventsResult, scenesResult, relatedResult] = await Promise.allSettled([
     fetchJson("./content/acervo.json"), fetchJson("./content/cenas.json"),
@@ -619,6 +654,7 @@ async function loadContent(){
         revealPhotos([figure]);
       }
     }
+    loadStaffMural(currentEvents.find(event => event.id === "funcionarios"));
     setupFilters(currentEvents);
   }else{
     archiveNote.textContent = "O álbum está indisponível agora.";

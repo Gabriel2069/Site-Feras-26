@@ -2307,3 +2307,45 @@ body.cinema-on #masthead .nav__sound { position:absolute; top:14px; right:clamp(
   57% { opacity:.88; filter:brightness(1.13) saturate(.78); }
   100% { opacity:1; clip-path:inset(0); }
 }
+
+/* Retratos da equipe reunidos na própria homenagem. */
+#pessoas .memory-people__spread { grid-template-columns:minmax(0,1fr); }
+#pessoas .memory-people__notes article p:not(.eyebrow) { max-width:72ch; }
+.staff-mural {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(clamp(115px,15vw,175px),1fr));
+  gap:clamp(9px,1.6vw,22px);
+  margin:clamp(22px,4vw,52px) 0 0;
+  padding:0;
+  list-style:none;
+}
+.staff-mural[hidden], .location-full[hidden] { display:none; }
+.staff-mural__card { min-width:0; }
+.staff-mural__card--wide { grid-column:span 2; }
+.staff-mural__card a {
+  display:block;
+  height:100%;
+  padding:clamp(4px,.7vw,9px);
+  background:var(--feras-paper);
+  box-shadow:0 4px 12px #0b0a0c54;
+}
+.staff-mural__card:nth-child(4n + 2) a { background:#dcd5fb; }
+.staff-mural__card:nth-child(4n + 4) a { background:#cbe7db; }
+.staff-mural__card a:focus-visible { outline:2px solid #f3d49a; outline-offset:3px; }
+.staff-mural__card img {
+  display:block;
+  width:100%;
+  aspect-ratio:3/4;
+  object-fit:contain;
+  background:#26213b;
+}
+.staff-mural__card--wide img { aspect-ratio:3/2; }
+.location-full { margin-top:1rem; }
+#corridor[data-place="biblioteca"] .corridor__image.has-image {
+  background-size:contain;
+  background-position:center;
+  background-repeat:no-repeat;
+}
+@media (max-width:560px) {
+  .staff-mural { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
