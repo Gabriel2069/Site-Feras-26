@@ -20,6 +20,40 @@ let cinemaMode = false;
 let rafPending = false;
 let previousFocus = null;
 
+const returnTimeout = 5 * 60 * 1000;
+const returnKey = "feras26:away:" + location.pathname;
+const navigationType = performance.getEntriesByType("navigation")[0]?.type;
+let awaySince = null;
+if (navigationType === "reload" || navigationType === "back_forward") {
+  try { awaySince = Number(sessionStorage.getItem(returnKey)) || null; } catch {}
+}
+
+function rememberDeparture() {
+  awaySince ??= Date.now();
+  try { sessionStorage.setItem(returnKey, String(awaySince)); } catch {}
+}
+
+function returnToPage() {
+  if (document.hidden) return;
+  const wasAway = awaySince !== null && Date.now() - awaySince >= returnTimeout;
+  awaySince = null;
+  try { sessionStorage.removeItem(returnKey); } catch {}
+  if (!wasAway) return;
+
+  closeChapter();
+  if (miniDialog.open) miniDialog.close();
+  setMenu(false, false);
+  if (location.hash) history.replaceState(history.state, "", location.pathname + location.search);
+  requestAnimationFrame(() => scrollTo({top:0, left:0, behavior:"instant"}));
+}
+
+addEventListener("pagehide", rememberDeparture);
+addEventListener("pageshow", returnToPage);
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) rememberDeparture();
+  else returnToPage();
+});
+
 function filePath(src) {
   if (typeof src !== "string") return null;
   if (Object.hasOwn(window.ferasPreview?.images ?? {}, src)) return window.ferasPreview.images[src];
@@ -139,45 +173,91 @@ const defaultLocations=[
   {id:"salas",nome:"AS SALAS",numero:"03",descricao:"Cada uma com seu jeito, suas conversas e seus professores.",imagem:null},
   {id:"auditorio",nome:"O AUDITÓRIO",numero:"04",descricao:"Tem aulão e outros encontros que merecem entrar no arquivo.",imagem:null}
 ];
+const locationPhotos = $("#locationPhotos");
+const locationPhotoCount = $("#locationPhotoCount");
+const locationPlayback = $("#locationPlayback");
+const locationSurface = $("#locationImage");
+const locationFull = $("#locationFull");
+let placePhotos = [];
+let placePhotoIndex = 0;
+let placePhotoTimer;
+let placePaused = false;
+let placeVisible = false;
+
+function schedulePlacePhoto() {
+  clearTimeout(placePhotoTimer);
+  if (placePhotos.length > 1 && placeVisible && !placePaused && !document.hidden && !reduced.matches) {
+    placePhotoTimer = setTimeout(nextPlacePhoto, 5000);
+  }
+}
+
+function showPlacePhoto() {
+  const photo = placePhotos[placePhotoIndex];
+  const src = filePath(photo?.imagem);
+  const full = fullPhotoPath(photo?.imagem, photo?.hd);
+  locationFull.hidden = !full;
+  if (full) locationFull.href = full;
+  else locationFull.removeAttribute("href");
+  locationSurface.classList.toggle("has-image", Boolean(src));
+  locationSurface.style.backgroundImage = src ? 'url("' + src + '")' : "";
+  if (src && !reduced.matches) {
+    locationSurface.getAnimations().forEach(animation => animation.cancel());
+    locationSurface.animate([{opacity:.3, transform:"scale(1.045)"}, {opacity:1, transform:"scale(1)"}],
+      {duration:360, easing:"cubic-bezier(.2,.7,.3,1)"});
+  }
+  locationPhotoCount.textContent = placePhotos.length > 1 ? (placePhotoIndex + 1) + " / " + placePhotos.length : "";
+}
+
+function nextPlacePhoto() {
+  if (placePhotos.length < 2) return;
+  placePhotoIndex = (placePhotoIndex + 1) % placePhotos.length;
+  showPlacePhoto();
+  schedulePlacePhoto();
+}
+
 function switchLocation(id) {
-  const loc=(currentScenes.locais||[]).find(x=>x.id===id) || defaultLocations.find(x=>x.id===id);
-  if(!loc)return;
-  $$("button[data-place]").forEach(b=>{
-    const active=b.dataset.place===id;
-    b.classList.toggle("is-active",active);
-    b.setAttribute("aria-pressed",String(active));
+  const loc = currentScenes.locais.find(item => item.id === id) || defaultLocations.find(item => item.id === id);
+  if (!loc) return;
+  $$("button[data-place]").forEach(button => {
+    const active = button.dataset.place === id;
+    button.classList.toggle("is-active", active);
+    button.setAttribute("aria-pressed", String(active));
   });
-  $("#locationName").textContent=loc.nome;
-  $("#locationDescription").textContent=loc.descricao || "";
+  $("#locationName").textContent = loc.nome;
+  $("#locationDescription").textContent = loc.descricao || "";
   const caption = $("#locationDescription").parentElement;
   if (!reduced.matches && corridor.dataset.place !== id) {
     caption.getAnimations().forEach(animation => animation.cancel());
-    caption.animate([{opacity:.5,translate:"0 8px"},{opacity:1,translate:"0 0"}],
-      {duration:280,easing:"cubic-bezier(.2,.75,.25,1)"});
+    caption.animate([{opacity:.5, translate:"0 8px"}, {opacity:1, translate:"0 0"}],
+      {duration:280, easing:"cubic-bezier(.2,.75,.25,1)"});
   }
-  corridor.dataset.place=id;
-  const surface=$("#locationImage");
-  const src=filePath(loc.imagem);
-  const fullLink=$("#locationFull");
-  const full=fullPhotoPath(loc.imagem,loc.hd);
-  fullLink.hidden=!full;
-  if(full) fullLink.href=full;
-  else fullLink.removeAttribute("href");
-  if(src && !isVideo(src)) {
-    surface.style.backgroundImage="url('"+src+"')";
-    surface.classList.add("has-image");
-    if (!reduced.matches) {
-      surface.getAnimations().forEach(animation => animation.cancel());
-      surface.animate([{ opacity: .3, transform: "scale(1.045)" }, { opacity: 1, transform: "scale(1)" }], {
-        duration: 360, easing: "cubic-bezier(.2,.7,.3,1)"
-      });
-    }
-  } else {
-    surface.style.backgroundImage="";
-    surface.classList.remove("has-image");
-  }
+  corridor.dataset.place = id;
+
+  const photos = Array.isArray(loc.fotos) ? loc.fotos : [loc];
+  placePhotos = photos.filter(photo => filePath(photo?.imagem) && !isVideo(photo.imagem));
+  placePhotoIndex = 0;
+  locationPhotos.hidden = placePhotos.length < 2;
+  showPlacePhoto();
+  schedulePlacePhoto();
 }
-$$("button[data-place]").forEach(b=>b.addEventListener("click",()=>switchLocation(b.dataset.place)));
+
+$$("button[data-place]").forEach(button => button.addEventListener("click", () => switchLocation(button.dataset.place)));
+$("#locationNext").addEventListener("click", nextPlacePhoto);
+locationPlayback.addEventListener("click", () => {
+  placePaused = !placePaused;
+  locationPlayback.textContent = placePaused ? "Retomar" : "Pausar";
+  schedulePlacePhoto();
+});
+locationPlayback.hidden = reduced.matches;
+reduced.addEventListener("change", () => {
+  locationPlayback.hidden = reduced.matches;
+  schedulePlacePhoto();
+});
+document.addEventListener("visibilitychange", schedulePlacePhoto);
+new IntersectionObserver(([entry]) => {
+  placeVisible = entry.isIntersecting;
+  schedulePlacePhoto();
+}, {threshold: 0.2}).observe(corridor);
 
 const archiveMore = $("#archiveMore");
 let albumEntries = [];
@@ -239,12 +319,17 @@ function selectAlbum(filter) {
   const matches = selected.flatMap(event =>
     (event.midias || []).filter(media => filePath(media.src) && !(filter === "todos" && media.soNoAlbum)).map(media => ({ media, event }))
   );
-  const seen = new Set();
-  const available = matches.filter(({ media }) => {
-    if (seen.has(media.src)) return false;
-    seen.add(media.src);
-    return true;
-  });
+  const albumPriority = ["outros", "convivencia", "retratos-sala"];
+  const byPhoto = new Map();
+  for (const entry of matches) {
+    const current = byPhoto.get(entry.media.src);
+    const rank = albumPriority.indexOf(entry.event.id);
+    const currentRank = current ? albumPriority.indexOf(current.event.id) : -1;
+    if (!current || (currentRank >= 0 && (rank < 0 || rank > currentRank))) {
+      byPhoto.set(entry.media.src, entry);
+    }
+  }
+  const available = [...byPhoto.values()];
   if (!available.length) return;
   for (const button of archiveFilters.querySelectorAll("button")) {
     const active = button.dataset.filter === filter;
@@ -571,7 +656,7 @@ async function fetchJson(path){
   if (Object.hasOwn(window.ferasPreview?.content ?? {}, path)) return window.ferasPreview.content[path];
   const url = window.ferasHosted?.base ? new URL(path, window.ferasHosted.base) : path;
   if (url instanceof URL && ["./content/acervo.json", "./content/cenas.json"].includes(path)) {
-    url.searchParams.set("v", "curadoria-turmas");
+    url.searchParams.set("v", "revisao-do-acervo");
   }
   const r=await fetch(url);
   if(!r.ok)throw Error("Não foi possível abrir "+path+": HTTP "+r.status);
