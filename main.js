@@ -803,6 +803,7 @@ const remote = /^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/.test(config?.url || "")
 const kinds = new Set([...memoryKind.options].map(option => option.value));
 let memories = [];
 let sharedMemories = [];
+const removedMemoryIds = new Set();
 try {
   const saved = JSON.parse(localStorage.getItem(storageKey) || "[]");
   if (Array.isArray(saved)) memories = saved.filter(row => row && typeof row.message === "string");
@@ -864,7 +865,10 @@ memoryDeleteForm.addEventListener("submit", async event => {
       memoryDeletePassword.select();
       return;
     }
-    if (sharedMemories.includes(target)) sharedMemories = sharedMemories.filter(row => row.id !== target.id);
+    if (sharedMemories.includes(target)) {
+      removedMemoryIds.add(target.id);
+      sharedMemories = sharedMemories.filter(row => row.id !== target.id);
+    }
     else {
       const next = memories.filter(row => row !== target);
       localStorage.setItem(storageKey, JSON.stringify(next));
@@ -902,7 +906,7 @@ function renderMemories() {
 renderMemories();
 
 if (remote) {
-  $("#memoryPrivacy").textContent = "A lembrança passa por revisão antes de aparecer para a turma.";
+  $("#memoryPrivacy").textContent = "Sua lembrança aparece na hora. Palavras ofensivas são censuradas automaticamente.";
   const feed = new URL(remote);
   feed.search = "select=id,kind,message,author&order=created_at.desc&limit=100";
   fetch(feed, {headers:{apikey:config.key}})
@@ -910,7 +914,11 @@ if (remote) {
       if (!response.ok) throw Error("Mural indisponível");
       return response.json();
     })
-    .then(rows => { sharedMemories = rows; renderMemories(); })
+    .then(rows => {
+      const known = new Set(sharedMemories.map(row => row.id));
+      sharedMemories = [...sharedMemories, ...rows.filter(row => !known.has(row.id) && !removedMemoryIds.has(row.id))].slice(0,100);
+      renderMemories();
+    })
     .catch(() => { memoryStatus.textContent = "O mural compartilhado está indisponível agora."; });
 }
 
@@ -928,13 +936,20 @@ memoryForm.addEventListener("submit", async event => {
   submit.disabled = true;
   try {
     if (remote) {
-      const response = await fetch(remote, {
+      const publish = new URL(remote);
+      publish.search = "select=id,kind,message,author";
+      const response = await fetch(publish, {
         method:"POST",
-        headers:{apikey:config.key,"Content-Type":"application/json",Prefer:"return=minimal"},
+        headers:{apikey:config.key,"Content-Type":"application/json",Prefer:"return=representation"},
         body:JSON.stringify(row)
       });
       if (!response.ok) throw Error("Falha ao enviar");
-      memoryStatus.textContent = "Lembrança enviada para revisão.";
+      const published = await response.json();
+      if (Array.isArray(published) && published[0]?.id) {
+        sharedMemories = [published[0], ...sharedMemories.filter(item => item.id !== published[0].id)].slice(0,100);
+        renderMemories();
+      }
+      memoryStatus.textContent = "Lembrança publicada no mural.";
     } else {
       const next = [row, ...memories];
       localStorage.setItem(storageKey, JSON.stringify(next));
