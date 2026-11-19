@@ -803,6 +803,7 @@ const remote = /^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/.test(config?.url || "")
 const kinds = new Set([...memoryKind.options].map(option => option.value));
 let memories = [];
 let sharedMemories = [];
+const removedMemoryIds = new Set();
 try {
   const saved = JSON.parse(localStorage.getItem(storageKey) || "[]");
   if (Array.isArray(saved)) memories = saved.filter(row => row && typeof row.message === "string");
@@ -864,7 +865,10 @@ memoryDeleteForm.addEventListener("submit", async event => {
       memoryDeletePassword.select();
       return;
     }
-    if (sharedMemories.includes(target)) sharedMemories = sharedMemories.filter(row => row.id !== target.id);
+    if (sharedMemories.includes(target)) {
+      removedMemoryIds.add(target.id);
+      sharedMemories = sharedMemories.filter(row => row.id !== target.id);
+    }
     else {
       const next = memories.filter(row => row !== target);
       localStorage.setItem(storageKey, JSON.stringify(next));
@@ -910,7 +914,11 @@ if (remote) {
       if (!response.ok) throw Error("Mural indisponível");
       return response.json();
     })
-    .then(rows => { sharedMemories = rows; renderMemories(); })
+    .then(rows => {
+      const known = new Set(sharedMemories.map(row => row.id));
+      sharedMemories = [...sharedMemories, ...rows.filter(row => !known.has(row.id) && !removedMemoryIds.has(row.id))].slice(0,100);
+      renderMemories();
+    })
     .catch(() => { memoryStatus.textContent = "O mural compartilhado está indisponível agora."; });
 }
 

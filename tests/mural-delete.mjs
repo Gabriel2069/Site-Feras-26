@@ -31,5 +31,29 @@ try {
   assert.equal(await page.locator('#memoryWall button').count(),1);
   await page.close();
  }
- console.log('Mural: cancelar, senha errada e confirmação conferidos em desktop e celular, sem remover mensagens reais.');
+ for (const removeBeforeLoad of [false,true]) {
+  const race = await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'});
+  let release; const gate = new Promise(resolve=>release=resolve);
+  const saved = {id:'00000000-0000-4000-8000-000000000003',kind:'Cotidiano',message:'Nova lembrança',author:'Teste'};
+  await race.route('**/rest/v1/feras_memorias?*', async route=>{
+   if(route.request().method()==='POST') return route.fulfill({json:[saved]});
+   await gate; return route.fulfill({json:removeBeforeLoad?[saved]:[]});
+  });
+  await race.route('**/rest/v1/rpc/feras_apagar_memoria',route=>route.fulfill({json:{ok:true,code:'deleted'}}));
+  await race.goto('http://127.0.0.1:4173/',{waitUntil:'domcontentloaded'});
+  await race.locator('#memoryText').fill('Nova lembrança');
+  await race.locator('#relato button[type=submit]').click();
+  await race.getByText('Lembrança publicada no mural.',{exact:true}).waitFor();
+  if(removeBeforeLoad) {
+   await race.locator('#memoryWall button').click();
+   await race.locator('#memoryDeletePassword').fill('senha-de-teste');
+   await race.locator('#memoryDeleteConfirm').click();
+   await race.getByText('Mensagem apagada.',{exact:true}).waitFor();
+  }
+  const loaded = race.waitForResponse(response=>response.url().includes('/rest/v1/feras_memorias?') && response.request().method()==='GET');
+  release(); await (await loaded).finished(); await race.waitForTimeout(150);
+  assert.equal(await race.locator('#memoryWall article').count(),removeBeforeLoad?0:1,'Carga atrasada preserva publicações e remoções confirmadas');
+  await race.close();
+ }
+ console.log('Mural: remoção, publicação imediata filtrada e carga atrasada conferidas em desktop e celular, sem mensagens reais.');
 } finally {await browser.close();}
