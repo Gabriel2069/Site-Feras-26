@@ -40,8 +40,12 @@ try {
    await page.locator("#menuButton").click();
    assert.equal(await page.locator("#menuButton").getAttribute("aria-expanded"), "false");
    const poly = page.locator("#poly-madrinha [data-open-event]");
-   const catalog = await (await page.request.get("http://127.0.0.1:4173/content/acervo.json")).json();
+   const catalogUrl = await page.evaluate(() => window.ferasHosted?.base
+     ? new URL("./content/acervo.json", window.ferasHosted.base).href
+     : new URL("./content/acervo.json", location.href).href);
+   const catalog = await (await page.request.get(catalogUrl)).json();
    if (catalog.eventos.find(event => event.id === "convite-poly")?.midias.length) {
+     await poly.waitFor({state:"visible"});
      await poly.click();
      assert.equal(await page.locator("#chapterDialog").evaluate(el => el.open), true);
      await page.locator("#chapterClose").click();
