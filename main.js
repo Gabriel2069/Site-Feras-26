@@ -15,43 +15,16 @@ const mosaic = $("#mosaicWall");
 const archiveNote = $("#archiveNote");
 const modal = $("#chapterDialog");
 let currentEvents = [];
+let staffDuplicates = new Set();
 let currentScenes = {locais: [], recortes: []};
 let cinemaMode = false;
 let rafPending = false;
 let previousFocus = null;
 
-const returnTimeout = 5 * 60 * 1000;
-const returnKey = "feras26:away:" + location.pathname;
-const navigationType = performance.getEntriesByType("navigation")[0]?.type;
-let awaySince = null;
-if (navigationType === "reload" || navigationType === "back_forward") {
-  try { awaySince = Number(sessionStorage.getItem(returnKey)) || null; } catch {}
-}
-
-function rememberDeparture() {
-  awaySince ??= Date.now();
-  try { sessionStorage.setItem(returnKey, String(awaySince)); } catch {}
-}
-
-function returnToPage() {
-  if (document.hidden) return;
-  const wasAway = awaySince !== null && Date.now() - awaySince >= returnTimeout;
-  awaySince = null;
-  try { sessionStorage.removeItem(returnKey); } catch {}
-  if (!wasAway) return;
-
+addEventListener("feras:restart", () => {
   closeChapter();
   if (miniDialog.open) miniDialog.close();
   setMenu(false, false);
-  if (location.hash) history.replaceState(history.state, "", location.pathname + location.search);
-  requestAnimationFrame(() => scrollTo({top:0, left:0, behavior:"instant"}));
-}
-
-addEventListener("pagehide", rememberDeparture);
-addEventListener("pageshow", returnToPage);
-document.addEventListener("visibilitychange", () => {
-  if (document.hidden) rememberDeparture();
-  else returnToPage();
 });
 
 function filePath(src) {
@@ -659,7 +632,7 @@ async function fetchJson(path){
     ? new URL(path, document.baseURI)
     : window.ferasHosted?.base ? new URL(path, window.ferasHosted.base) : path;
   if (url instanceof URL && ["./content/acervo.json", "./content/cenas.json"].includes(path)) {
-    url.searchParams.set("v", "copa-guarita");
+    url.searchParams.set("v", "legendas-mural");
   }
   const r=await fetch(url);
   if(!r.ok)throw Error("Não foi possível abrir "+path+": HTTP "+r.status);
@@ -675,9 +648,11 @@ function showTimelinePhoto(image, source) {
 function loadStaffMural(event) {
   const mural = $("#staffMural");
   const portraits = document.createDocumentFragment();
+  const seen = new Set();
   for (const [index, media] of (event?.midias ?? []).entries()) {
     const source = filePath(media.src);
-    if (!source || isVideo(media.src)) continue;
+    if (!source || isVideo(media.src) || staffDuplicates.has(media.src) || seen.has(source)) continue;
+    seen.add(source);
     const card = text("li", "", "staff-mural__card");
     if (media.largura > media.altura) card.classList.add("staff-mural__card--wide");
     const link = document.createElement("a");
@@ -699,12 +674,16 @@ function loadStaffMural(event) {
 }
 
 async function loadContent(){
-  const [eventsResult, scenesResult, relatedResult] = await Promise.allSettled([
+  const [eventsResult, scenesResult, relatedResult, muralResult] = await Promise.allSettled([
     fetchJson("./content/acervo.json"), fetchJson("./content/cenas.json"),
-    fetch("./content/fotos-semelhantes.json").then(response => response.ok ? response.json() : [])
+    fetch("./content/fotos-semelhantes.json").then(response => response.ok ? response.json() : []),
+    fetch("./content/mural-edicao.json?v=legendas-mural").then(response => response.ok ? response.json() : {})
   ]);
   if (relatedResult.status === "fulfilled" && Array.isArray(relatedResult.value)) {
     relatedPhotos = new Map(relatedResult.value.flatMap((group, index) => group.map(src => [src, index])));
+  }
+  if (muralResult.status === "fulfilled") {
+    staffDuplicates = new Set(muralResult.value.ocultarDuplicadas ?? []);
   }
   if(eventsResult.status==="fulfilled"){
     const data=eventsResult.value;
@@ -714,9 +693,6 @@ async function loadContent(){
       const photo = event?.midias?.find(media => media.src === image.dataset.timelineSrc);
       const source = filePath(photo?.src);
       if (!source || isVideo(photo.src)) continue;
-      photo.alt = image.alt;
-      const caption = image.closest("figure").querySelector("figcaption");
-      if (caption) photo.legenda = caption.textContent;
       showTimelinePhoto(image, source);
     }
     for (const button of $$("[data-open-event]")) {
