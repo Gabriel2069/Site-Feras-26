@@ -1,0 +1,16 @@
+/* Confirmação de remoção de uma lembrança. */
+.memory-wall__delete { display:block; margin:1rem 0 0 auto; padding:.55rem .8rem; min-height:44px; background:transparent; color:#473d69; border:1px solid #70628d; border-radius:4px; font:600 .9rem "DM Sans", sans-serif; cursor:pointer; }
+.memory-wall__delete:hover { background:#e6dff1; }
+.memory-delete-dialog { box-sizing:border-box; width:min(92vw,470px); max-height:85dvh; padding:1.5rem; color:#18203f; background:#f6f2e8; border:2px solid #6044d7; border-radius:12px; box-shadow:0 20px 70px #0006; overflow:auto; }
+.memory-delete-dialog::backdrop { background:#101631a8; }
+.memory-delete-dialog h2 { margin:0 0 .6rem; font:600 1.8rem var(--film-serif); }
+.memory-delete-dialog p { margin:.6rem 0; }
+.memory-delete-dialog blockquote { margin:1rem 0; padding:.6rem .8rem; border-left:3px solid #6044d7; font-size:.95rem; white-space:pre-wrap; overflow-wrap:anywhere; max-height:7rem; overflow:auto; }
+.memory-delete-dialog label { display:block; margin:.7rem 0 .3rem; font-weight:600; }
+.memory-delete-dialog input { box-sizing:border-box; width:100%; min-height:46px; padding:.65rem; border:1px solid #726487; border-radius:4px; background:white; color:#18203f; font-size:1rem; }
+.memory-delete-dialog__actions { display:flex; justify-content:flex-end; flex-wrap:wrap; gap:.65rem; margin-top:1rem; }
+.memory-delete-dialog button { min-height:44px; padding:.65rem 1rem; border:1px solid #6044d7; border-radius:4px; background:transparent; color:#34226b; font:600 1rem "DM Sans", sans-serif; cursor:pointer; }
+.memory-delete-dialog button[type=submit] { color:white; background:#6044d7; }
+.memory-delete-dialog button:disabled { opacity:.55; cursor:wait; }
+.memory-delete-dialog :focus-visible,.memory-wall__delete:focus-visible { outline:3px solid #00a782; outline-offset:3px; }
+#memoryDeleteStatus { color:#8b253c; min-height:1.4em; }

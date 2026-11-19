@@ -8,19 +8,20 @@
 <meta property="og:title" content="FERAS 26 · Depois do Sinal">
 <meta property="og:description" content="A nossa turma, do primeiro anúncio dos Feras até o último dia.">
 <title>FERAS 26 · Depois do Sinal</title>
-<script src="./retorno.js?v=legendas-mural"></script>
+<script src="./retorno.js?v=apagar-mensagem"></script>
 <link rel="icon" href="assets/marca-garra-clara.webp" type="image/webp">
 <link rel="preconnect" href="https://dvvpnxbcfajuoybfcslc.supabase.co" crossorigin>
-<link rel="preload" as="fetch" href="https://dvvpnxbcfajuoybfcslc.supabase.co/storage/v1/object/public/memorial-publico/r1/content/acervo.json?v=legendas-mural" crossorigin>
+<link rel="preload" as="fetch" href="https://dvvpnxbcfajuoybfcslc.supabase.co/storage/v1/object/public/memorial-publico/r1/content/acervo.json?v=apagar-mensagem" crossorigin>
 <link rel="preload" as="image" href="https://dvvpnxbcfajuoybfcslc.supabase.co/storage/v1/object/public/memorial-publico/r1/cenas/turma-abertura.webp" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;1,500;1,600&family=DM+Sans:wght@400;500;600;700&family=Caveat:wght@600;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./styles.css">
-<link rel="stylesheet" href="./montagem.css?v=legendas-mural">
-<script src="./content/public-config.js?v=legendas-mural" defer></script>
+<link rel="stylesheet" href="./montagem.css?v=apagar-mensagem">
+<link rel="stylesheet" href="./mural-mensagens.css?v=apagar-mensagem">
+<script src="./content/public-config.js?v=apagar-mensagem" defer></script>
 <script src="./montagem.js" defer></script>
-<script src="./main.js?v=legendas-mural" defer></script>
+<script src="./main.js?v=apagar-mensagem" defer></script>
 </head>
 <body>
 <a class="skip" href="#caminho">Ir para os lugares da escola</a>
@@ -616,5 +617,21 @@
   <button class="mini-dialog__close" type="button" aria-label="Fechar Mini Feras">Fechar ×</button>
   <iframe id="miniFrame" title="Polaroids dos Mini Feras"></iframe>
 </dialog>
+
+<dialog class="memory-delete-dialog" id="memoryDeleteDialog" aria-labelledby="memoryDeleteTitle">
+  <form id="memoryDeleteForm">
+    <h2 id="memoryDeleteTitle">Apagar esta mensagem?</h2>
+    <p>Digite a senha para confirmar.</p>
+    <blockquote id="memoryDeletePreview"></blockquote>
+    <label for="memoryDeletePassword">Senha de confirmação</label>
+    <input id="memoryDeletePassword" type="password" inputmode="numeric" autocomplete="off" maxlength="64" required>
+    <p id="memoryDeleteStatus" role="status" aria-live="polite"></p>
+    <div class="memory-delete-dialog__actions">
+      <button type="button" id="memoryDeleteCancel">Cancelar</button>
+      <button type="submit" id="memoryDeleteConfirm">Apagar mensagem</button>
+    </div>
+  </form>
+</dialog>
+
 </body>
 </html>
