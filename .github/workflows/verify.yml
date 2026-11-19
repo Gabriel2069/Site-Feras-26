@@ -14,6 +14,8 @@ jobs:
       - name: Validate JavaScript
         run: |
           node --check main.js
+          node --check retorno.js
+          node tests/return-to-start.mjs
           node --check tools/importar-drive.mjs
       - name: Validate catalog and assets
         run: |

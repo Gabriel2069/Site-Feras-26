@@ -105,21 +105,21 @@
     {
       "id": "biblioteca",
       "nome": "A BIBLIOTECA",
-      "descricao": "",
+      "descricao": "Aqui que conhecemos o'que é imaginação, e suas várias formas de ensinar. Já pagou suas multas e atraso?",
       "imagem": "./media/lugares/foto-2519.webp",
       "hd": true
     },
     {
       "id": "restaurante",
       "nome": "O RESTAURANTE",
-      "descricao": "",
+      "descricao": "Falam que o olfato é o que mais ativa memórias, esse restaurante comprova isso.",
       "imagem": "./media/lugares/novos-2795.webp",
       "hd": true
     },
     {
       "id": "copa",
       "nome": "A COPA",
-      "descricao": "",
+      "descricao": "Como cabia toda aquela comida na geladeira?",
       "imagem": "./media/lugares/novos-2798.webp",
       "hd": true
     }
