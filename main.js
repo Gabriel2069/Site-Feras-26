@@ -25,6 +25,7 @@ addEventListener("feras:restart", () => {
   closeChapter();
   if (miniDialog.open) miniDialog.close();
   setMenu(false, false);
+  if (!memoryDeletePending && memoryDeleteDialog.open) memoryDeleteDialog.close();
 });
 
 function filePath(src) {
@@ -807,6 +808,80 @@ try {
   if (Array.isArray(saved)) memories = saved.filter(row => row && typeof row.message === "string");
 } catch {}
 
+const memoryDeleteDialog = $("#memoryDeleteDialog");
+const memoryDeleteForm = $("#memoryDeleteForm");
+const memoryDeletePassword = $("#memoryDeletePassword");
+const memoryDeleteStatus = $("#memoryDeleteStatus");
+const memoryDeleteConfirm = $("#memoryDeleteConfirm");
+const memoryDeleteCancel = $("#memoryDeleteCancel");
+let memoryDeleteTarget = null;
+let memoryDeleteTrigger = null;
+let memoryDeletePending = false;
+
+function requestMemoryDeletion(row, trigger) {
+  memoryDeleteTarget = row;
+  memoryDeleteTrigger = trigger;
+  memoryDeleteForm.reset();
+  memoryDeleteStatus.textContent = "";
+  $("#memoryDeletePreview").textContent = row.message;
+  memoryDeleteDialog.showModal();
+  memoryDeletePassword.focus({preventScroll:true});
+}
+memoryDeleteCancel.addEventListener("click", () => memoryDeleteDialog.close());
+memoryDeleteDialog.addEventListener("cancel", event => {
+  if (memoryDeletePending) event.preventDefault();
+});
+memoryDeleteDialog.addEventListener("close", () => {
+  memoryDeleteForm.reset();
+  memoryDeleteTarget = null;
+  if (memoryDeleteTrigger?.isConnected) memoryDeleteTrigger.focus({preventScroll:true});
+  memoryDeleteTrigger = null;
+});
+memoryDeletePassword.addEventListener("input", () => { memoryDeleteStatus.textContent = ""; });
+memoryDeleteForm.addEventListener("submit", async event => {
+  event.preventDefault();
+  if (!memoryDeleteTarget || memoryDeletePending) return;
+  if (!remote) {
+    memoryDeleteStatus.textContent = "Não foi possível confirmar a senha agora. Tente novamente mais tarde.";
+    return;
+  }
+  const target = memoryDeleteTarget;
+  memoryDeletePending = true;
+  memoryDeleteConfirm.disabled = memoryDeleteCancel.disabled = true;
+  memoryDeleteStatus.textContent = "Confirmando…";
+  try {
+    const response = await fetch(new URL("/rest/v1/rpc/feras_apagar_memoria", config.url), {
+      method:"POST", headers:{apikey:config.key,"Content-Type":"application/json"},
+      body:JSON.stringify({p_id:sharedMemories.includes(target) ? target.id : null, p_senha:memoryDeletePassword.value})
+    });
+    if (!response.ok) throw Error("Falha ao confirmar");
+    const result = await response.json();
+    if (!result.ok) {
+      memoryDeleteStatus.textContent = result.code === "rate_limit"
+        ? "Muitas tentativas. Aguarde um minuto e tente novamente."
+        : result.code === "invalid_password" ? "Senha incorreta. A mensagem foi mantida."
+        : "Não foi possível apagar agora. Tente novamente.";
+      memoryDeletePassword.select();
+      return;
+    }
+    if (sharedMemories.includes(target)) sharedMemories = sharedMemories.filter(row => row.id !== target.id);
+    else {
+      const next = memories.filter(row => row !== target);
+      localStorage.setItem(storageKey, JSON.stringify(next));
+      memories = next;
+    }
+    renderMemories();
+    memoryDeleteDialog.close();
+    memoryStatus.textContent = "Mensagem apagada.";
+  } catch {
+    memoryDeleteStatus.textContent = "Não consegui apagar agora. Tente novamente.";
+  } finally {
+    memoryDeletePending = false;
+    memoryDeleteConfirm.disabled = memoryDeleteCancel.disabled = false;
+    memoryDeletePassword.value = "";
+  }
+});
+
 function renderMemories() {
   [...memoryWall.children].forEach(card => photoReveal.unobserve(card));
   memoryWall.replaceChildren();
@@ -814,6 +889,11 @@ function renderMemories() {
     const card = text("article", "", "memory-wall__card");
     card.append(text("h3", row.kind), text("p", row.message));
     if (row.author) card.append(text("footer", row.author));
+    const remove = text("button", "Apagar", "memory-wall__delete");
+    remove.type = "button";
+    remove.setAttribute("aria-label", "Apagar mensagem" + (row.author ? " de " + row.author : ""));
+    remove.addEventListener("click", () => requestMemoryDeletion(row, remove));
+    card.append(remove);
     memoryWall.append(card);
   }
   memoryWall.hidden = !memoryWall.childElementCount;
@@ -824,7 +904,7 @@ renderMemories();
 if (remote) {
   $("#memoryPrivacy").textContent = "A lembrança passa por revisão antes de aparecer para a turma.";
   const feed = new URL(remote);
-  feed.search = "select=kind,message,author&order=created_at.desc&limit=100";
+  feed.search = "select=id,kind,message,author&order=created_at.desc&limit=100";
   fetch(feed, {headers:{apikey:config.key}})
     .then(response => {
       if (!response.ok) throw Error("Mural indisponível");
